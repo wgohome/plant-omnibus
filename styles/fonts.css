@@ -1,0 +1,76 @@
+/* Different weights */
+@font-face {
+  font-family: "ttinterfaces";
+  font-weight: 100;
+  src: url("../public/fonts/TTInterfaces-Thin.otf");
+}
+
+@font-face {
+  font-family: "ttinterfaces";
+  font-weight: 200;
+  src: url("../public/fonts/TTInterfaces-ExtraLight.otf");
+}
+
+@font-face {
+  font-family: "ttinterfaces";
+  font-weight: 300;
+  src: url("../public/fonts/TTInterfaces-Light.otf");
+}
+
+@font-face {
+  font-family: "ttinterfaces";
+  font-weight: 400;
+  src: url("../public/fonts/TTInterfaces-Regular.otf");
+}
+
+@font-face {
+  font-family: "ttinterfaces";
+  font-weight: 500;
+  src: url("../public/fonts/TTInterfaces-Medium.otf");
+}
+
+@font-face {
+  font-family: "ttinterfaces";
+  font-weight: 600;
+  src: url("../public/fonts/TTInterfaces-DemiBold.otf");
+}
+
+@font-face {
+  font-family: "ttinterfaces";
+  font-weight: 700;
+  src: url("../public/fonts/TTInterfaces-Bold.otf");
+}
+
+@font-face {
+  font-family: "ttinterfaces";
+  font-weight: 800;
+  src: url("../public/fonts/TTInterfaces-ExtraBold.otf");
+}
+
+@font-face {
+  font-family: "ttinterfaces";
+  font-weight: 900;
+  src: url("../public/fonts/TTInterfaces-Black.otf");
+}
+
+/* Italic */
+@font-face {
+  font-family: "ttinterfaces";
+  font-weight: 300;
+  font-style: italic;
+  src: url("../public/fonts/TTInterfaces-LightItalic.otf");
+}
+
+@font-face {
+  font-family: "ttinterfaces";
+  font-weight: 400;
+  font-style: italic;
+  src: url("../public/fonts/TTInterfaces-Italic.otf");
+}
+
+@font-face {
+  font-family: "ttinterfaces";
+  font-weight: 500;
+  font-style: italic;
+  src: url("../public/fonts/TTInterfaces-MediumItalic.otf");
+}
