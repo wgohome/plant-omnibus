@@ -24,7 +24,7 @@ const GlobalSearchBox = ({
           setValue(e.target.value)
           handleChange(e.target.value)
         }}
-        placeholder="Search for your species ..."
+        placeholder="Search for your XXX ..."
         type="search"
       />
     </span>

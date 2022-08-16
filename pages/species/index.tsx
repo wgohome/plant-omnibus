@@ -2,10 +2,10 @@ import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { ObjectId } from 'bson'
 
-import Layout from '../../components/layout'
+import Layout from '../../components/Layout'
 import Species from '../../models/species'
 import connectMongo from '../../utils/connectMongo'
-import Table from '../../components/table'
+import Table from '../../components/tables/SpeciesTable'
 import React from 'react'
 import Link from 'next/link'
 
