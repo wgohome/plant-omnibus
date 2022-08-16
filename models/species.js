@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose"
 
-var speciesSchema = new Schema({
+const speciesSchema = new Schema({
   tax: {
     type: Number,
     required: true,
