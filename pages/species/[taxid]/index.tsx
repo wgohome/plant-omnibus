@@ -3,11 +3,11 @@ import Head from "next/head";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 
-import Layout from "../../components/Layout";
-import GenesTable from "../../components/tables/GenesTable";
-import Species from "../../models/species";
-import { getGenesPage } from "../../utils/genes";
-import connectMongo from "../../utils/connectMongo";
+import Layout from "../../../components/Layout";
+import GenesTable from "../../../components/tables/GenesTable";
+import Species from "../../../models/species";
+import { getGenesPage } from "../../../utils/genes";
+import connectMongo from "../../../utils/connectMongo";
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   connectMongo()
@@ -54,7 +54,6 @@ const SpeciesPage: NextPage = ({ species, initialGenes, numGenes }) => {
     // This will get called when the table needs new data
     // Give this fetch an ID
     const fetchId = ++fetchIdRef.current
-    // debugger
     setLoading(true)
     // Only update the data if this is the latest fetch
     if (fetchId === fetchIdRef.current) {
@@ -83,11 +82,7 @@ const SpeciesPage: NextPage = ({ species, initialGenes, numGenes }) => {
       </section>
 
       <section>
-        {/* {loading ? (
-          "Loading ..."
-        ) : ( */}
-          <GenesTable columns={columns} data={genes} fetchGenes={fetchGenes} loading={loading} pageCount={pageCount} />
-        {/* )} */}
+        <GenesTable columns={columns} data={genes} fetchGenes={fetchGenes} loading={loading} pageCount={pageCount} />
       </section>
     </Layout>
   )

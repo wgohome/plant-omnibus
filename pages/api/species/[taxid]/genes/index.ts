@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { getGenesPage } from '../../../../utils/genes'
+import { getGenesPage } from '../../../../../utils/genes'
 
 export default async function handler(
   req: NextApiRequest,
