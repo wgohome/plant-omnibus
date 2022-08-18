@@ -2,8 +2,9 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from '../styles/Home.module.css'
+
 import Layout from '../components/Layout'
+import SearchBox from '../components/searchBox'
 
 const Home: NextPage = () => {
   return (
@@ -11,35 +12,57 @@ const Home: NextPage = () => {
       <Head>
         <title>Plant Gene Expression Omnibus</title>
       </Head>
-      <section>
-        <div>
-          <div className="h-36" />
-          <h1 className="text-4xl my-3">
+
+      <section id="home-banner-section">
+        <div className="pt-16 pb-8" id="home-banner-img-container">
+          <div className="relative w-64 h-64 mx-auto drop-shadow-2xl" id="home-banner-img">
+            <Image
+              src="/images/binary-code-bro-green.svg"
+              alt="home banner image"
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
+        </div>
+        <div className="text-center drop-shadow" id="home-banner-text">
+          <h1 className="text-4xl py-3">
             Plant Gene Expression Omnibus
           </h1>
-          <p className="text-xl my-3">
-            The largest annotated gene expression resource for <span className="font-bold text-plb-red">100</span> plant species
+          <p className="text-xl py-3">
+            The largest annotated gene expression resource for{" "}
+            <Link href="/species">
+              <a className="hover:underline active:text-plb-green">
+                <span className="font-bold text-xl text-plb-red">97</span> plant species
+              </a>
+            </Link>
           </p>
-          <div className="h-12" />
+        </div>
+      </section>
+
+      <section className="py-4" id="home-search-global">
+        <div className="max-w-4xl mx-auto my-4" id="search-box">
+          <SearchBox
+            initialValue=""
+            onValueUpdate={() => {}}
+            placeholder="Search for your gene ..."
+          />
+        </div>
+        <div className="my-4" id="search-results">
+          Results
+        </div>
+      </section>
+
+      <section id="home-other-actions">
+        <div className="flex justify-center my-4">
           <Link href="/species">
-            <button type="button" className="text-xl text-white bg-plb-green hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full px-6 py-3 text-center">
+            <a type="button" className="text-xl text-stone-500 outline outline-plb-green hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full px-6 py-3 text-center">
               Browse species
-            </button>
+            </a>
           </Link>
         </div>
+      </section>
 
-        {/* <div className="">
-          <Image
-            src="/images/pots_of_plants.jpg"
-            alt="background image"
-            width={400}
-            height={180}
-            layout="responsive"
-            objectFit="cover"
-            objectPosition="50% bottom"
-          />
-        </div> */}
-
+      <section id="home-draft">
         {/* <div className="h-40"></div>
 
         <h2>1. Select your species</h2>

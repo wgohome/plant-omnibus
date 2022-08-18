@@ -38,7 +38,7 @@ export default function Layout({ children }) {
         </nav>
       </header>
 
-      <main className="container mx-auto py-4 px-4">{children}</main>
+      <main className="container mx-auto py-4 px-8">{children}</main>
 
       <footer className="mt-auto">
         <div className="text-center px-8 py-3">

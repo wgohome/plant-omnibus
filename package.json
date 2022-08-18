@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/react-table": "^7.7.12",
+    "lodash.debounce": "^4.0.8",
     "mongoose": "^6.5.1",
     "next": "12.2.3",
     "react": "18.2.0",
