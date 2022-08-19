@@ -3,7 +3,7 @@ import Link from "next/link"
 
 import { useTable, usePagination, useAsyncDebounce, useGlobalFilter } from "react-table"
 
-const GlobalSearchBox = ({
+const GlobalFilterBox = ({
   preGlobalFilteredRows,
   globalFilter,
   setGlobalFilter,
@@ -61,7 +61,7 @@ const Table = ({ columns, data }) => {
 
   return (
     <>
-      <GlobalSearchBox
+      <GlobalFilterBox
         preGlobalFilteredRows={preGlobalFilteredRows}
         globalFilter={globalFilter}
         setGlobalFilter={setGlobalFilter}

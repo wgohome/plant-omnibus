@@ -2,32 +2,74 @@ import React from "react"
 import debounce from "lodash.debounce"
 
 const SearchBox = ({
-  initialValue,
-  onValueUpdate, // function to update state in parent component
-  placeholder,
+  initialValue, // for input field, usually blank
+  placeholder, // for input field
+  getSuggestions, // callback from parent to get array of suggestions
+  submitSearchQuery, // callback from parent to get and render results
 }) => {
   const [ localValue, setLocalValue ] = React.useState(initialValue)
-  const handleValueChange = React.useCallback(
-    debounce(query => {
-      console.log(query)
-      // onValueUpdate(query)
+  const [ suggestions, setSuggestions ] = React.useState([])
+  const [ suggestActive, setSuggestActive ] = React.useState(false)
+
+  const updateSuggestions = React.useCallback(
+    debounce(async (query) => {
+      console.log(`Querying for: ${query} ...`)
+      setSuggestions(await getSuggestions(query))
     }, 500),
     [],
   )
 
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    submitSearchQuery(localValue)
+    setSuggestActive(false)
+  }
+
+  // TODO
+  // Inactivate search bar when loading search
+  // Reactivate search bar when results returned
+  // When no suggestion returned, give indication of no match, dont just return white bar ...
+  // Filtered results by type
+
   return (
-    <div>
-      <input
-        className="outline-none p-4 w-full rounded-xl shadow border border-stone-300 focus:ring ring-plb-green ring-offset-1 focus:border-green-plb"
-        value={localValue || ""}
-        onChange={(e) => {
-          setLocalValue(e.target.value)  // For local state in this component
-          handleValueChange(e.target.value)  // For external state and searching db
-        }}
-        placeholder={placeholder}
-        type="search"
-      />
-    </div>
+    <form action="#" onSubmit={handleSubmit}>
+      <div className="flex my-3">
+        <div className="grow mr-3">
+          <input
+            className="outline-none p-4 w-full rounded-full shadow border border-stone-300 focus:ring ring-plb-green ring-offset-1 focus:border-green-plb"
+            value={localValue || ""}
+            onChange={(e) => {
+              /*
+                Set local state in this component
+                Should not be called in debounced function because of timeout
+                which cause state to be out of sync when typing
+              */
+              setLocalValue(e.target.value)
+              setSuggestActive(true)
+              updateSuggestions(e.target.value)
+            }}
+            placeholder={placeholder}
+            type="search"
+          />
+          <div className="border bg-white my-1 mx-4 p-3" hidden={!suggestActive}>
+            {/* TODO: may break when it is not just genes */}
+            {suggestions.map((gene) => (
+              <div className="border-b last:border-0 py-1.5" key={gene._id}>
+                {gene.label}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <button
+            type="submit"
+            className="text-xl text-plb-light bg-plb-green hover:bg-plb-dark-green focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full px-6 py-3 text-center"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
   )
 }
 
