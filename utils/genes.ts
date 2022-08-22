@@ -33,9 +33,24 @@ export const getGenesSearchPage = async (
   pageSize: number = parseInt(process.env.pageSize),
 ) => {
   connectMongo()
-  const genes = await Gene.find({label: new RegExp(searchTerm, "i")}, "label alias")
+  // const genes = await Gene.find({label: new RegExp(searchTerm, "i")}, "label alias")
+  //   .skip(pageIndex * pageSize)
+  //   .limit(pageSize)
+  const genes = await Gene.aggregate()
+    .match({label: new RegExp(searchTerm, "i")})
     .skip(pageIndex * pageSize)
-    .limit(pageSize)
+    .limit(10)
+    .lookup({
+      from: "species",
+      localField: "spe_id",
+      foreignField: "_id",
+      pipeline: [{
+        $project: {_id: 0, tax: 1, name: 1}
+      }],
+      as: "species",
+    })
+    .unwind("species")
+    .project({label: 1, alias: 1, species: 1})
   const numGenes = await Gene.countDocuments({label: new RegExp(searchTerm, "i")})
   const pageTotal = Math.ceil(numGenes / pageSize)
   return {

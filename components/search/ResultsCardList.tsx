@@ -11,7 +11,7 @@ const ResultsCardList = ({ results }) => {
       </div>
       <div className="py-3" id="result-child-cards">
         {results.genes.map((gene) => (
-          <GeneCard label={gene.label} alias={gene.alias} key={gene._id} />
+          <GeneCard label={gene.label} alias={gene.alias} speciesName={gene.species.name} taxid={gene.species.tax} key={gene._id} />
           ))}
       </div>
     </div>

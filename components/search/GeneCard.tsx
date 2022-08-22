@@ -4,9 +4,11 @@ import Link from "next/link"
 interface IProps {
   label: string
   alias: string[]
+  speciesName: string
+  taxid: number
 }
 
-const GeneCard: React.FC<IProps> = ({ label, alias }) => {
+const GeneCard: React.FC<IProps> = ({ label, alias, speciesName, taxid }) => {
   return (
     <div className="border p-4">
       <div className="my-3">
@@ -16,14 +18,14 @@ const GeneCard: React.FC<IProps> = ({ label, alias }) => {
       </div>
       <h3 className="text-lg font-medium pb-1">
         {/* TODO: find the species on redirect */}
-        <Link href={`/species/{taxid}/genes/${label}`}>
+        <Link href={`/species/${taxid}/genes/${label}`}>
           <a className="text-plb-green hover:underline active:text-plb-red">
             {label}
           </a>
         </Link>
       </h3>
       <p className="">
-        Species: ...
+        Species: {speciesName} ({taxid})
       </p>
       <p className="">
         <span>Alias: </span><span>{alias.length ? alias : "-"}</span>
