@@ -5,7 +5,6 @@ import Link from 'next/link'
 
 import Layout from '../components/Layout'
 import SearchBox from '../components/searchBox'
-import GlobalSearchBox from '../components/globalSearchBox'
 
 const Home: NextPage = () => {
   return (
@@ -48,17 +47,9 @@ const Home: NextPage = () => {
             placeholder="Anything you are looking for ..."
           />
         </div>
-
-        <div>
-          {/* <GlobalSearchBox
-            initialValue=""
-            onValueUpdate={() => {}}
-            placeholder="Search for your gene ..."
-          /> */}
-        </div>
       </section>
 
-      <section id="home-other-actions">
+      {/* <section id="home-other-actions">
         <div className="flex justify-center my-4">
           <Link href="/species">
             <a type="button" className="text-xl text-stone-500 outline outline-plb-green hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full px-6 py-3 text-center">
@@ -81,7 +72,7 @@ const Home: NextPage = () => {
             </a>
           </Link>
         </div>
-      </section>
+      </section> */}
 
       <section id="home-draft">
         {/* <div className="h-40"></div>
