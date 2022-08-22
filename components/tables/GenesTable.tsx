@@ -42,6 +42,7 @@ const GenesTable = ({
   )
 
   // Listen for changes in pagination and use the state to fetch our new data
+  // react-table only helps us to update the pageIndex and pageSize states
   React.useEffect(() => {
     fetchGenes({ pageIndex, pageSize })
   }, [fetchGenes, pageIndex, pageSize])

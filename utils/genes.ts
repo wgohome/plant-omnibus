@@ -26,3 +26,22 @@ export const getGenesPage = async (
     genes: genes,
   }
 }
+
+export const getGenesSearchPage = async (
+  searchTerm: string,
+  pageIndex: number = 0,
+  pageSize: number = parseInt(process.env.pageSize),
+) => {
+  connectMongo()
+  const genes = await Gene.find({label: new RegExp(searchTerm, "i")}, "label alias")
+    .skip(pageIndex * pageSize)
+    .limit(pageSize)
+  const numGenes = await Gene.countDocuments({label: new RegExp(searchTerm, "i")})
+  const pageTotal = Math.ceil(numGenes / pageSize)
+  return {
+    pageIndex: pageIndex,
+    pageTotal: pageTotal,
+    numGenes: numGenes,
+    genes: genes,
+  }
+}
