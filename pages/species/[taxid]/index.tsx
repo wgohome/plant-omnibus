@@ -1,5 +1,6 @@
 import React from "react";
 import Head from "next/head";
+import Link from "next/link";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 
@@ -39,6 +40,11 @@ const SpeciesPage: NextPage = ({ species, initialGenes, numGenes }) => {
     {
       Header: "Gene ID",
       accessor: "label",
+      Cell: ({ value }) => (
+        <Link href={`/species/${taxid}/genes/${value}`}>
+          <a className="text-plb-green hover:underline active:text-plb-red">{value}</a>
+        </Link>
+      ),
     },
     {
       Header: "Alias",
