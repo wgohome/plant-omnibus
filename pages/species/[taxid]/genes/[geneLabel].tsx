@@ -32,9 +32,9 @@ const GenePage: NextPage = ({sampleAnnotations}) => {
         <h1 className="text-4xl py-3">Gene {geneLabel}</h1>
         <p>{}</p>
       </section>
-      {sampleAnnotations.map((sa) => (
+      {/*{sampleAnnotations.map((sa) => (
         <div>{JSON.stringify(sa, null, 2)}</div>
-      ))}
+      ))}*/}
     </Layout>
   )
 }
