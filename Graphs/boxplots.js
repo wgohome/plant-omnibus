@@ -3,7 +3,7 @@ import Plot from "react-plotly.js";
 import { removeOutliers } from "../HelperFunctions/math.js";
 import { assignColors } from "../Data/genePageInfo.js";
 
-class Experimental extends React.Component {
+class GeneBoxplot extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -94,4 +94,4 @@ class Experimental extends React.Component {
   }
 }
 
-export default Experimental;
+export default GeneBoxplot;
