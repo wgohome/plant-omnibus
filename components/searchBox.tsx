@@ -7,10 +7,14 @@ const SearchBox = ({
   getSuggestions, // callback from parent to get array of suggestions
   submitSearchQuery, // callback from parent to get and render results
 }) => {
+  // console.log(`start ${initialValue}`)
   const [ localValue, setLocalValue ] = React.useState(initialValue)
   const [ suggestions, setSuggestions ] = React.useState([])
   const [ suggestActive, setSuggestActive ] = React.useState(false)
   const [ isUpdatingSuggestions, setIsUpdatingSuggsetions ] = React.useState(false)
+
+  // setLocalValue(initialValue)
+  // console.log(`from search box ${localValue}`)
 
   const updateSuggestions = React.useCallback(
     debounce(async (query) => {
@@ -31,7 +35,6 @@ const SearchBox = ({
   // TODO
   // Inactivate search bar when loading search
   // Reactivate search bar when results returned
-  // When no suggestion returned, give indication of no match, dont just return white bar ...
   // Filtered results by type
 
   return (
@@ -58,8 +61,17 @@ const SearchBox = ({
             type="search"
           />
           <div className="border bg-white my-1 mx-4 p-3" hidden={!suggestActive}>
-            {isUpdatingSuggestions && (suggestions.length === 0) && "Checking suggestions ..."}
-            {!isUpdatingSuggestions && (suggestions.length === 0) && "No suggestions ..."}
+            {/* Show status on suggestions */}
+            {isUpdatingSuggestions && (suggestions.length === 0) && (
+              <span className="text-stone-500">
+                Checking suggestions ...
+              </span>
+            )}
+            {!isUpdatingSuggestions && (suggestions.length === 0) && (
+              <span className="text-stone-500">
+                No suggestions ...
+              </span>
+            )}
             {/* TODO: may break when it is not just genes */}
             {suggestions.map((gene) => (
               <div className="border-b last:border-0 py-1.5" key={gene._id}>

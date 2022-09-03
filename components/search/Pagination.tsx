@@ -8,8 +8,8 @@ interface IPaginationProps {
 
 const Pagination: React.FC<IPaginationProps> = ({ pageIndex, pageTotal, changeSearchPage }) => {
   return (
-    <nav className="flex justify-center">
-      <div className="inline-flex drop-shadow-md my-4">
+    <nav className="">
+      <div className="flex drop-shadow-md my-4">
         <button
           className="py-2 px-3 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
           onClick={() => changeSearchPage(0)}
@@ -25,14 +25,14 @@ const Pagination: React.FC<IPaginationProps> = ({ pageIndex, pageTotal, changeSe
           {'<'}
         </button>
         <div
-            className="py-2 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+            className="grow text-center py-2 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
           >
             Page{" "}
             <input
               className="w-12 text-center border border-stone-300"
               type="number"
               defaultValue={pageIndex + 1}
-              onBlur={e => {
+              onChange={e => {
                 const page = e.target.value ? Number(e.target.value) - 1 : 0
                 changeSearchPage(page)
                 // console.log(`change to ${page}`)
