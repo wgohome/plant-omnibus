@@ -12,6 +12,7 @@ export default function Layout({ children }) {
           name="description"
           content="A kingdom-wide resource for plant gene expression across organs"
         />
+        {/* <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" /> */}
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
