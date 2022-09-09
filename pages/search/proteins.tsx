@@ -31,7 +31,9 @@ const ProteinSearchPage: NextPage = ({ DIAMOND_URL }) => {
           "Content-type": "application/json; charset=UTF-8",
         },
       }
-      )
+    )
+    // For debugging without waiting for the query
+    // fetch("https://diamond-search-z4ugr225pa-uc.a.run.app/results/proteins/8ce4ddcc-301a-11ed-b238-bd858c985e0c")
       .then(res=>res.json())
       .then(data=>{
         setResults(data.result || [])
@@ -45,8 +47,8 @@ const ProteinSearchPage: NextPage = ({ DIAMOND_URL }) => {
       {
         Header: "Gene identifier",
         accessor: "target",
-        Cell: ({ value }) => (
-          <Link href={`/species//genes/${value}`}>
+        Cell: ({ value, row }) => (
+          <Link href={`/species/${row.values.taxid}/genes/${value}`}>
             <a className="hover:underline text-plb-green active:text-plb-red">{value}</a>
           </Link>
         ),

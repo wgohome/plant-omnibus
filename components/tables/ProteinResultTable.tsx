@@ -26,7 +26,7 @@ const ProteinResultTable = ({ columns, data }) => {
             {headerGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
                 {headerGroup.headers.map(column => (
-                  // Add the sorting props to control sorting. For this example
+                  // Add the sorting props to control sorting. For this case
                   // we can add them into the header props
                   // eslint-disable-next-line react/jsx-key
                   <th
