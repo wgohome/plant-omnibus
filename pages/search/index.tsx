@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import type { NextPage } from 'next'
 
 import Layout from '../../components/Layout'
-import SearchBox from '../../components/searchBox'
+import SearchBox from '../../components/search/searchBox'
 import Pagination from "../../components/search/Pagination"
 import ResultsCardList from "../../components/search/ResultsCardList"
 

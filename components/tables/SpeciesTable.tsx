@@ -1,6 +1,5 @@
 import React from "react"
 import Link from "next/link"
-
 import { useTable, usePagination, useAsyncDebounce, useGlobalFilter } from "react-table"
 
 const GlobalFilterBox = ({

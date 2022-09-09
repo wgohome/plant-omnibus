@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import Layout from '../components/Layout'
-import SearchBox from '../components/searchBox'
+import SearchBox from '../components/search/searchBox'
 
 const Home: NextPage = () => {
   return (
