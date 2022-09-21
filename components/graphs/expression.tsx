@@ -18,9 +18,8 @@ const ExpressionPlot = ({}) => {
         data={[
           {
             type: 'bar',
-            // x: sampleAnnotations.map(sa => sa.label),
-            // y: sampleAnnotations.map(sa => sa.avg_tpm),
-            x: data.xValues,
+            // x: data.xValues,
+            x: data.organNames,
             y: data.yValues,
             error_y: {
               type: "data",
@@ -29,9 +28,6 @@ const ExpressionPlot = ({}) => {
               thickness: 2,
               symmetric: true,
               array: data.stdDevValues,
-              // value: 10,
-              // valueminus: 12,
-              // TODO: Get ranges
             },
             marker: {color: 'green'},  // TODO: map color to groups of organs?
             opacity: 0.4,
@@ -39,11 +35,12 @@ const ExpressionPlot = ({}) => {
         ]}
         layout={{
           // title: 'Gene expression in organs',
-          xaxis: {title: "Organs", automargin: true},
+          xaxis: {automargin: true, tickangle: -90},
           yaxis: {title: "TPM"},
+          height: 600,
         }}
         config={ {responsive: true} }
-        style={ {height: "inherit"} }
+        style={ {width: "inherit", height: "inherit"} }
       />
     </div>
   )
