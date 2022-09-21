@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { getSampleAnnotations } from '../../../../../utils/sampleAnnotations'
+import { getSampleAnnotations } from '../../../../../../utils/sampleAnnotations'
 
 export default async function handler(
   req: NextApiRequest,
