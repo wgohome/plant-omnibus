@@ -1,4 +1,4 @@
-const roundDecimal = (value: number, decimalPoints: number = 3): number => {
+export const roundDecimal = (value: number, decimalPoints: number = 3): number => {
   if (!decimalPoints || !Number.isInteger(decimalPoints)) {
     console.warn("decimalPoints must be an integer")
     decimalPoints = decimalPoints ? Math.round(decimalPoints) : 3
@@ -8,7 +8,7 @@ const roundDecimal = (value: number, decimalPoints: number = 3): number => {
   return Math.round(value * multiplier) / multiplier
 }
 
-const getStdDev = (values: number[]): number => {
+export const getStdDev = (values: number[]): number => {
   if (values.length == 0) { return 0 }
   const mean: number = values.reduce((prev, curr) => prev + curr, 0) / values.length
   const errSq: number[] = values.map(val => Math.pow((val - mean), 2))
@@ -16,5 +16,3 @@ const getStdDev = (values: number[]): number => {
   const rawStdDev: number = Math.sqrt(variance)
   return roundDecimal(rawStdDev, 3)
 }
-
-export { getStdDev, roundDecimal }

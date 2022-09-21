@@ -4,13 +4,13 @@ import useSWR from "swr"
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
-const ExpressionPlot = ({}) => {
+const ExpressionPlot = ({taxid, geneLabel, hideLoader}) => {
   // TODO: may want to store Plot attributes as state
 
-  const { data, error } = useSWR(`/api/species/3702/genes/AT1G01540/forBarchart`, fetcher)
+  const { data, error } = useSWR(`/api/species/${taxid}/genes/${geneLabel}/forBarchart`, fetcher)
 
   if (error) return <div>Failed to load</div>
-  if (!data) return <div>Loading...</div>
+  if (!data) return <div>Fetching data ...</div>
 
   return (
     <div className="my-4">
@@ -41,6 +41,7 @@ const ExpressionPlot = ({}) => {
         }}
         config={ {responsive: true} }
         style={ {width: "inherit", height: "inherit"} }
+        onAfterPlot={hideLoader}
       />
     </div>
   )
