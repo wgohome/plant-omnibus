@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import Layout from '../components/Layout'
-import SearchBox from '../components/search/searchBox'
+import SearchBox from '../components/search/SearchBox'
 import TextLink from '../components/atomic/TextLink'
 
 const Home: NextPage = () => {
@@ -22,6 +22,7 @@ const Home: NextPage = () => {
               alt="home banner image"
               layout="fill"
               objectFit="cover"
+              priority
             />
           </div>
         </div>

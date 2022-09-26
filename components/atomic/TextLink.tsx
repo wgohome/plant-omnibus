@@ -4,15 +4,14 @@ import Link from "next/link"
 interface IProps {
   href: string
   moreClassName?: string
-  moreAttributes?: object
   children: React.ReactNode
 }
 
-const TextLink: React.FC<IProps> = ({
+const TextLink: React.FC<IProps & {[key: string]: any}> = ({
   href,
   moreClassName = "",
-  moreAttributes = {},  /* Eg: {target: "_blank"} */
-  children
+  children,
+  ...moreAttributes  /* Eg: target="_blank" in the element */
 }) => {
   return (
     <Link href={href}>
