@@ -57,7 +57,7 @@ export default function Layout({ children }) {
         <div className="bg-amber-300/50 text-center px-3 py-3">
           <p className="text-sm">
             🚧👷🏻 We are in alpha testing.{" "}
-            <TextLink href="https://forms.gle/AbVGtaGe8CxtmR8q9" moreAttributes={{ target: "_blank" }}>
+            <TextLink href="https://forms.gle/AbVGtaGe8CxtmR8q9" target="_blank">
               Give your feedback
             </TextLink>.
           </p>
