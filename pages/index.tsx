@@ -5,6 +5,7 @@ import Link from 'next/link'
 
 import Layout from '../components/Layout'
 import SearchBox from '../components/search/searchBox'
+import TextLink from '../components/atomic/TextLink'
 
 const Home: NextPage = () => {
   return (
@@ -44,13 +45,19 @@ const Home: NextPage = () => {
           <SearchBox
             initialValue=""
             onValueUpdate={() => {}}
-            placeholder="Anything you are looking for ..."
+            placeholder="Search for your favorite gene ..."
           />
         </div>
       </section>
 
-      {/* <section id="home-other-actions">
-        <div className="flex justify-center my-4">
+      <section id="home-other-actions">
+        <div className="flex justify-center">
+          <TextLink href="/search/proteins">
+            Search by protein sequence
+          </TextLink>
+        </div>
+
+        {/* <div className="flex justify-center my-4">
           <Link href="/species">
             <a type="button" className="text-xl text-stone-500 outline outline-plb-green hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full px-6 py-3 text-center">
               Browse species
@@ -61,18 +68,9 @@ const Home: NextPage = () => {
               Search genes
             </a>
           </Link>
-          <Link href="#">
-            <a type="button" className="text-xl text-stone-500 outline outline-plb-green hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full px-6 py-3 text-center">
-              Search PFAM
-            </a>
-          </Link>
-          <Link href="#">
-            <a type="button" className="text-xl text-stone-500 outline outline-plb-green hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full px-6 py-3 text-center">
-              Search organs
-            </a>
-          </Link>
-        </div>
-      </section> */}
+
+        </div> */}
+      </section>
 
       <section id="home-draft">
         {/* <div className="h-40"></div>

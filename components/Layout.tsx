@@ -2,6 +2,7 @@ import Head from "next/head"
 import Link from "next/link"
 import Image from 'next/image'
 
+import TextLink from "./atomic/TextLink";
 
 export default function Layout({ children }) {
   return (
@@ -20,9 +21,9 @@ export default function Layout({ children }) {
         <nav className="sticky w-full bg-plb-green text-white shadow-sm shadow-slate-200">
           <div className="flex flex-row items-end py-4">
             <Link href="/">
-              <h1 className="grow text-2xl font-medium hover:underline active:text-blue-800 ml-8 mr-3">
+              <a className="grow text-2xl font-medium hover:underline active:text-blue-800 ml-8 mr-3">
                 Omnibus
-              </h1>
+              </a>
             </Link>
             {[
               ["Species", "/species"],
@@ -30,9 +31,9 @@ export default function Layout({ children }) {
               ["PFAM", "#"],
             ].map(([title, url]) => (
               <Link href={url} key={title}>
-                <p className="text-lg mx-3 last:mr-8 hover:underline active:text-blue-800">
+                <a className="text-lg mx-3 last:mr-8 hover:underline active:text-blue-800">
                   {title}
-                </p>
+                </a>
               </Link>
             ))}
           </div>
@@ -42,7 +43,7 @@ export default function Layout({ children }) {
       <main className="container mx-auto py-4 px-8">{children}</main>
 
       <footer className="mt-auto">
-        <div className="text-center px-8 py-3">
+        <div className="text-center px-8 my-3">
           <a
             href="https://plant.tools"
             target="_blank"
@@ -52,6 +53,14 @@ export default function Layout({ children }) {
             Mutwil Lab
           </a>{" "}
           🌱 , NTU Singapore
+        </div>
+        <div className="bg-amber-300/50 text-center px-3 py-3">
+          <p className="text-sm">
+            🚧👷🏻 We are in alpha testing.{" "}
+            <TextLink href="https://forms.gle/AbVGtaGe8CxtmR8q9" moreAttributes={{ target: "_blank" }}>
+              Give your feedback
+            </TextLink>.
+          </p>
         </div>
       </footer>
     </div>

@@ -17,6 +17,7 @@ module.exports = {
         "plb-green": "#5E7E67",
         "plb-light": "#EBF3ED",
         "plb-red": "#993B40",
+        "plb-orange": "#D87F61",
       },
     },
   },
