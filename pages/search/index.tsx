@@ -85,6 +85,9 @@ const GlobalSearchPage: NextPage = ({}) => {
           getSuggestions={getGenesSuggestions}
           submitSearchQuery={fetchResults}
         />
+        <TextLink href="/search/proteins" moreClassName="mx-2">
+          Search by protein sequence instead
+        </TextLink>
       </section>
 
       <section className="pt-4 my-4" id="results">

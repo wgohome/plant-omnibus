@@ -1,79 +1,27 @@
-import React, { KeyboardEvent } from "react"
+import React from "react"
 import debounce from "lodash.debounce"
-
-import useOutsideAlerter from '../../components/hooks/useOutsideAlterer'
-import useAutoFocus from "../hooks/useAutoFocus"
 
 const SearchBox = ({
   initialValue, // for input field, usually blank
   placeholder, // for input field
-  isLoadingResults =  false, // to know when the submit button should be disabled or not
-  /*
-   * `getSuggestions` is a callback from parent element
-   *  returning an array of suggestions
-   *  which contain the key `label`
-   */
-  getSuggestions,
+  isLoadingResults,
+  getSuggestions, // callback from parent to get array of suggestions
   submitSearchQuery, // callback from parent to get and render results
 }) => {
-  /* Controlled input element */
-  const [ userInput, setUserInput ] = React.useState(initialValue)
-
-  /* List of suggestions and the selected index if any */
+  const [ localValue, setLocalValue ] = React.useState(initialValue)
   const [ suggestions, setSuggestions ] = React.useState([])
-  const [ selectedIndex, setSelectedIndex ] = React.useState(-1)  // First one by default
-
-  /* Determines whether suggestions dropdown is shown or not */
   const [ suggestActive, setSuggestActive ] = React.useState(false)
   const [ isUpdatingSuggestions, setIsUpdatingSuggestions ] = React.useState(false)
-
-  /* Disable button when query has been sent and is awaiting results */
   const [ buttonDisabled, setButtonDisabled ] = React.useState(isLoadingResults)
-
-  /*
-   * `formRef` to requestSubmit on it programatically
-   * if the first load has non empty initial value
-   * while retaining the userInput in the search box
-   */
-  const formRef = React.useRef(null)
-  const [ isHydrated, setIsHydrated ] = React.useState(false)
-
-  /* Autofocus on in the input field, passed as ref */
-  const autoFocusRef = useAutoFocus()
-
-  /* Ref used to identify clicks outside this div */
-  const suggestionBoxRef = React.useRef(null)
-  useOutsideAlerter(suggestionBoxRef, () => {setSuggestActive(false)})
 
   React.useEffect(() => {
     setButtonDisabled(isLoadingResults)
   }, [isLoadingResults])
 
-  React.useEffect(() => {
-    if (initialValue) {
-      setUserInput(initialValue)
-      setIsHydrated(true)
-    }
-  }, [initialValue])
-
-  React.useEffect(() => {
-    if (isHydrated && userInput) {
-      formRef.current.requestSubmit()
-    }
-  }, [isHydrated])
-
-  /*
-   * If suggestions change, then update index to -1
-   * meaning no suggestion is selected yet
-   */
-  React.useEffect(() => {
-    setSelectedIndex(-1)
-  }, [suggestions])
-
   const updateSuggestions = React.useCallback(
     debounce(async (query: string) => {
       setIsUpdatingSuggestions(true)
-      console.log(`Querying suggestions for: ${query} ...`)
+      console.log(`Querying for: ${query} ...`)
       setSuggestions(await getSuggestions(query))
       setIsUpdatingSuggestions(false)
     }, 500),
@@ -83,52 +31,32 @@ const SearchBox = ({
   const handleSubmit = (event) => {
     event.preventDefault()
     setButtonDisabled(true)
-    submitSearchQuery(userInput)
+    submitSearchQuery(localValue)
     setSuggestActive(false)
   }
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    /* User pressed the enter key */
-    if (event.key === "Enter") {
-      // If no suggestion selected, no need to update userInput
-      // if no suggestion to select from, also no need to update userInput
-      if (selectedIndex < 0 || suggestions.length < 0) return
-      setUserInput(suggestions[selectedIndex].label)
-    }
-    /* User pressed the up arrow */
-    else if (event.key === "ArrowUp") {
-      if (selectedIndex === -1) return
-      // if selectedIndex === 0, can stil go up to unselect
-      setSelectedIndex(selectedIndex - 1)
-    }
-    /* User pressed the down arrow */
-    else if (event.key === "ArrowDown") {
-      if (selectedIndex === suggestions.length - 1) return
-      setSelectedIndex(selectedIndex + 1)
-    }
-  }
-
   return (
-    <form action="#" onSubmit={handleSubmit} ref={formRef}>
+    <form action="#" onSubmit={handleSubmit}>
       <div className="flex my-3">
-        <div className="grow mr-3" ref={suggestionBoxRef}>
+        <div className="grow mr-3">
           <input
-            type="search"
-            ref={autoFocusRef}
-            placeholder={placeholder}
             className="outline-none p-3 w-full rounded-full shadow border border-stone-300 focus:ring ring-plb-green ring-offset-1 focus:border-green-plb"
-            value={userInput}
+            value={localValue}
             onChange={(e) => {
               /*
-                Sync `value` with `userInput` component state
+                Set local state in this component
                 Should not be called in debounced function because of timeout
                 which cause state to be out of sync when typing
               */
-              setUserInput(e.target.value)
+              setLocalValue(e.target.value)
               setSuggestActive(true)
               updateSuggestions(e.target.value)
             }}
-            onKeyDown={handleKeyDown}
+            onBlur={(e) => {
+              setSuggestActive(false)
+            }}
+            placeholder={placeholder}
+            type="search"
           />
           <div className="border bg-white my-1 mx-4 p-3" hidden={!suggestActive}>
             {/* Show status on suggestions */}
@@ -139,23 +67,13 @@ const SearchBox = ({
             )}
             {!isUpdatingSuggestions && (suggestions.length === 0) && (
               <span className="text-stone-500">
-                No suggestions found
+                No suggestions ...
               </span>
             )}
-            {/* NOTE: Suggestions must return array of objects with a `label` key */}
-            {suggestions.map((item, index) => (
-              <div
-                className={
-                  `border-b last:border-0 py-1.5 hover:bg-slate-100
-                  ${index === selectedIndex && "bg-plb-green/25"}`
-                }
-                key={item.label}
-                onClick={(event) => {
-                  setUserInput(event.target.innerText)
-                  setSuggestActive(false)
-                }}
-              >
-                {item.label}
+            {/* NOTE: Suggestions must return array of objects with key label */}
+            {suggestions.map((gene) => (
+              <div className="border-b last:border-0 py-1.5" key={gene.label}>
+                {gene.label}
               </div>
             ))}
           </div>
