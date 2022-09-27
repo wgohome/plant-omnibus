@@ -18,10 +18,14 @@ const SearchBox = ({
     setButtonDisabled(isLoadingResults)
   }, [isLoadingResults])
 
+  React.useEffect(() => {
+    setLocalValue(initialValue)
+  }, [initialValue])
+
   const updateSuggestions = React.useCallback(
     debounce(async (query: string) => {
       setIsUpdatingSuggestions(true)
-      console.log(`Querying for: ${query} ...`)
+      console.log(`Querying suggestions for: ${query} ...`)
       setSuggestions(await getSuggestions(query))
       setIsUpdatingSuggestions(false)
     }, 500),
