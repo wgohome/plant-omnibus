@@ -7,39 +7,36 @@ import Layout from '../../components/Layout'
 import SearchBox from '../../components/search/SearchBox'
 import Pagination from "../../components/search/Pagination"
 import ResultsCardList from "../../components/search/ResultsCardList"
+import TextLink from '../../components/atomic/TextLink'
 
 const GlobalSearchPage: NextPage = ({}) => {
   const router = useRouter()
-  const { searchTerm } = router.query
-  // console.log(searchTerm)
 
   const [ loading, setLoading ] = React.useState(false)
-  const [ queryTerm, setQueryTerm ] = React.useState(searchTerm || "")
+  const [ queryTerm, setQueryTerm ] = React.useState("")
   const [ results, setResults ] = React.useState({
     pageIndex: 0,
     pageTotal: 0,
     numGenes: 0,
     genes: []
   })
-  // const refNum = React.useRef(0)
-  // console.log(queryTerm)
 
   /*
     Updates url query params
     to allow copying the url to rerun same search again
   */
-  React.useEffect(() => {
-    // if (refNum === ++refNum.current) return
-    // console.log(`from effect ${queryTerm}`)
-    router.push(
-      {
-        pathname: "/search",
-        query: {...router.query, searchTerm: queryTerm}
-      },
-      undefined,
-      {shallow: true}
-    )
-  }, [queryTerm])
+  // React.useEffect(() => {
+  //   // if (refNum === ++refNum.current) return
+  //   console.log(`from effect ${queryTerm}`)
+  //   router.push(
+  //     {
+  //       pathname: "/search",
+  //       query: {...router.query, searchTerm: queryTerm}
+  //     },
+  //     undefined,
+  //     {shallow: true}
+  //   )
+  // }, [])
   /*
     Do not pass router as dependency as router is always updating on navigation
     Causes infinite navigation and browser will throttle and block navigation altogether
@@ -52,15 +49,24 @@ const GlobalSearchPage: NextPage = ({}) => {
     TODO: perphaps make it generic Object, must return an _id and label
   */
   const getGenesSuggestions = async (query) => {
-    const genes = await fetch(`/api/search/genes?searchTerm=${query}`)
+    const genes = await fetch(`/api/search/geneLabels?searchTerm=${query}`)
       .then(res => res.json())
       .then(data => data.genes)
     return genes
   }
 
-  const changeQueryTerm = (query) => {
+  const fetchResults = (query: string) => {
     setLoading(true)
     setQueryTerm(query)
+    router.push(
+      {
+        pathname: "/search",
+        query: {...router.query, searchTerm: queryTerm}
+      },
+      undefined,
+      {shallow: true}
+    )
+    // setQueryTerm(query)
     // update query term state
     // to be passed down to the results side too?
     // and url update?
@@ -94,18 +100,23 @@ const GlobalSearchPage: NextPage = ({}) => {
       <h1 className="text-4xl py-3">Search</h1>
       <section className="my-4" id="search-box">
         <SearchBox
-          initialValue={searchTerm}
+          initialValue={queryTerm}
           placeholder="Search for anything (genes for now) ..."
+          isLoadingResults={loading}
           getSuggestions={getGenesSuggestions}
-          submitSearchQuery={changeQueryTerm}
+          submitSearchQuery={fetchResults}
         />
+        <TextLink href="/search/proteins" moreClassName="mx-2">
+          Search by protein sequence instead
+        </TextLink>
       </section>
 
       <section className="pt-4 my-4" id="results">
         <div className="grid grid-cols-4">
           <div className="col-span-1">
             <div className="p-3">
-              <h3 className="text-xl font-medium">Filters</h3>
+              <h3 className="text-xl font-medium my-2">Filters</h3>
+              <p className="text-sm italic my-2">Only gene identifiers for now</p>
             </div>
           </div>
           <div className="col-span-3">
