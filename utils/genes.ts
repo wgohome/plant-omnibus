@@ -39,7 +39,7 @@ export const getGenesSearchPage = async (
   const genes = await Gene.aggregate()
     .match({label: new RegExp(searchTerm, "i")})
     .skip(pageIndex * pageSize)
-    .limit(10)
+    .limit(pageSize)
     .lookup({
       from: "species",
       localField: "spe_id",
@@ -59,4 +59,16 @@ export const getGenesSearchPage = async (
     numGenes: numGenes,
     genes: genes,
   }
+}
+
+export const getGeneLabelsSearchPage = async (
+  searchTerm: string,
+  pageIndex: number = 0,
+  pageSize: number = parseInt(process.env.pageSize),
+) => {
+  connectMongo()
+  const genes = await Gene.find({label: new RegExp(searchTerm, "i")}, "label")
+    .skip(pageIndex * pageSize)
+    .limit(pageSize)
+  return { genes }
 }
