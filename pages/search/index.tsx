@@ -21,6 +21,12 @@ const GlobalSearchPage: NextPage = ({}) => {
     genes: []
   })
 
+  React.useEffect(() => {
+    if (router.isReady) {
+      setQueryTerm(router.query.searchTerm)
+    }
+  }, [router.isReady])
+
   /*
     Updates url query params
     to allow copying the url to rerun same search again
@@ -45,8 +51,7 @@ const GlobalSearchPage: NextPage = ({}) => {
   /*
     Custom callback to obtain suggestions based on query
     to be passed to generic SearchBox component
-    TODO: if global search may call another endpoint
-    TODO: perphaps make it generic Object, must return an _id and label
+    Returns array of objects with key `label`
   */
   const getGenesSuggestions = async (query) => {
     const genes = await fetch(`/api/search/geneLabels?searchTerm=${query}`)
@@ -58,18 +63,17 @@ const GlobalSearchPage: NextPage = ({}) => {
   const fetchResults = (query: string) => {
     setLoading(true)
     setQueryTerm(query)
+    // NOTE: queryState value will only be updated once outside of this callback context
+    // So use query value instead
+    console.log(`Fetching results for ${query}`)
     router.push(
       {
         pathname: "/search",
-        query: {...router.query, searchTerm: queryTerm}
+        query: {...router.query, searchTerm: query}
       },
       undefined,
       {shallow: true}
     )
-    // setQueryTerm(query)
-    // update query term state
-    // to be passed down to the results side too?
-    // and url update?
     fetch(`/api/search/genes?searchTerm=${query}`)
       .then(res => res.json())
       .then(data => {
