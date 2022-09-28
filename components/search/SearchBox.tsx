@@ -21,7 +21,7 @@ const SearchBox = ({
 
   /* List of suggestions and the selected index if any */
   const [ suggestions, setSuggestions ] = React.useState([])
-  const [ selectedIndex, setSelectedIndex ] = React.useState(0)  // First one by default
+  const [ selectedIndex, setSelectedIndex ] = React.useState(-1)  // First one by default
 
   /* Determines whether suggestions dropdown is shown or not */
   const [ suggestActive, setSuggestActive ] = React.useState(false)
@@ -29,6 +29,17 @@ const SearchBox = ({
 
   /* Disable button when query has been sent and is awaiting results */
   const [ buttonDisabled, setButtonDisabled ] = React.useState(isLoadingResults)
+
+  /*
+   * `formRef` to requestSubmit on it programatically
+   * if the first load has non empty initial value
+   * while retaining the userInput in the search box
+   */
+  const formRef = React.useRef(null)
+  const [ isHydrated, setIsHydrated ] = React.useState(false)
+
+  /* Autofocus on in the input field, passed as ref */
+  const autoFocusRef = useAutoFocus()
 
   /* Ref used to identify clicks outside this div */
   const suggestionBoxRef = React.useRef(null)
@@ -39,11 +50,25 @@ const SearchBox = ({
   }, [isLoadingResults])
 
   React.useEffect(() => {
-    setUserInput(initialValue)
+    if (initialValue) {
+      setUserInput(initialValue)
+      setIsHydrated(true)
+    }
   }, [initialValue])
 
-  /* Autofocus on in the input field, passed as ref */
-  const autoFocusRef = useAutoFocus()
+  React.useEffect(() => {
+    if (isHydrated && userInput) {
+      formRef.current.requestSubmit()
+    }
+  }, [isHydrated])
+
+  /*
+   * If suggestions change, then update index to -1
+   * meaning no suggestion is selected yet
+   */
+  React.useEffect(() => {
+    setSelectedIndex(-1)
+  }, [suggestions])
 
   const updateSuggestions = React.useCallback(
     debounce(async (query: string) => {
@@ -65,23 +90,26 @@ const SearchBox = ({
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     /* User pressed the enter key */
     if (event.key === "Enter") {
-      if (suggestions.length === 0) return
+      // If no suggestion selected, no need to update userInput
+      // if no suggestion to select from, also no need to update userInput
+      if (selectedIndex < 0 || suggestions.length < 0) return
       setUserInput(suggestions[selectedIndex].label)
     }
     /* User pressed the up arrow */
     else if (event.key === "ArrowUp") {
-      if (selectedIndex === 0) return
+      if (selectedIndex === -1) return
+      // if selectedIndex === 0, can stil go up to unselect
       setSelectedIndex(selectedIndex - 1)
     }
     /* User pressed the down arrow */
     else if (event.key === "ArrowDown") {
-      if (selectedIndex - 1 === suggestions.length) return
+      if (selectedIndex === suggestions.length - 1) return
       setSelectedIndex(selectedIndex + 1)
     }
   }
 
   return (
-    <form action="#" onSubmit={handleSubmit}>
+    <form action="#" onSubmit={handleSubmit} ref={formRef}>
       <div className="flex my-3">
         <div className="grow mr-3" ref={suggestionBoxRef}>
           <input

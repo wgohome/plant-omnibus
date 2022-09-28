@@ -2,12 +2,15 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 import Layout from '../components/Layout'
 import SearchBox from '../components/search/SearchBox'
 import TextLink from '../components/atomic/TextLink'
 
 const Home: NextPage = () => {
+  const router = useRouter()
+
   const getGenesSuggestions = async (query) => {
     const genes = await fetch(`/api/search/geneLabels?searchTerm=${query}`)
       .then(res => res.json())
@@ -58,7 +61,12 @@ const Home: NextPage = () => {
             initialValue=""
             placeholder="Search for your favorite gene ..."
             getSuggestions={getGenesSuggestions}
-            submitSearchQuery={() => {console.log(`Send result ...`)}}
+            submitSearchQuery={(query: string) => {
+              router.push({
+                pathname: "/search",
+                query: {...router.query, searchTerm: query, loadResults: true}
+              },)
+            }}
           />
         </div>
       </section>
