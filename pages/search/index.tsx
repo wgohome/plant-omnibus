@@ -28,27 +28,6 @@ const GlobalSearchPage: NextPage = ({}) => {
   }, [router.isReady])
 
   /*
-    Updates url query params
-    to allow copying the url to rerun same search again
-  */
-  // React.useEffect(() => {
-  //   // if (refNum === ++refNum.current) return
-  //   console.log(`from effect ${queryTerm}`)
-  //   router.push(
-  //     {
-  //       pathname: "/search",
-  //       query: {...router.query, searchTerm: queryTerm}
-  //     },
-  //     undefined,
-  //     {shallow: true}
-  //   )
-  // }, [])
-  /*
-    Do not pass router as dependency as router is always updating on navigation
-    Causes infinite navigation and browser will throttle and block navigation altogether
-  */
-
-  /*
     Custom callback to obtain suggestions based on query
     to be passed to generic SearchBox component
     Returns array of objects with key `label`
@@ -91,10 +70,6 @@ const GlobalSearchPage: NextPage = ({}) => {
         setLoading(false)
       })
   }
-
-  // TODO
-  // Create card components for different results returned
-  // Server side pagination of results returned
 
   return (
     <Layout>
