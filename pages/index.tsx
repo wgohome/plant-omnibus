@@ -8,6 +8,13 @@ import SearchBox from '../components/search/SearchBox'
 import TextLink from '../components/atomic/TextLink'
 
 const Home: NextPage = () => {
+  const getGenesSuggestions = async (query) => {
+    const genes = await fetch(`/api/search/geneLabels?searchTerm=${query}`)
+      .then(res => res.json())
+      .then(data => data.genes)
+    return genes
+  }
+
   return (
     <Layout>
       <Head>
@@ -43,10 +50,15 @@ const Home: NextPage = () => {
 
       <section className="py-4" id="home-search-global">
         <div className="max-w-4xl mx-auto my-4" id="search-box">
+          {/*
+            * Give suggestions
+            * Redirect to search page on enter
+          */}
           <SearchBox
             initialValue=""
-            onValueUpdate={() => {}}
             placeholder="Search for your favorite gene ..."
+            getSuggestions={getGenesSuggestions}
+            submitSearchQuery={() => {console.log(`Send result ...`)}}
           />
         </div>
       </section>
