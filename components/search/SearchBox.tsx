@@ -2,11 +2,12 @@ import React, { KeyboardEvent } from "react"
 import debounce from "lodash.debounce"
 
 import useOutsideAlerter from '../../components/hooks/useOutsideAlterer'
+import useAutoFocus from "../hooks/useAutoFocus"
 
 const SearchBox = ({
   initialValue, // for input field, usually blank
   placeholder, // for input field
-  isLoadingResults, // to known when the submit button should be disabled or not
+  isLoadingResults =  false, // to know when the submit button should be disabled or not
   /*
    * `getSuggestions` is a callback from parent element
    *  returning an array of suggestions
@@ -41,6 +42,9 @@ const SearchBox = ({
     setUserInput(initialValue)
   }, [initialValue])
 
+  /* Autofocus on in the input field, passed as ref */
+  const autoFocusRef = useAutoFocus()
+
   const updateSuggestions = React.useCallback(
     debounce(async (query: string) => {
       setIsUpdatingSuggestions(true)
@@ -61,6 +65,7 @@ const SearchBox = ({
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     /* User pressed the enter key */
     if (event.key === "Enter") {
+      if (suggestions.length === 0) return
       setUserInput(suggestions[selectedIndex].label)
     }
     /* User pressed the up arrow */
@@ -81,6 +86,7 @@ const SearchBox = ({
         <div className="grow mr-3" ref={suggestionBoxRef}>
           <input
             type="search"
+            ref={autoFocusRef}
             placeholder={placeholder}
             className="outline-none p-3 w-full rounded-full shadow border border-stone-300 focus:ring ring-plb-green ring-offset-1 focus:border-green-plb"
             value={userInput}
