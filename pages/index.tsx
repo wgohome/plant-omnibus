@@ -74,7 +74,7 @@ const Home: NextPage = () => {
       <section id="home-other-actions">
         <div className="flex justify-center">
           <TextLink href="/search/proteins">
-            Search by protein sequence
+            Search by protein sequence instead
           </TextLink>
         </div>
 

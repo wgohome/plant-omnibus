@@ -15,7 +15,8 @@ const TextLink: React.FC<IProps & {[key: string]: any}> = ({
 }) => {
   return (
     <Link href={href}>
-      <a className={`text-plb-green hover:underline active:text-plb-red visited:text-plb-red ${moreClassName}`} {...moreAttributes}>
+      <a className={`text-plb-green hover:underline active:text-plb-red visited:text-plb-green ${moreClassName}`} {...moreAttributes}>
+      {/* <a className={`text-plb-green hover:underline active:text-plb-red visited:text-plb-red ${moreClassName}`} {...moreAttributes}> */}
         {children}
       </a>
     </Link>

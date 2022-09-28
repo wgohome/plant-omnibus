@@ -85,20 +85,45 @@ const GlobalSearchPage: NextPage = ({}) => {
           getSuggestions={getGenesSuggestions}
           submitSearchQuery={fetchResults}
         />
-        <TextLink href="/search/proteins" moreClassName="mx-2">
-          Search by protein sequence instead
-        </TextLink>
       </section>
 
       <section className="pt-4 my-4" id="results">
-        <div className="grid grid-cols-4">
-          <div className="col-span-1">
-            <div className="p-3">
-              <h3 className="text-xl font-medium my-2">Filters</h3>
-              <p className="text-sm italic my-2">Only gene identifiers for now</p>
+        <div className="grid grid-cols-12">
+          <div className="col-span-4 pr-3">
+            <h3 className="text-2xl font-medium mb-4">Filters</h3>
+
+            {/* TODO: extract into atomic component */}
+            <div className="flex items-center my-3">
+              <input
+                type="checkbox"
+                name="searchFilter"
+                value="gene"
+                id="filterByGene"
+                className="w-5 h-5 text-plb-green bg-gray-100 rounded-lg border-gray-300 focus:ring-plb-green focus:ring-2"  readOnly
+              />
+              <label
+                htmlFor="filterByGene"
+                className="ml-2 text-gray-900"
+              >
+                Gene
+              </label>
             </div>
+
+            <p className="text-sm text-stone-400 italic my-2">Other filters coming soon</p>
+
+            <h3 className="text-2xl font-medium mt-8 mb-4">Others</h3>
+            <p className="my-2">
+              <TextLink href="/search/proteins">
+                Search by protein sequence
+              </TextLink>
+            </p>
+            <p className="my-2">
+              <TextLink href="/species">
+                Search by species
+              </TextLink>
+            </p>
           </div>
-          <div className="col-span-3">
+          <div className="col-span-8">
             <Pagination pageIndex={results.pageIndex} pageTotal={results.pageTotal} changeSearchPage={changeSearchPage} />
             {/*
               CASE #1: When user enter a new query term
