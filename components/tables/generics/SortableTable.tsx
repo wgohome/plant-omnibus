@@ -19,6 +19,15 @@ const SortableTable = ({ columns, data }) => {
     useSortBy,
   )
 
+  {
+    /* If rows is empty, don't render any table at all */
+    if (rows.length === 0) return (
+      <p className="">
+        No entries
+      </p>
+    )
+  }
+
   return (
     <div className="overflow-x-auto border border-stone-300 rounded-xl shadow-lg my-3">
       <table className="w-full" {...getTableProps()}>
