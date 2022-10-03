@@ -18,7 +18,6 @@ const InterproTable = ({ geneAnnotations }) => {
         Header: "GO Terms",
         accessor: "details.go_terms",
         Cell: ({value: goTerms}) => {
-          console.log(goTerms)
           return goTerms.map((goTerm, i) => (
             <TextLink href="#" key={i}>
               {goTerm}{"  "}
