@@ -7,8 +7,6 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json())
 const ExpressionPlot = ({taxid, geneLabel, hideLoader}) => {
   // TODO: may want to store Plot attributes as state
 
-  console.log("rendering graph again")
-
   const { data, error } = useSWRImmutable(`/api/species/${taxid}/genes/${geneLabel}/forBarchart`, fetcher)
 
   if (error) return <div>Failed to load</div>
