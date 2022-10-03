@@ -1,13 +1,15 @@
 import React from "react"
 import Plot from "react-plotly.js"
-import useSWR from "swr"
+import useSWRImmutable from "swr/immutable"
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 const ExpressionPlot = ({taxid, geneLabel, hideLoader}) => {
   // TODO: may want to store Plot attributes as state
 
-  const { data, error } = useSWR(`/api/species/${taxid}/genes/${geneLabel}/forBarchart`, fetcher)
+  console.log("rendering graph again")
+
+  const { data, error } = useSWRImmutable(`/api/species/${taxid}/genes/${geneLabel}/forBarchart`, fetcher)
 
   if (error) return <div>Failed to load</div>
   if (!data) return <div>Fetching data ...</div>
@@ -19,7 +21,7 @@ const ExpressionPlot = ({taxid, geneLabel, hideLoader}) => {
           {
             type: 'bar',
             // x: data.xValues,
-            x: data.organNames,
+            x: data.organNames,  // Use organ names instead of PO terms
             y: data.yValues,
             error_y: {
               type: "data",
