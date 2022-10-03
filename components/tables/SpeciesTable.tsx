@@ -66,7 +66,7 @@ const Table = ({ columns, data }) => {
         setGlobalFilter={setGlobalFilter}
       />
       <div className="overflow-x-auto border border-stone-300 rounded-xl shadow-lg my-3">
-        <table className="" {...getTableProps()}>
+        <table className="w-full" {...getTableProps()}>
           <thead className="border-b">
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
