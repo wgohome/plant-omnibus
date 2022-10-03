@@ -1,7 +1,12 @@
+import { ObjectId } from "mongoose"
+
 import Species from "../models/species"
 import Gene from "../models/gene"
 import connectMongo from "../utils/connectMongo"
 
+/*
+  Used for species show page, where the table of all genes for the species is at
+ */
 export const getGenesPage = async (
   taxid: number,
   pageIndex: number,
@@ -27,6 +32,24 @@ export const getGenesPage = async (
   }
 }
 
+/*
+  To return a single gene doc with its associated docs
+  For gene show page
+ */
+export const getOneGene = async (
+  species_id: ObjectId,
+  label: string,
+) => {
+  connectMongo()
+  const gene = await Gene.findOne({"spe_id": species_id, "label": label})
+    .populate("gene_annotations")
+  return gene
+}
+
+/*
+  Returns a page of full gene docs
+  Used for search results
+ */
 export const getGenesSearchPage = async (
   searchTerm: string,
   pageIndex: number = 0,
@@ -61,6 +84,11 @@ export const getGenesSearchPage = async (
   }
 }
 
+
+/*
+  Returns just gene labels
+  Used for search recommendations
+ */
 export const getGeneLabelsSearchPage = async (
   searchTerm: string,
   pageIndex: number = 0,
