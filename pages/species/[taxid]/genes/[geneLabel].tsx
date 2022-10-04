@@ -15,10 +15,7 @@ import MapmanTable from "../../../../components/tables/MapmanTable"
 import InterproTable from "../../../../components/tables/InterproTable"
 import TextLink from "../../../../components/atomic/TextLink"
 
-const ExpressionPlot = dynamic(
-  () => import("../../../../components/graphs/expression"),
-  {ssr: false},
-)
+import ExpressionTabs from "../../../../components/graphs/ExpressionTabs"
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   connectMongo()
@@ -50,13 +47,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
 const GenePage: NextPage = ({species, gene, highestSpm, mapmanGas, interproGas}) => {
   const router = useRouter()
   const { taxid, geneLabel } = router.query
-
-  const loader = <p id="graph-loading-placeholder">Loading graph ...</p>
-
-  const hideLoader = () => {
-    const placeholder = document.getElementById("graph-loading-placeholder")
-    placeholder.hidden = true
-  }
 
   return (
     <Layout>
@@ -90,7 +80,6 @@ const GenePage: NextPage = ({species, gene, highestSpm, mapmanGas, interproGas})
             Coexpressed genes
           </TextLink>
         </div>
-
       </section>
 
       <section className="my-4" id="expression-graph">
@@ -98,12 +87,7 @@ const GenePage: NextPage = ({species, gene, highestSpm, mapmanGas, interproGas})
         {!highestSpm && (
           <p>No annotated samples yet 😢</p>
         )}
-        {loader}
-        {/* TODO:
-          Hide expression plot if no samples
-          Prevent auto rehydrating of graph data
-        */}
-        <ExpressionPlot taxid={taxid} geneLabel={geneLabel} hideLoader={hideLoader} />
+        <ExpressionTabs taxid={taxid} geneLabel={geneLabel} />
       </section>
 
       <section className="my-4" id="mapman-annotations">
