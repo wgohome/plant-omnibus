@@ -1,6 +1,8 @@
 import Layout from "../components/layout"
 import Tabs from "../components/atomic/Tabs"
 
+import { TabGroup, TabHeaderGroup, TabHeaderItem, TabBodyGroup, TabBodyItem } from "../components/atomic/tabs/index"
+
 const Testing = () => {
 
   const graphs = [
@@ -47,8 +49,26 @@ const Testing = () => {
 
       <section>
         <Tabs listItems={graphs} />
+      </section>
 
-
+      <section>
+        <h1 className="text-2xl">Another component</h1>
+        <TabGroup>
+          <TabHeaderGroup>
+            {graphs.map(({ label, header }, i) => (
+              <TabHeaderItem key={label} tabIndex={i}>
+                {label}
+              </TabHeaderItem>
+            ))}
+          </TabHeaderGroup>
+          <TabBodyGroup>
+            {graphs.map(({ label , content }, i) => (
+              <TabBodyItem key={label} tabIndex={i}>
+                {content}
+              </TabBodyItem>
+            ))}
+          </TabBodyGroup>
+        </TabGroup>
       </section>
     </Layout>
   )
