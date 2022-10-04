@@ -13,13 +13,18 @@ const ExpressionBarplot = dynamic(
   () => import("./ExpressionBarplot"),
   {ssr: false},
 )
+const ExpressionBoxplot = dynamic(
+  () => import("./ExpressionBoxplot"),
+  {ssr: false},
+)
 
 interface IProps {
   taxid: number
   geneLabel: string
+  sampleAnnotations: object
 }
 
-const ExpressionTabs: React.FC<IProps> = ({ taxid, geneLabel }) => {
+const ExpressionTabs: React.FC<IProps> = ({ taxid, geneLabel, sampleAnnotations }) => {
   const [ showLoader, setShowLoader ] = React.useState(true)
 
   const hideLoader = () => {
@@ -38,17 +43,20 @@ const ExpressionTabs: React.FC<IProps> = ({ taxid, geneLabel }) => {
       </TabHeaderGroup>
       <TabBodyGroup>
         <TabBodyItem key="barchart" tabIndex={0}>
-          {showLoader && (
-            <p id="graph-loading-placeholder">Loading graph ...</p>
-          )}
-          {/*
-            ExpressionBarplot will only be loaded on client side,
-            so the loading placeholder should be outside of that component
-          */}
+          {
+            /*
+              ExpressionBarplot will only be loaded on client side,
+              so the loading placeholder should be outside of that component
+            */
+            showLoader && (
+              <p id="graph-loading-placeholder">Loading graph ...</p>
+            )
+          }
           <ExpressionBarplot taxid={taxid} geneLabel={geneLabel} hideLoader={hideLoader} />
         </TabBodyItem>
         <TabBodyItem key="boxplot" tabIndex={1}>
-          This is boxplot
+          {/* <ExpressionBoxplot taxid={taxid} geneLabel={geneLabel} hideLoader={hideLoader} /> */}
+          <ExpressionBoxplot taxid={taxid} geneLabel={geneLabel} hideLoader={hideLoader} sampleAnnotations={sampleAnnotations} />
         </TabBodyItem>
       </TabBodyGroup>
     </TabGroup>
