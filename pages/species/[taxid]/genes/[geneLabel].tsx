@@ -35,6 +35,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
 
   return {
     props: {
+      sampleAnnotations: JSON.parse(JSON.stringify(sampleAnnotations)),
       species: JSON.parse(JSON.stringify(species)),
       gene: JSON.parse(JSON.stringify(gene)),
       mapmanGas: JSON.parse(JSON.stringify(mapmanGas)),
@@ -44,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
 }
 
-const GenePage: NextPage = ({species, gene, highestSpm, mapmanGas, interproGas}) => {
+const GenePage: NextPage = ({species, gene, highestSpm, mapmanGas, interproGas, sampleAnnotations}) => {
   const router = useRouter()
   const { taxid, geneLabel } = router.query
 
@@ -87,7 +88,7 @@ const GenePage: NextPage = ({species, gene, highestSpm, mapmanGas, interproGas})
         {!highestSpm && (
           <p>No annotated samples yet 😢</p>
         )}
-        <ExpressionTabs taxid={taxid} geneLabel={geneLabel} />
+        <ExpressionTabs taxid={taxid} geneLabel={geneLabel} sampleAnnotations={sampleAnnotations} />
       </section>
 
       <section className="my-4" id="mapman-annotations">

@@ -23,7 +23,7 @@ const ExpressionBarplot = ({ taxid, geneLabel, hideLoader }) => {
             error_y: {
               type: "data",
               visible: true,
-              color: "black",
+              // color: "black",
               thickness: 2,
               symmetric: true,
               array: data.stdDevValues,
@@ -39,7 +39,10 @@ const ExpressionBarplot = ({ taxid, geneLabel, hideLoader }) => {
           height: 600,
         }}
         config={ {responsive: true} }
-        style={ {width: "inherit", height: "inherit"} }
+        style={{
+          position: "relative",
+        }}
+        // style={ {width: "inherit", height: "inherit"} }
         onInitialized={hideLoader}
       />
     </div>
