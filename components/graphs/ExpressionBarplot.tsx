@@ -4,11 +4,10 @@ import useSWRImmutable from "swr/immutable"
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
-const ExpressionPlot = ({taxid, geneLabel, hideLoader}) => {
+const ExpressionBarplot = ({ taxid, geneLabel, hideLoader }) => {
   // TODO: may want to store Plot attributes as state
 
   const { data, error } = useSWRImmutable(`/api/species/${taxid}/genes/${geneLabel}/forBarchart`, fetcher)
-
   if (error) return <div>Failed to load</div>
   if (!data) return <div>Fetching data ...</div>
 
@@ -47,4 +46,4 @@ const ExpressionPlot = ({taxid, geneLabel, hideLoader}) => {
   )
 }
 
-export default ExpressionPlot
+export default ExpressionBarplot
