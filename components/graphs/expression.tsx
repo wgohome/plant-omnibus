@@ -41,7 +41,7 @@ const ExpressionPlot = ({taxid, geneLabel, hideLoader}) => {
         }}
         config={ {responsive: true} }
         style={ {width: "inherit", height: "inherit"} }
-        onAfterPlot={hideLoader}
+        onInitialized={hideLoader}
       />
     </div>
   )
