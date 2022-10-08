@@ -10,7 +10,7 @@ const MapmanTable = ({ geneAnnotations }) => {
       },
       {
         Header: "Bin name",
-        accessor: "details.name",
+        accessor: "name",
       },
       {
         Header: "Bin description",

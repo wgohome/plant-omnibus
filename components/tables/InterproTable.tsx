@@ -12,7 +12,7 @@ const InterproTable = ({ geneAnnotations }) => {
       },
       {
         Header: "PFAM name",
-        accessor: "details.desc",
+        accessor: "name",
       },
       {
         Header: "GO Terms",
