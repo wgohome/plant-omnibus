@@ -1,203 +1,63 @@
 import React from "react"
-import { useTable, usePagination } from 'react-table'
 
-const GenesTable = ({
-  columns,
-  data,
-  fetchGenes,
-  loading,
-  pageCount: controlledPageCount,
-  givenPageSize  // optional
-}) => {
-  givenPageSize = givenPageSize || process.env.pageSize
+import VirtualPaginatedTable from "./generics/VirtualPaginatedTable"
+import TextLink from "../atomic/TextLink"
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    prepareRow,
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    setPageSize,
-    // Get the state from the instance
-    state: { pageIndex, pageSize },
-  } = useTable(
+interface IProps {
+  taxid: number
+}
+
+const GenesTable: React.FC<IProps> = ({ taxid }) => {
+  // Pagination state management
+  const [ genesPage, setGenesPage ] = React.useState([])
+  const [ pageCount, setPageCount ] = React.useState(0)
+  const [ loading, setLoading ] = React.useState(false)
+  const fetchIdRef = React.useRef(0)
+
+  // Table columns
+  const columns = React.useMemo(() => [
     {
-      columns,
-      data,
-      initialState: { pageIndex: 0, pageSize: givenPageSize }, // Pass our hoisted table state
-      manualPagination: true, // Tell the usePagination
-      // hook that we'll handle our own data fetching
-      // This means we'll also have to provide our own
-      // pageCount.
-      pageCount: controlledPageCount,
+      Header: "Gene ID",
+      accessor: "label",
+      Cell: ({ value }: { value: string }) => (
+        <TextLink href={`/species/${taxid}/genes/${value}`}>
+          {value}
+        </TextLink>
+      ),
     },
-    usePagination
-  )
+    {
+      Header: "Alias",
+      accessor: "alias",
+    },
+    {
+      Header: "Annotations",
+      accessor: "ga_ids",
+    },
+  ], [taxid])
 
-  // Listen for changes in pagination and use the state to fetch our new data
-  // react-table only helps us to update the pageIndex and pageSize states
-  React.useEffect(() => {
-    fetchGenes({ pageIndex, pageSize })
-  }, [fetchGenes, pageIndex, pageSize])
+  const fetchGenePage = React.useCallback(({ pageSize, pageIndex }: { pageSize: number; pageIndex: number }) => {
+    const fetchId = ++fetchIdRef.current
+    setLoading(true)
+    if (fetchId === fetchIdRef.current) {
+      fetch(`/api/species/${taxid}/genes?pageIndex=${pageIndex}&pageSize=${pageSize}`)
+      .then(res => res.json())
+      .then((data) => {
+          setGenesPage(data.genes)
+          setPageCount(data.pageTotal)
+          setLoading(false)
+        })
+        .catch(err => console.log(err))
+    }
+  }, [taxid])
 
   return (
-    <>
-      <pre hidden>
-        <code>
-          {JSON.stringify(
-            {
-              pageIndex,
-              pageSize,
-              pageCount,
-              canNextPage,
-              canPreviousPage,
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre>
-      <div className="overflow-x-auto border border-stone-300 rounded-xl shadow-lg my-3">
-        <table {...getTableProps()}>
-          <thead className="border-b">
-            {headerGroups.map(headerGroup => (
-              // eslint-disable-next-line react/jsx-key
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
-                  // eslint-disable-next-line react/jsx-key
-                  <th
-                    scope="col"
-                    className="text-gray-900 font-medium text-left min-w-[120px] px-6 py-4"
-                    {...column.getHeaderProps()}
-                  >
-                    {column.render('Header')}
-                    <span>
-                      {column.isSorted
-                        ? column.isSortedDesc
-                          ? ' 🔽'
-                          : ' 🔼'
-                        : ''}
-                    </span>
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map((row, i) => {
-              prepareRow(row)
-              return (
-                // eslint-disable-next-line react/jsx-key
-                <tr
-                  className="bg-white border-b last:border-0"
-                  {...row.getRowProps()}
-                >
-                  {row.cells.map(cell => {
-                    // eslint-disable-next-line react/jsx-key
-                    return (
-                      // eslint-disable-next-line react/jsx-key
-                      <td
-                        className="text-gray-900 text-sm font-light px-6 py-4"
-                        {...cell.getCellProps()}
-                      >
-                        {cell.render('Cell')}
-                      </td>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-            <tr>
-              {loading ? (
-                <span>Loading ...</span>
-              ) : (
-                <span>
-                  Page{' '}
-                  <strong>
-                    {pageIndex + 1} of {pageOptions.length}
-                  </strong>
-                </span>
-              )}
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      {/*
-        Pagination
-      */}
-      <nav className="flex justify-center">
-        <div className="inline-flex drop-shadow-md my-4">
-          <button
-            className="py-2 px-3 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-            onClick={() => gotoPage(0)}
-            disabled={!canPreviousPage}
-          >
-            First
-          </button>
-          <button
-            className="py-2 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-            onClick={() => previousPage()}
-            disabled={!canPreviousPage}
-          >
-            {'<'}
-          </button>
-          <div
-            className="py-2 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-          >
-            Go to{" "}
-            <input
-              className="text-center border border-stone-300"
-              type="number"
-              defaultValue={pageIndex + 1}
-              onChange={e => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0
-                gotoPage(page)
-              }}
-              style={{ width: '50px' }}
-            />
-          </div>
-          <div
-            className="py-2 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-          >
-            <select
-              className="border border-stone-300"
-              value={pageSize}
-              onChange={e => {
-                setPageSize(Number(e.target.value))
-              }}
-            >
-              {[10, 15, 20, 25, 30].map(pageSize => (
-                <option key={pageSize} value={pageSize}>
-                  Show {pageSize}
-                </option>
-              ))}
-            </select>
-          </div>
-          <button
-            className="py-2 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-            onClick={() => nextPage()}
-            disabled={!canNextPage}
-          >
-            {'>'}
-          </button>
-          <button
-            className="py-2 px-5 text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-            onClick={() => gotoPage(pageCount - 1)}
-            disabled={!canNextPage}
-          >
-            Last
-          </button>
-        </div>
-      </nav>
-    </>
+    <VirtualPaginatedTable
+      columns={columns}
+      data={genesPage}
+      pageCount={pageCount}
+      loading={loading}
+      fetchData={fetchGenePage}
+    />
   )
 }
 
