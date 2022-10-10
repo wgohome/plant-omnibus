@@ -25,13 +25,24 @@ const GenesTable: React.FC<IProps> = ({ taxid }) => {
         </TextLink>
       ),
     },
+    // {
+    //   Header: "Alias",
+    //   accessor: "alias",
+    // },
     {
-      Header: "Alias",
-      accessor: "alias",
-    },
-    {
-      Header: "Annotations",
-      accessor: "ga_ids",
+      Header: "Mapman annotations",
+      accessor: "gene_annotations",
+      Cell: ({ value: geneAnnotations }: { value: string }) => (
+        <ul className="space-y-1 max-w-md list-disc list-outside">
+          {
+            geneAnnotations.filter(ga => ga.type == "MAPMAN").map(ga => (
+              <li className="mb-1" key={ga.label}>
+                {ga.name}
+              </li>
+            ))
+          }
+        </ul>
+      )
     },
   ], [taxid])
 
