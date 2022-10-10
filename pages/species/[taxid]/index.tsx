@@ -1,15 +1,14 @@
 import React from "react";
-import Head from "next/head";
-import Link from "next/link";
-import { NextPage } from "next";
-import { useRouter } from "next/router";
+import Head from "next/head"
+import { NextPage } from "next"
+import { useRouter } from "next/router"
 
-import Layout from "../../../components/Layout";
-import GenesTable from "../../../components/tables/GenesTable";
-import Species from "../../../models/species";
-import { getGenesPage } from "../../../utils/genes";
-import connectMongo from "../../../utils/connectMongo";
-import Header1 from "../../../components/atomic/texts/Header1";
+import Layout from "../../../components/layout"
+import GenesTable from "../../../components/tables/GenesTable"
+import Header1 from "../../../components/atomic/texts/Header1"
+import connectMongo from "../../../utils/connectMongo"
+import Species from "../../../models/species"
+import { getGenesPage } from "../../../utils/genes"
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   connectMongo()
@@ -19,61 +18,21 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   return {
     props: {
       species: JSON.parse(JSON.stringify(this_species)),
-      initialGenes: JSON.parse(JSON.stringify(genePage.genes)),
-      numGenes: parseInt(genePage.numGenes),
+      // initialGenes: JSON.parse(JSON.stringify(genePage.genes)),
+      // pageTotal: genePage.pageTotal,
+      numGenes: genePage.numGenes,
     },
   }
 }
 
-const SpeciesPage: NextPage = ({ species, initialGenes, numGenes }) => {
+interface IProps {
+  species: Species
+  numGenes: number
+}
+
+const SpeciesPage: NextPage<IProps> = ({ species, numGenes }) => {
   const router = useRouter()
-  const { taxid } = router.query
-
-  // Pagination state management
-  const [ pageCount, setPageCount ] = React.useState(0)
-  const [ loading, setLoading ] = React.useState(false)
-  // Table body data
-  const [ genes, setGenes ] = React.useState(initialGenes)
-  const fetchIdRef = React.useRef(0)
-
-  // Table columns
-  const columns = React.useMemo(() => [
-    {
-      Header: "Gene ID",
-      accessor: "label",
-      Cell: ({ value }) => (
-        <Link href={`/species/${taxid}/genes/${value}`}>
-          <a className="text-plb-green hover:underline active:text-plb-red">{value}</a>
-        </Link>
-      ),
-    },
-    {
-      Header: "Alias",
-      accessor: "alias",
-    },
-    {
-      Header: "Annotations",
-      accessor: "ga_ids",
-    },
-  ], [])
-
-  const fetchGenes = React.useCallback(({ pageSize, pageIndex }: { pageSize: number, pageIndex: number }) => {
-    // This will get called when the table needs new data
-    // Give this fetch an ID
-    const fetchId = ++fetchIdRef.current
-    setLoading(true)
-    // Only update the data if this is the latest fetch
-    if (fetchId === fetchIdRef.current) {
-      fetch(`/api/species/${taxid}/genes?pageIndex=${pageIndex}&pageSize=${pageSize}`)
-        .then(res => res.json())
-        .then((data) => {
-          setGenes(data.genes)
-          setPageCount(data.pageTotal)
-          setLoading(false)
-        })
-        .catch(err => console.log(err))
-    }
-  }, [taxid, setGenes, setPageCount, setLoading])
+  const taxid = parseInt(router.query.taxid!)
 
   return (
     <Layout>
@@ -91,7 +50,7 @@ const SpeciesPage: NextPage = ({ species, initialGenes, numGenes }) => {
       </section>
 
       <section>
-        <GenesTable columns={columns} data={genes} fetchGenes={fetchGenes} loading={loading} pageCount={pageCount} />
+        <GenesTable taxid={taxid} />
       </section>
     </Layout>
   )
