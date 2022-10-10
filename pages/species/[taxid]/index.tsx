@@ -9,6 +9,7 @@ import GenesTable from "../../../components/tables/GenesTable";
 import Species from "../../../models/species";
 import { getGenesPage } from "../../../utils/genes";
 import connectMongo from "../../../utils/connectMongo";
+import Header1 from "../../../components/atomic/texts/Header1";
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   connectMongo()
@@ -81,7 +82,9 @@ const SpeciesPage: NextPage = ({ species, initialGenes, numGenes }) => {
       </Head>
 
       <section>
-        <h1 className="text-4xl italic py-3">{species.name}</h1>
+        <Header1 className="italic">
+          {species.name}
+        </Header1>
         <p>Taxanomic ID: {taxid}</p>
         <p>Alias: {species.alias.length ? species.alias.join(", ") : "-"}</p>
         <p>Number of genes: {numGenes}</p>
