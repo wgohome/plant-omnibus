@@ -18,6 +18,9 @@ export const getGenesPage = async (
   const genes = await Gene.find({"spe_id": species_id})
     .skip(pageIndex * pageSize)
     .limit(pageSize)
+    .populate("gene_annotations")
+    .lean()
+
   const numGenes = await Gene.countDocuments({"spe_id": species_id})
   /*
     NOTE: pageTotal is the number of pages required for the given pageSize,
