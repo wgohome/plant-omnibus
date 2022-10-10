@@ -76,6 +76,19 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
           )}
         </code>
       </pre>
+      <PaginationBar
+        {...{
+          pageIndex,  // This is a state from useTable hook
+          pageSize,  // This is a state from useTable hook
+          pageCount,
+          canPreviousPage,
+          previousPage,
+          canNextPage,
+          nextPage,
+          gotoPage,
+          setPageSize,
+        }}
+      />
       <div className="overflow-x-auto border border-stone-300 rounded-xl shadow-lg my-3">
         <table className="w-full" {...getTableProps()}>
           <thead className="border-b">
@@ -129,19 +142,6 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
           </tbody>
         </table>
       </div>
-      <PaginationBar
-        {...{
-          pageIndex,  // This is a state from useTable hook
-          pageSize,  // This is a state from useTable hook
-          pageCount,
-          canPreviousPage,
-          previousPage,
-          canNextPage,
-          nextPage,
-          gotoPage,
-          setPageSize,
-        }}
-      />
     </div>
   )
 }
