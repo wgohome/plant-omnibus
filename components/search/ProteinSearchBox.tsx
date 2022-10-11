@@ -19,7 +19,8 @@ const ProteinSearchBox = ({submitSearchQuery}) => {
 
   const sampleSeq = "MEEENQKSHRVSRKDQSGSHWSQGADEEPRARCSGKRCRSWAAAAIADCVALCCCPCAVVNIFTLAFVKVPWMIGRKCIGRGGPSKKRMKKINREDRFHHHHHHRRSAEMVSGGCCGGGDGDGEFDDHRFVVERDGSLTKEEAKTASLKEEEETRISARVEAERVWLELYQIGHLGFGRVSFTGIHQ"
 
-  const loadExampleSeq = () => {
+  const loadExampleSeq = (event) => {
+    event.preventDefault()
     const textarea: HTMLTextAreaElement = document.querySelector("textarea#proteinSeq")!
     textarea.value = sampleSeq
     textarea.focus()
