@@ -6,3 +6,20 @@ export const getOneSpecies = async (taxid: number) => {
   const species = await Species.findOne({"tax": taxid}).lean()
   return species
 }
+
+/*
+  For protein seq search results
+  From an array of taxid,
+  return species name
+*/
+export const getManySpecies = async (
+  taxids: number[]
+) => {
+  connectMongo()
+  const results = Promise.all(
+    taxids.map(async (taxid) => {
+      return await Species.findOne({ tax: taxid }, "_id tax name").lean()
+    })
+  )
+  return results
+}

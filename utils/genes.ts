@@ -103,3 +103,23 @@ export const getGeneLabelsSearchPage = async (
     .limit(pageSize)
   return { genes }
 }
+
+
+/*
+  For protein seq search results
+  From an array of taxid and gene label,
+  return gene annotation names (filter for MAPMAN within the API call itself)
+*/
+export const getManyGenes = async (
+  hits: {species_id: ObjectId, gene_label: string}[]
+) => {
+  connectMongo()
+  const results = Promise.all(
+    hits.map(async (hit) => {
+      return await Gene.findOne({ spe_id: hit.species_id, label: hit.gene_label })
+        .populate("gene_annotations")
+        .lean()
+    })
+  )
+  return results
+}

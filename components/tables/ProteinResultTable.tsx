@@ -13,6 +13,9 @@ const ProteinResultTable = ({ columns, data }) => {
     {
       columns,
       data,
+      initialState: {
+        hiddenColumns: ["taxid"]
+      }
     },
     useSortBy,
   )

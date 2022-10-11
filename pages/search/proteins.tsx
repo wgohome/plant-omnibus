@@ -19,7 +19,11 @@ const ProteinSearchPage: NextPage = ({ DIAMOND_URL }) => {
   const [ results, setResults ] = React.useState([])
   const [ queryStatus, setQueryStatus ] = React.useState(null)
 
-  const submitSearchQuery = (query: string) => {
+  /*
+    STEP 1: Query the diamond search API (FastAPI)
+    to get the diamond hits for this protein sequence
+  */
+  const submitSearchQuery = async (query: string) => {
     setQueryStatus("searching")
     fetch(
       `${DIAMOND_URL}/queries/proteins/wait`, {
@@ -32,12 +36,45 @@ const ProteinSearchPage: NextPage = ({ DIAMOND_URL }) => {
         },
       }
     )
-    // For debugging without waiting for the query
-    // fetch("https://diamond-search-z4ugr225pa-uc.a.run.app/results/proteins/8ce4ddcc-301a-11ed-b238-bd858c985e0c")
       .then(res=>res.json())
       .then(data=>{
-        setResults(data.result || [])
-        setQueryStatus(data.status)
+        processAndSetResults(data.result, data.status)
+      })
+      .catch(err=>console.log(err))
+  }
+
+  /*
+    STEP 2: For each query hit,
+    find the species name
+    and the gene's mapman annotation
+  */
+  const processAndSetResults = async (rawResults: object[], status: string) => {
+    const gene_targets = rawResults.map(res => {
+      return { taxid: res.taxid, gene_label: res.target}
+    })
+
+    fetch(
+      `/api/names/speciesAndGenes`, {
+        method: "POST",
+        body: JSON.stringify(gene_targets),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }
+    )
+      .then(res => res.json())
+      .then(names => {
+        const newResults = rawResults.map((old_result, i) => {
+          return {
+            ...old_result,
+            species_name: names[i].species_name,
+            gene_names: names[i].names,
+          }
+        })
+
+        console.log(newResults)
+        setResults(newResults)
+        setQueryStatus(status)
       })
       .catch(err=>console.log(err))
   }
@@ -53,6 +90,7 @@ const ProteinSearchPage: NextPage = ({ DIAMOND_URL }) => {
           </Link>
         ),
       },
+      /* Hide this column "taxid" under `setInitialState` in `useTable` hook call */
       {
         Header: "Taxanomic ID",
         accessor: "taxid",
@@ -61,6 +99,20 @@ const ProteinSearchPage: NextPage = ({ DIAMOND_URL }) => {
             <a className="hover:underline text-plb-green active:text-plb-red">{value}</a>
           </Link>
         ),
+      },
+      {
+        Header: "Species",
+        accessor: "species_name",
+        Cell: ({ value, row }) => (
+          <Link href={`/species/${row.values.taxid}`}>
+            <a className="hover:underline text-plb-green active:text-plb-red">{value}</a>
+          </Link>
+        ),
+      },
+      {
+        Header: "Mampman terms",
+        accessor: "gene_names",
+        Cell: ({ value }) => value ? value.join(", ") : "",
       },
       {
         Header: "% identity",
