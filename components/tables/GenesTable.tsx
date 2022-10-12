@@ -25,6 +25,7 @@ const GenesTable: React.FC<IProps> = ({ taxid }) => {
         </TextLink>
       ),
     },
+    /* No Alias stored in DB yet for now, so leaving it out first */
     // {
     //   Header: "Alias",
     //   accessor: "alias",
@@ -32,11 +33,17 @@ const GenesTable: React.FC<IProps> = ({ taxid }) => {
     {
       Header: "Mapman annotations",
       accessor: "gene_annotations",
-      Cell: ({ value: geneAnnotations }: { value: string }) => (
-        <ul className="space-y-1 max-w-md list-disc list-outside">
+      Cell: ({ value: geneAnnotations }: { value: object[] }) => (
+        <ul className="">
           {
+            /* If not gene annotation in the DB, just rended MAPMAN bin 35.2 */
+            (geneAnnotations.filter(ga => ga.type == "MAPMAN").length === 0) ? (
+              <li className="mb-2 last:mb-0">
+                not assigned.not annotated
+              </li>
+            ) :
             geneAnnotations.filter(ga => ga.type == "MAPMAN").map(ga => (
-              <li className="mb-1" key={ga.label}>
+              <li className="mb-2 last:mb-0" key={ga.label}>
                 {ga.name}
               </li>
             ))
