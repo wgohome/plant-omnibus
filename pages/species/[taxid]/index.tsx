@@ -18,8 +18,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   return {
     props: {
       species: JSON.parse(JSON.stringify(this_species)),
-      // initialGenes: JSON.parse(JSON.stringify(genePage.genes)),
-      // pageTotal: genePage.pageTotal,
+      initialGenes: JSON.parse(JSON.stringify(genePage.genes)),
+      pageTotal: genePage.pageTotal,
       numGenes: genePage.numGenes,
     },
   }
@@ -30,7 +30,7 @@ interface IProps {
   numGenes: number
 }
 
-const SpeciesPage: NextPage<IProps> = ({ species, numGenes }) => {
+const SpeciesPage: NextPage<IProps> = ({ species, numGenes, initialGenes, pageTotal }) => {
   const router = useRouter()
   const taxid = parseInt(router.query.taxid!)
 
@@ -50,7 +50,7 @@ const SpeciesPage: NextPage<IProps> = ({ species, numGenes }) => {
       </section>
 
       <section>
-        <GenesTable taxid={taxid} />
+        <GenesTable taxid={taxid} initialGenes={initialGenes} pageTotal={pageTotal} />
       </section>
     </Layout>
   )

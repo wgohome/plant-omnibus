@@ -5,12 +5,14 @@ import TextLink from "../atomic/TextLink"
 
 interface IProps {
   taxid: number
+  initalGenes: object[]
+  pageTotal: number
 }
 
-const GenesTable: React.FC<IProps> = ({ taxid }) => {
+const GenesTable: React.FC<IProps> = ({ taxid, initialGenes, pageTotal }) => {
   // Pagination state management
-  const [ genesPage, setGenesPage ] = React.useState([])
-  const [ pageCount, setPageCount ] = React.useState(0)
+  const [ genesPage, setGenesPage ] = React.useState(initialGenes)
+  const [ pageCount, setPageCount ] = React.useState(pageTotal)
   const [ loading, setLoading ] = React.useState(false)
   const fetchIdRef = React.useRef(0)
 
