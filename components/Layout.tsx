@@ -28,7 +28,8 @@ export default function Layout({ children }) {
             {[
               ["Species", "/species"],
               ["Organs", "#"],
-              ["PFAM", "#"],
+              ["PFAM", "/pfam"],
+              ["Mapman", "/mapman"],
             ].map(([title, url]) => (
               <Link href={url} key={title}>
                 <a className="text-lg mx-3 last:mr-8 hover:underline active:text-blue-800">
