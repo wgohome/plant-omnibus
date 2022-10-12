@@ -1,7 +1,8 @@
-import { GetServerSideProps, NextPage } from 'next'
 import React from 'react'
+import Head from "next/head"
+import { GetServerSideProps, NextPage } from 'next'
 
-import Layout from '../../components/layout'
+import Layout from '../../components/Layout'
 import Header1 from '../../components/atomic/texts/Header1'
 import { getGeneAnnotationsPage } from '../../utils/geneAnnotations'
 import InterproIndexTable from '../../components/tables/InterproIndexTable'
@@ -25,6 +26,10 @@ interface IProps {
 const PfamIndexPage: NextPage<IProps> = ({ geneAnnotations, numGeneAnnotations }) => {
   return (
     <Layout>
+      <Head>
+        <title>PFAM terms</title>
+      </Head>
+
       <Header1>PFAM terms</Header1>
       <InterproIndexTable
         initialGeneAnnotations={geneAnnotations}
