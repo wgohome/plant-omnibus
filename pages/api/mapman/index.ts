@@ -13,7 +13,7 @@ export default async function handler(
         pageIndex = parseInt(pageIndex) || 0
         pageSize = parseInt(pageSize) || parseInt(process.env.pageSize)
         const genePage = await getGeneAnnotationsPage({
-          type: "INTERPRO",
+          type: "MAPMAN",
           pageIndex,
           pageSize,
         })
