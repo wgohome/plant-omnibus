@@ -3,7 +3,7 @@ import Head from "next/head"
 import { NextPage } from "next"
 import { useRouter } from "next/router"
 
-import Layout from "../../../components/layout"
+import Layout from "../../../components/Layout"
 import GenesTable from "../../../components/tables/GenesTable"
 import Header1 from "../../../components/atomic/texts/Header1"
 import connectMongo from "../../../utils/connectMongo"
