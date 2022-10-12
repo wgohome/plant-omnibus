@@ -21,7 +21,7 @@ const MapmanIndexTable: React.FC<IProps> = ({ initialGeneAnnotations, pageTotal 
       Header: "Bincode",
       accessor: "label",
       Cell: ({ value }: { value: string }) => (
-        <TextLink href={`#`}>
+        <TextLink href={`/mapman/${value}`}>
           {value}
         </TextLink>
       ),
