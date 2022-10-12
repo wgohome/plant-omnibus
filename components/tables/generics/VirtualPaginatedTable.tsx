@@ -28,7 +28,7 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
     page,  // Instead of rows
     canPreviousPage,
     canNextPage,
-    // pageOptions,
+    pageOptions,
     pageCount,
     gotoPage,
     nextPage,
@@ -141,6 +141,20 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
             )}
           </tbody>
         </table>
+        {/* Optional foorter row */}
+        <div className="px-3">
+          {loading ? (
+            <span>Loading ...</span>
+          ) : (
+            <span>
+              Page{' '}
+              <strong>
+                {pageIndex + 1}
+              </strong>{' '}
+              of {pageOptions.length}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   )
