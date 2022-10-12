@@ -1,7 +1,7 @@
 import React from "react"
 
-import TextLink from "../atomic/TextLink"
 import SortableTable from "./generics/SortableTable"
+import TextLink from "../atomic/TextLink"
 
 const InterproTable = ({ geneAnnotations }) => {
   const columns = React.useMemo(
@@ -9,6 +9,11 @@ const InterproTable = ({ geneAnnotations }) => {
       {
         Header: "PFAM Identifier",
         accessor: "label",
+        Cell: ({ value }) => (
+          <TextLink href={`/interpro/${value}`}>
+            {value}
+          </TextLink>
+        ),
       },
       {
         Header: "PFAM name",
