@@ -1,5 +1,7 @@
 import React from "react"
+
 import SortableTable from "./generics/SortableTable"
+import TextLink from "../atomic/TextLink"
 
 const MapmanTable = ({ geneAnnotations }) => {
   const columns = React.useMemo(
@@ -7,6 +9,11 @@ const MapmanTable = ({ geneAnnotations }) => {
       {
         Header: "Bin code",
         accessor: "label",
+        Cell: ({ value }) => (
+          <TextLink href={`/mapman/${value}`}>
+            {value}
+          </TextLink>
+        ),
       },
       {
         Header: "Bin name",
