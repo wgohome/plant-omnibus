@@ -22,7 +22,7 @@ const InterproIndexTable: React.FC<IProps> = ({ initialGeneAnnotations, pageTota
       Header: "PFAM ID",
       accessor: "label",
       Cell: ({ value }: { value: string }) => (
-        <TextLink href={`#`}>
+        <TextLink href={`/pfam/${value}`}>
           {value}
         </TextLink>
       ),
