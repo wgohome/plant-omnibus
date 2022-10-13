@@ -1,7 +1,8 @@
 import React from "react"
 
-import VirtualPaginatedTable from "./generics/VirtualPaginatedTable"
+import VirtualPaginatedFilterTable from "./generics/VirtualPaginatedFilterTable"
 import TextLink from "../atomic/TextLink"
+import { IPropsFetchData } from "./generics/VirtualPaginatedFilterTable"
 
 interface IProps {
   initialGeneAnnotations: object[]
@@ -36,11 +37,15 @@ const MapmanIndexTable: React.FC<IProps> = ({ initialGeneAnnotations, pageTotal 
     },
   ], [])
 
-  const fetchGaPage = React.useCallback(({ pageSize, pageIndex }: { pageSize: number; pageIndex: number }) => {
+  const fetchGaPage = React.useCallback(({ pageSize, pageIndex, queryFilter=null }: IPropsFetchData) => {
     const fetchId = ++fetchIdRef.current
     setLoading(true)
     if (fetchId === fetchIdRef.current) {
-      fetch(`/api/mapman?pageIndex=${pageIndex}&pageSize=${pageSize}`)
+      let apiUrl = `/api/mapman?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      if (queryFilter) {
+        apiUrl += `&queryFilter=${queryFilter}`
+      }
+      fetch(apiUrl)
       .then(res => res.json())
       .then((data) => {
           setGaPage(data.geneAnnotations)
@@ -52,7 +57,7 @@ const MapmanIndexTable: React.FC<IProps> = ({ initialGeneAnnotations, pageTotal 
   }, [])
 
   return (
-    <VirtualPaginatedTable
+    <VirtualPaginatedFilterTable
       columns={columns}
       data={gaPage}
       pageCount={pageCount}

@@ -9,13 +9,14 @@ export default async function handler(
   switch (req.method) {
     case "GET":
       try {
-        let { pageIndex, pageSize } = req.query
-        pageIndex = parseInt(pageIndex) || 0
-        pageSize = parseInt(pageSize) || parseInt(process.env.pageSize)
+        let { pageIndex: pageIndexIn, paegSize: pageSizeIn, queryFilter } = req.query
+        const pageIndex = parseInt(pageIndexIn as string) || 0
+        const pageSize = parseInt(pageSizeIn as string) || parseInt(process.env.pageSize!)
         const genePage = await getGeneAnnotationsPage({
           type: "MAPMAN",
           pageIndex,
           pageSize,
+          queryFilter,
         })
         if (pageIndex < 0 || pageIndex > genePage.pageTotal) {
           res.status(422).json({
