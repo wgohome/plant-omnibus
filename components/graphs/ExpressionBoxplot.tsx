@@ -47,13 +47,17 @@ const ExpressionBoxplot = ({ taxid, geneLabel, hideLoader, sampleAnnotations }) 
           xaxis: {automargin: true, tickangle: -90},
           yaxis: {title: "TPM"},
           height: 600,
+          // autosize: true,
         }}
         config={ {responsive: true} }
         // style={ {width: "inherit", height: "inherit"} }
         style={{
           position: "relative",
+          // width: "100%",
+          // height: "inherit",
         }}
         onInitialized={hideLoader}
+        // useResizeHandler={true}
       />
     </div>
   )
