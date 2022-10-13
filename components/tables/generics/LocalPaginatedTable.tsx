@@ -11,7 +11,7 @@ interface IProps {
   fetchData: ({pageIndex, pageSize}: {pageIndex: number, pageSize: number}) => void
 }
 
-const LoaclPaginatedTable: React.FC<IProps> = ({
+const LocalPaginatedTable: React.FC<IProps> = ({
   columns,
   data,
   pageCount: controlledPageCount,
@@ -141,4 +141,4 @@ const LoaclPaginatedTable: React.FC<IProps> = ({
   )
 }
 
-export default LoaclPaginatedTable
+export default LocalPaginatedTable
