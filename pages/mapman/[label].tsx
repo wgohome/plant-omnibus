@@ -5,20 +5,24 @@ import { useRouter } from "next/router"
 
 import Layout from "../../components/Layout"
 import Header1 from "../../components/atomic/texts/Header1"
+import InterproShowTable from "../../components/tables/InterproShowTable"
+import { getOneGeneAnnotation } from "../../utils/geneAnnotations"
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
+  const geneAnnotation = await getOneGeneAnnotation({ type: "MAPMAN", label: params.label })
+
   return {
     props: {
-
+      geneAnnotation: JSON.parse(JSON.stringify(geneAnnotation))
     }
   }
 }
 
 interface IProps {
-
+  geneAnnotation: object
 }
 
-const MapmanShowPage: NextPage<IProps> = ({  }) => {
+const MapmanShowPage: NextPage<IProps> = ({ geneAnnotation }) => {
   const router = useRouter()
   const label = router.query.label
 
@@ -29,6 +33,9 @@ const MapmanShowPage: NextPage<IProps> = ({  }) => {
       </Head>
 
       <Header1>Mapman Bin {label}</Header1>
+      <p><b>Bin name:</b> {geneAnnotation.name}</p>
+      <p><b>Description:</b> {geneAnnotation.details.desc}</p>
+      <InterproShowTable data={geneAnnotation.gene_annotation_buckets} />
     </Layout>
   )
 }

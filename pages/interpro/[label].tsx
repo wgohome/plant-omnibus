@@ -35,11 +35,8 @@ const InterproShowPage: NextPage<IProps> = ({ geneAnnotation }) => {
       <Header1>PFAM {label}</Header1>
       <p>{geneAnnotation.name}</p>
       <p>
-        GO Terms: {geneAnnotation.details.go_terms.join(", ")}
+        <b>GO Terms:</b> {geneAnnotation.details.go_terms.join(", ")}
       </p>
-
-      {JSON.stringify(geneAnnotation.gene_annotation_buckets[0], undefined, 2)}
-
       <InterproShowTable data={geneAnnotation.gene_annotation_buckets} />
     </Layout>
   )
