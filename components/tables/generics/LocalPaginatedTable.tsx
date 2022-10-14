@@ -2,21 +2,18 @@ import React from "react"
 import { useTable, usePagination, useSortBy } from 'react-table'
 
 import PaginationBar from "./PaginationBar"
+import PageStatusFooter from "./PageStatusFooter"
 
 interface IProps {
   columns: object[]
   data: object[]
-  pageCount: number
-  loading: boolean
-  fetchData: ({pageIndex, pageSize}: {pageIndex: number, pageSize: number}) => void
+  hiddenColumns?: string[]
 }
 
 const LocalPaginatedTable: React.FC<IProps> = ({
   columns,
   data,
-  pageCount: controlledPageCount,
-  loading,
-  fetchData,
+  hiddenColumns = [],
 }) => {
   const defaultPageSize: number = process.env.pageSize ? parseInt(process.env.pageSize) : 10
 
@@ -28,7 +25,7 @@ const LocalPaginatedTable: React.FC<IProps> = ({
     page,  // Instead of rows
     canPreviousPage,
     canNextPage,
-    // pageOptions,
+    pageOptions,
     pageCount,
     gotoPage,
     nextPage,
@@ -40,19 +37,15 @@ const LocalPaginatedTable: React.FC<IProps> = ({
     {
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize: defaultPageSize },
+      initialState: {
+        pageIndex: 0,
+        pageSize: defaultPageSize,
+        hiddenColumns: hiddenColumns,
+      },
     },
     useSortBy,
     usePagination,
   )
-
-  /*
-    Whenever pageIndex changes, the data will be fetched.
-    useEffect to avoid re-rendering
-  */
-  React.useEffect(() => {
-    fetchData({ pageIndex, pageSize })
-  }, [fetchData, pageIndex, pageSize])
 
   return (
     <div>
@@ -136,6 +129,10 @@ const LocalPaginatedTable: React.FC<IProps> = ({
             )}
           </tbody>
         </table>
+        <PageStatusFooter
+          pageIndex={pageIndex}
+          pageLength={pageOptions.length}
+        />
       </div>
     </div>
   )
