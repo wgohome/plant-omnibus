@@ -33,3 +33,26 @@ export const getGeneAnnotationsPage = async ({
     pageTotal: pageTotal,
   }
 }
+
+export const getOneGeneAnnotation = async ({ type, label }) => {
+  connectMongo()
+  const geneAnnotation = await GeneAnnotation.findOne({ type: type, label: label})
+    .populate({
+      path: "gene_annotation_buckets",
+      select: "ga_id tax gene_ids",
+      populate: [
+        {
+          path: "species",
+          model: "Species",
+          select: "name taxid"
+        },
+        {
+          path: "genes",
+          model: "Gene",
+          select: "label",
+        }
+      ],
+    })
+    .lean()
+  return geneAnnotation
+}
