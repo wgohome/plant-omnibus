@@ -8,6 +8,7 @@ import {
   TabBodyGroup,
   TabBodyItem
 } from "../atomic/tabs/index"
+import Loader from "../atomic/Loader"
 
 const ExpressionBarplot = dynamic(
   () => import("./ExpressionBarplot"),
@@ -49,14 +50,18 @@ const ExpressionTabs: React.FC<IProps> = ({ sampleAnnotations }) => {
               so the loading placeholder should be outside of that component
             */
             showLoader && (
-              <p id="graph-loading-placeholder">Loading graph ...</p>
+              <div id="graph-loading-placeholder">
+                <Loader comment="Drawing the graph" />
+              </div>
             )
           }
           <ExpressionBarplot hideLoader={hideLoader} sampleAnnotations={sampleAnnotations} />
         </TabBodyItem>
         <TabBodyItem key="boxplot" tabIndex={1}>
           {showLoader && (
-            <p id="graph-loading-placeholder">Loading graph ...</p>
+            <div id="graph-loading-placeholder">
+              <Loader comment="Drawing the graph" />
+            </div>
           )}
           <ExpressionBoxplot hideLoader={hideLoader} sampleAnnotations={sampleAnnotations} />
         </TabBodyItem>
