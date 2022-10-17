@@ -8,7 +8,7 @@ interface IProps {
 }
 
 const TabHeaderItem: React.FC<IProps> = ({ tabIndex, children }) => {
-  const { openTab, setOpenTab } = React.useContext(TabContext)
+  const { openTab, setOpenTab, handleChangeTab } = React.useContext(TabContext)!
 
   const selectedHeaderClass = "font-medium text-plb-green border-b-2 border-plb-green"
 
@@ -26,6 +26,7 @@ const TabHeaderItem: React.FC<IProps> = ({ tabIndex, children }) => {
         onClick={(e) => {
           e.preventDefault()
           setOpenTab(tabIndex)
+          handleChangeTab && handleChangeTab(tabIndex)
         }}
       >
         {children}

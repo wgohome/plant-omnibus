@@ -1,5 +1,8 @@
 import dynamic from "next/dynamic"
 import React from "react"
+import Plotly from "plotly.js"
+
+// const Plotly = dynamic(() => import("plotly.js"), {ssr: false})
 
 import {
   TabGroup,
@@ -32,8 +35,14 @@ const ExpressionTabs: React.FC<IProps> = ({ sampleAnnotations }) => {
     setShowLoader(false)
   }
 
+  const handleChangeTab = (tabIndex: number) => {
+    const plotlyDivs = document.getElementsByClassName("js-plotly-plot")
+    Plotly.Plots.resize(plotlyDivs[tabIndex])
+  }
+  // handleChangeTab.bind(document)
+
   return (
-    <TabGroup>
+    <TabGroup handleChangeTab={handleChangeTab}>
       <TabHeaderGroup>
         <TabHeaderItem key="barchart" tabIndex={0}>
           Barchart
