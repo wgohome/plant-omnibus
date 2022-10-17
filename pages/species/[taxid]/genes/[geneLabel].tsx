@@ -2,31 +2,22 @@ import React from "react"
 import { NextPage, GetServerSideProps } from "next"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import dynamic from "next/dynamic"
 
 import Layout from "../../../../components/Layout"
-import connectMongo from "../../../../utils/connectMongo"
-import { getSampleAnnotations } from "../../../../utils/sampleAnnotations"
-import { getOneSpecies } from "../../../../utils/species"
-// import ExpressionPlot from "../../../../components/graphs/expression"
-import * as poNameMap from '/public/data/po_name_map.json' assert {type: 'json'}
-import { getOneGene } from "../../../../utils/genes"
+import TextLink from "../../../../components/atomic/TextLink"
 import MapmanTable from "../../../../components/tables/MapmanTable"
 import InterproTable from "../../../../components/tables/InterproTable"
-import TextLink from "../../../../components/atomic/TextLink"
-
 import ExpressionTabs from "../../../../components/graphs/ExpressionTabs"
+
+import connectMongo from "../../../../utils/connectMongo"
+import { getHighestSpmSA, getSampleAnnotations } from "../../../../utils/sampleAnnotations"
+import { getOneSpecies } from "../../../../utils/species"
+import { getOneGene } from "../../../../utils/genes"
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   connectMongo()
   const sampleAnnotations = await getSampleAnnotations(params.taxid, params.geneLabel)
-  let highestSpm = null
-  if (sampleAnnotations.length > 0) {
-    highestSpm = sampleAnnotations.reduce(
-      (prev, curr) => prev.spm > curr.spm ? prev : curr
-    )
-    highestSpm.labelName = poNameMap[highestSpm.label]
-  }
+  const highestSpmSa = await getHighestSpmSA(params.taxid, params.geneLabel)
 
   const species = await getOneSpecies(params.taxid)
   const gene = await getOneGene(species._id, params.geneLabel)
@@ -40,12 +31,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
       gene: JSON.parse(JSON.stringify(gene)),
       mapmanGas: JSON.parse(JSON.stringify(mapmanGas)),
       interproGas: JSON.parse(JSON.stringify(interproGas)),
-      highestSpm: JSON.parse(JSON.stringify(highestSpm)),
+      highestSpmSa: JSON.parse(JSON.stringify(highestSpmSa)),
     }
   }
 }
 
-const GenePage: NextPage = ({species, gene, highestSpm, mapmanGas, interproGas, sampleAnnotations}) => {
+const GenePage: NextPage = ({species, gene, highestSpmSa, mapmanGas, interproGas, sampleAnnotations}) => {
   const router = useRouter()
   const { taxid, geneLabel } = router.query
 
@@ -59,16 +50,12 @@ const GenePage: NextPage = ({species, gene, highestSpm, mapmanGas, interproGas, 
         <h1 className="text-4xl py-4">Gene {geneLabel}</h1>
         <p>Species name: <span className="italic">{species.name}</span></p>
         <p>Taxanomic ID: {taxid}</p>
-        {highestSpm && (
+        {highestSpmSa && (
           <React.Fragment>
-            <p>Organ with highest SPM: {highestSpm.labelName} ({highestSpm.label})</p>
-            <p>Highest SPM value: {highestSpm.spm}</p>
+            <p>Organ with highest SPM: {highestSpmSa.labelName} ({highestSpmSa.label})</p>
+            <p>Highest SPM value: {highestSpmSa.spm}</p>
           </React.Fragment>
         )}
-
-        {/* For debugging purposes */}
-        {/* {JSON.stringify(mapmanGas)}
-        {JSON.stringify(interproGas)} */}
 
         <div className="flex italic text-sm gap-2 my-3">
           <TextLink href="#mapman-annotations">
@@ -85,7 +72,7 @@ const GenePage: NextPage = ({species, gene, highestSpm, mapmanGas, interproGas, 
 
       <section className="my-4" id="expression-graph">
         <h3 className="text-2xl py-3">Gene expression profile by organs</h3>
-        {!highestSpm && (
+        {!highestSpmSa && (
           <p>No annotated samples yet 😢</p>
         )}
         <ExpressionTabs taxid={taxid} geneLabel={geneLabel} sampleAnnotations={sampleAnnotations} />
