@@ -2,12 +2,15 @@ import React from "react"
 import { NextPage, GetServerSideProps } from "next"
 import { useRouter } from "next/router"
 import Head from "next/head"
+import dynamic from "next/dynamic"
 
 import Layout from "../../../../components/Layout"
 import TextLink from "../../../../components/atomic/TextLink"
 import MapmanTable from "../../../../components/tables/MapmanTable"
 import InterproTable from "../../../../components/tables/InterproTable"
-import ExpressionTabs from "../../../../components/graphs/ExpressionTabs"
+// import ExpressionTabs from "../../../../components/graphs/ExpressionTabs"
+
+const ExpressionTabs = dynamic(() => import("../../../../components/graphs/ExpressionTabs"), {ssr: false})
 
 import connectMongo from "../../../../utils/connectMongo"
 import {

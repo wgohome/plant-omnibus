@@ -8,7 +8,7 @@ interface IProps {
 }
 
 const TabBodyItem: React.FC<IProps> = ({ tabIndex, children }) => {
-  const { openTab, setOpenTab } = React.useContext(TabContext)
+  const { openTab } = React.useContext(TabContext)!
 
   return (
     <li

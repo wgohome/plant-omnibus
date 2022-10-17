@@ -2,20 +2,22 @@ import React from "react"
 
 interface IProps {
   children: React.ReactNode
+  handleChangeTab?: (tabIndex?: number) => {}  // Callback to run when changing tab
 }
 
 interface TabContextType {
   openTab: number
   setOpenTab: React.Dispatch<React.SetStateAction<number>>
+  handleChangeTab?: (tabIndex?: number) => {}
 }
 
 export const TabContext = React.createContext<TabContextType | null>(null)
 
-const TabGroup: React.FC<IProps> = ({ children }) => {
+const TabGroup: React.FC<IProps> = ({ children, handleChangeTab }) => {
   const [ openTab, setOpenTab ] = React.useState(0)
 
   return (
-    <TabContext.Provider value={{ openTab, setOpenTab }}>
+    <TabContext.Provider value={{ openTab, setOpenTab, handleChangeTab }}>
       <div
         className="my-4"
         role="tablist"
