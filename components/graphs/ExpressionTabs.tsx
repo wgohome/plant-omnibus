@@ -24,7 +24,7 @@ interface IProps {
   sampleAnnotations: object
 }
 
-const ExpressionTabs: React.FC<IProps> = ({ taxid, geneLabel, sampleAnnotations }) => {
+const ExpressionTabs: React.FC<IProps> = ({ sampleAnnotations }) => {
   const [ showLoader, setShowLoader ] = React.useState(true)
 
   const hideLoader = () => {
@@ -52,14 +52,13 @@ const ExpressionTabs: React.FC<IProps> = ({ taxid, geneLabel, sampleAnnotations 
               <p id="graph-loading-placeholder">Loading graph ...</p>
             )
           }
-          <ExpressionBarplot taxid={taxid} geneLabel={geneLabel} hideLoader={hideLoader} />
+          <ExpressionBarplot hideLoader={hideLoader} sampleAnnotations={sampleAnnotations} />
         </TabBodyItem>
         <TabBodyItem key="boxplot" tabIndex={1}>
-          {/* <ExpressionBoxplot taxid={taxid} geneLabel={geneLabel} hideLoader={hideLoader} /> */}
           {showLoader && (
             <p id="graph-loading-placeholder">Loading graph ...</p>
           )}
-          <ExpressionBoxplot taxid={taxid} geneLabel={geneLabel} hideLoader={hideLoader} sampleAnnotations={sampleAnnotations} />
+          <ExpressionBoxplot hideLoader={hideLoader} sampleAnnotations={sampleAnnotations} />
         </TabBodyItem>
       </TabBodyGroup>
     </TabGroup>

@@ -10,28 +10,30 @@ import InterproTable from "../../../../components/tables/InterproTable"
 import ExpressionTabs from "../../../../components/graphs/ExpressionTabs"
 
 import connectMongo from "../../../../utils/connectMongo"
-import { getHighestSpmSA, getSampleAnnotations } from "../../../../utils/sampleAnnotations"
+import {
+  getHighestSpmSA,
+  getSampleAnnotationsGraphData,
+} from "../../../../utils/sampleAnnotations"
 import { getOneSpecies } from "../../../../utils/species"
 import { getOneGene } from "../../../../utils/genes"
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   connectMongo()
-  const sampleAnnotations = await getSampleAnnotations(params.taxid, params.geneLabel)
-  const highestSpmSa = await getHighestSpmSA(params.taxid, params.geneLabel)
-
   const species = await getOneSpecies(params.taxid)
+  const highestSpmSa = await getHighestSpmSA(params.taxid, params.geneLabel)
   const gene = await getOneGene(species._id, params.geneLabel)
   const mapmanGas = gene.gene_annotations.filter(ga => ga.type === "MAPMAN")
   const interproGas = gene.gene_annotations.filter(ga => ga.type === "INTERPRO")
+  const sampleAnnotations = await getSampleAnnotationsGraphData(params.taxid, params.geneLabel, "PO")
 
   return {
     props: {
-      sampleAnnotations: JSON.parse(JSON.stringify(sampleAnnotations)),
       species: JSON.parse(JSON.stringify(species)),
       gene: JSON.parse(JSON.stringify(gene)),
+      highestSpmSa: JSON.parse(JSON.stringify(highestSpmSa)),
       mapmanGas: JSON.parse(JSON.stringify(mapmanGas)),
       interproGas: JSON.parse(JSON.stringify(interproGas)),
-      highestSpmSa: JSON.parse(JSON.stringify(highestSpmSa)),
+      sampleAnnotations: JSON.parse(JSON.stringify(sampleAnnotations)),
     }
   }
 }
@@ -75,7 +77,7 @@ const GenePage: NextPage = ({species, gene, highestSpmSa, mapmanGas, interproGas
         {!highestSpmSa && (
           <p>No annotated samples yet 😢</p>
         )}
-        <ExpressionTabs taxid={taxid} geneLabel={geneLabel} sampleAnnotations={sampleAnnotations} />
+        <ExpressionTabs sampleAnnotations={sampleAnnotations} />
       </section>
 
       <section className="my-4" id="mapman-annotations">
