@@ -35,7 +35,7 @@ const ExpressionBarplot = ({ taxid, geneLabel, hideLoader }) => {
         layout={{
           // title: 'Gene expression in organs',
           xaxis: {automargin: true, tickangle: -90},
-          yaxis: {title: "TPM"},
+          yaxis: {title: "TPM", rangemode: "nonnegative"},
           height: 600,
         }}
         config={ {responsive: true} }
