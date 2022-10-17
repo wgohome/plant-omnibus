@@ -1,15 +1,10 @@
 import React from "react"
 import Plot from "react-plotly.js"
-import useSWRImmutable from "swr/immutable"
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json())
-
-const ExpressionBarplot = ({ taxid, geneLabel, hideLoader }) => {
-  // TODO: may want to store Plot attributes as state
-
-  const { data, error } = useSWRImmutable(`/api/species/${taxid}/genes/${geneLabel}/forBarchart`, fetcher)
-  if (error) return <div>Failed to load</div>
-  if (!data) return <div>Fetching data ...</div>
+const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
+  const organNames = sampleAnnotations.map(sa => sa.name)
+  const avgTpms = sampleAnnotations.map(sa => sa.avg_tpm)
+  const stdDevs = sampleAnnotations.map(sa => sa.sd)
 
   return (
     <div className="my-4">
@@ -17,16 +12,15 @@ const ExpressionBarplot = ({ taxid, geneLabel, hideLoader }) => {
         data={[
           {
             type: 'bar',
-            // x: data.xValues,
-            x: data.organNames,  // Use organ names instead of PO terms
-            y: data.yValues,
+            x: organNames,  // Use organ names instead of PO terms
+            y: avgTpms,
             error_y: {
               type: "data",
               visible: true,
               // color: "black",
               thickness: 2,
               symmetric: true,
-              array: data.stdDevValues,
+              array: stdDevs,
             },
             marker: {color: 'green'},  // TODO: map color to groups of organs?
             opacity: 0.4,

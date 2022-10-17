@@ -1,31 +1,16 @@
 import React from "react"
 import Plot from "react-plotly.js"
-import useSWRImmutable from "swr/immutable"
 
-import * as poNameMap from '../../public/data/po_name_map.json' assert {type: 'json'}
-
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json())
-
-const ExpressionBoxplot = ({ taxid, geneLabel, hideLoader, sampleAnnotations }) => {
-  // const { data, error } = useSWRImmutable(`/api/species/${taxid}/genes/${geneLabel}/forBarchart`, fetcher)
-  // if (error) return <div>Failed to load</div>
-  // if (!data) return <div>Fetching data ...</div>
-
-  const tracesData = sampleAnnotations.map(sa => ({
-    tpms: sa.samples.map(sample => sample.tpm),
-    label: poNameMap[sa.label],
-  }))
-
+const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
   return (
     <div className="relative my-4">
       <Plot
         data={
-          tracesData.map(trace => ({
+          sampleAnnotations.map(sa => ({
             type: "box",
-            y: trace.tpms,
+            y: sa.tpms,
             boxpoints: "all",
-            name: trace.label,
+            name: sa.label,
             showlegend: false,
             opacity: 0.8,
             fillcolor: "rgb(94, 126, 103)",
@@ -45,7 +30,7 @@ const ExpressionBoxplot = ({ taxid, geneLabel, hideLoader, sampleAnnotations }) 
         layout={{
           // title: 'Gene expression in organs',
           xaxis: {automargin: true, tickangle: -90},
-          yaxis: {title: "TPM"},
+          yaxis: {title: "TPM", range: [0, 50]},
           height: 600,
           // autosize: true,
         }}
