@@ -30,9 +30,9 @@ const Radio: React.FC<IProps> = ({ groupName, radioOptions, selected: initialSel
             id={radioOption.id}
             value={radioOption.id}  // Redundant
             checked={radioOption.id === selectedId}
-            className="w-4 h-4 text-plb-green bg-gray-100 border-gray-300 focus:ring-plb-green"
+            className="w-4 h-4"
           />
-          <label htmlFor={radioOption.id} className="ml-2 text-sm font-medium text-gray-900">
+          <label htmlFor={radioOption.id} className="ml-2">
             {radioOption.label}
           </label>
         </div>
