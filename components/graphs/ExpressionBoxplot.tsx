@@ -26,7 +26,7 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
           sampleAnnotations.map(sa => ({
             type: "box",
             y: sa.tpms,
-            boxpoints: boxpoints,  // From state
+            boxpoints: boxpoints,  // FROM STATE
             jitter: 0.5,
             name: sa.name,
             ids: sa.name,  // string[] for constancy of data points during animation
@@ -39,7 +39,7 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
             marker: {
               color: "rgb(84, 84, 84)",
               outliercolor: "rgba(172, 33, 33, 1)",
-              // opacity: 0.4,
+              opacity: 0.4,
               size: 4,
               line: {
               //   color: "rgb(220, 34, 164)",
@@ -107,6 +107,8 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
             handleChange={(id) => {
               switch (id) {
                 case "all-points":
+                  setBoxpoints("all")
+                  break
                 case "crop-out-outliers":
                   setBoxpoints("all")
                   break
