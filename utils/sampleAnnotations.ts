@@ -2,7 +2,7 @@ import Species from "../models/species"
 import Gene from "../models/gene"
 import SampleAnnotation from "../models/sampleAnnotation"
 import connectMongo from "../utils/connectMongo"
-import { getStdDev } from "./stats"
+import { getStdDev, getWhiskers } from "./stats"
 
 import * as poNameMap from '/public/data/po_name_map.json' assert {type: 'json'}
 
@@ -58,6 +58,7 @@ export const getSampleAnnotationsGraphData = async (
     sa.tpms = sa.samples.map((sample: object): number => sample.tpm)
     sa.sd = getStdDev(sa.tpms)
     // sa.se = 0
+    sa.topWhisker = getWhiskers(sa.tpms)[1]
     delete sa.samples
   })
   return sampleAnnotations

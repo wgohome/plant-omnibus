@@ -18,6 +18,8 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
     Show all jitter points, rescale to exclude outliers
   */
   const [ boxpoints, setBoxpoints ] = React.useState("all")  // "all" or "suspectedoutliers"
+  const [ constrainYRange, setConstrainYRange ] = React.useState(false)
+  const highestTopWhisker = Math.max(...sampleAnnotations.map(sa => sa.topWhisker))
 
   return (
     <div className="relative my-4">
@@ -54,8 +56,11 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
           }))
         }
         layout={{
-          xaxis: {automargin: true, tickangle: -90},
-          yaxis: {title: "TPM"},
+          xaxis: { automargin: true, tickangle: -90 },
+          yaxis: {
+            title: "TPM",
+            range: constrainYRange ? [0, highestTopWhisker + 5] : undefined  // FROM STATE
+          },
           height: 600,
           autosize: true,
           modebar: { orientation: "v" },
@@ -108,12 +113,15 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
               switch (id) {
                 case "all-points":
                   setBoxpoints("all")
+                  setConstrainYRange(false)
                   break
                 case "crop-out-outliers":
                   setBoxpoints("all")
+                  setConstrainYRange(true)
                   break
                 case "only-outliers":
                   setBoxpoints("suspectedoutliers")
+                  setConstrainYRange(false)
                   break
                 default:
                   break
