@@ -19,7 +19,7 @@ const Radio: React.FC<IProps> = ({ groupName, radioOptions, selected: initialSel
     <div
       onChange={e => {
         setSelectedId(e.target.id)
-        handleChange(e.target.id)
+        handleChange(e.target.id.replace(groupName, ""))
       }}
     >
       {radioOptions.map((radioOption) => (
@@ -27,12 +27,12 @@ const Radio: React.FC<IProps> = ({ groupName, radioOptions, selected: initialSel
           <input
             type="radio"
             name={groupName}
-            id={radioOption.id}
+            id={groupName + radioOption.id}
             value={radioOption.id}  // Redundant
-            checked={radioOption.id === selectedId}
+            checked={groupName + radioOption.id === selectedId}
             className="w-4 h-4"
           />
-          <label htmlFor={radioOption.id} className="ml-2">
+          <label htmlFor={groupName + radioOption.id} className="ml-2">
             {radioOption.label}
           </label>
         </div>

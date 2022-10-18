@@ -11,12 +11,6 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
     path: 'M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 232V334.1l31-31c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-72 72c-9.4 9.4-24.6 9.4-33.9 0l-72-72c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l31 31V232c0-13.3 10.7-24 24-24s24 10.7 24 24z',
   }
 
-  /*
-    States:
-    Show all jitter points
-    Show only outliers
-    Show all jitter points, rescale to exclude outliers
-  */
   const [ boxpoints, setBoxpoints ] = React.useState("all")  // "all" or "suspectedoutliers"
   const [ constrainYRange, setConstrainYRange ] = React.useState(false)
   const highestTopWhisker = Math.max(...sampleAnnotations.map(sa => sa.topWhisker))
@@ -59,10 +53,10 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
           xaxis: { automargin: true, tickangle: -90 },
           yaxis: {
             title: "TPM",
-            range: constrainYRange ? [0, highestTopWhisker + 5] : undefined  // FROM STATE
+            range: constrainYRange ? [ 0, highestTopWhisker + 1 ] : undefined,  // FROM STATE
           },
           height: 600,
-          autosize: true,
+          // autosize: true,
           modebar: { orientation: "v" },
         }}
         config={{
@@ -94,7 +88,7 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
           width: "100%",
         }}
         onInitialized={hideLoader}
-        useResizeHandler={true}
+        // useResizeHandler={true}
       />
       <div className="my-3">
         <p className="italic text-stone-500 text-sm">
@@ -115,14 +109,14 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
                   setBoxpoints("all")
                   setConstrainYRange(false)
                   break
-                case "crop-out-outliers":
-                  setBoxpoints("all")
-                  setConstrainYRange(true)
-                  break
-                case "only-outliers":
-                  setBoxpoints("suspectedoutliers")
-                  setConstrainYRange(false)
-                  break
+                  case "only-outliers":
+                    setBoxpoints("suspectedoutliers")
+                    setConstrainYRange(false)
+                    break
+                  case "crop-out-outliers":
+                    setBoxpoints("all")
+                    setConstrainYRange(true)
+                    break
                 default:
                   break
               }
