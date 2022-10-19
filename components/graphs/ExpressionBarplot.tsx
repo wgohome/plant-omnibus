@@ -24,18 +24,19 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
         data={[
           {
             type: 'bar',
-            x: organNames,  // Use organ names instead of PO terms
+            x: organNames,
             y: avgTpms,
             error_y: {
               type: "data",
               visible: true,
-              // color: "black",
-              thickness: 2,
+              color: "rgba(84, 84, 84, 0.6)",
+              thickness: 1.5,
               symmetric: true,
               array: stdDevs,
             },
-            marker: {color: 'green'},  // TODO: map color to groups of organs?
-            opacity: 0.4,
+            marker: {
+              color: "rgb(170, 227, 159)",
+            },
           },
         ]}
         layout={{
@@ -46,7 +47,6 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
             range: constrainYRange ? [ 0, highestTopWhisker + 1 ] : undefined,  // FROM STATE
           },
           height: 600,
-          // autosize: true,
           modebar: { orientation: "v" },
         }}
         config={{
@@ -88,8 +88,8 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
           <Radio
             groupName="barplot-options"
             radioOptions={[
-              { id: "barplot-full", label: "Full range" },
-              { id: "barplot-scale-down", label: "Range without outliers" },
+              { id: "barplot-full", label: "Full TPM-range" },
+              { id: "barplot-scale-down", label: "Scaled TPM-range" },
             ]}
             selected="barplot-full"
             handleChange={(id) => {
