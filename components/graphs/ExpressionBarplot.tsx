@@ -15,7 +15,7 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
   }
 
   const [ constrainYRange, setConstrainYRange ] = React.useState(false)
-  const highestTopWhisker = Math.max(...sampleAnnotations.map(sa => sa.topWhisker))
+  const highestAvgTpm = Math.max(...sampleAnnotations.map(sa => sa.avg_tpm))
 
   return (
     <div className="my-4">
@@ -44,7 +44,7 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
           yaxis: {
             title: "TPM",
             rangemode: "nonnegative",
-            range: constrainYRange ? [ 0, highestTopWhisker + 1 ] : undefined,  // FROM STATE
+            range: constrainYRange ? [ 0, highestAvgTpm * 1.01 ] : undefined,  // FROM STATE
           },
           height: 600,
           modebar: { orientation: "v" },
