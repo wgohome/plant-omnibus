@@ -20,14 +20,21 @@ export const getStdDev = (values: number[]): number => {
 }
 
 /*
-  Return [ topWhisker, bottomWhisker ]
+  Return [ bottomWhisker, topWhisker ]
 */
 export const getWhiskers = (values: number[]): [number, number] => {
   if (values.length == 0) { return [ 0, 0 ] }
   const [ q1, q2, q3 ] = quantileSeq(values, [ 0.25, 0.5, 0.75 ], false)
   const iqr = q3 - q1
-  const topWhisker = q3 + iqr
+  let topWhisker = q3 + 1.5 * iqr
+  // Top whisker as the highest point below q3 + iqr
+  const points = values.filter(tpm => tpm > q3 && tpm <= topWhisker)
+  if (points.length > 0) {
+    topWhisker = Math.max(...points)
+  } else {
+    topWhisker = q3
+  }
+  // Bottom whisker doesn't matter for now
   const bottomWhisker = Math.max(0, q1 - iqr)
-  // TODO: Can be more specific by giving the whisker as the highest point below q3 + iqr
   return [ bottomWhisker, topWhisker ]
 }
