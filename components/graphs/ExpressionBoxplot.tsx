@@ -31,22 +31,15 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
             hoverinfo: "y",  // default: "all", but we hide the name here, bcos too repetitive
             // hovertemplate: "",  // Refer to D3 formatting syntax if we need this in future
             // yhoverformat: "",
-            fillcolor: "green",
-            opacity: 0.5,
+            fillcolor: "rgb(170, 227, 159)",
             marker: {
-              color: "rgb(84, 84, 84)",
-              outliercolor: "rgba(172, 33, 33, 1)",
+              color: "rgba(84, 84, 84, 1)",
               opacity: 0.4,
               size: 4,
-              line: {
-              //   color: "rgb(220, 34, 164)",
-                outliercolor: "rgba(220, 34, 164, 1)",
-              }
+              line: { width: 0 }
             },
             line: {
-              // color: "green",
-              // color: "rgb(132, 168, 142)",
-              color: "rgb(144, 142, 142)",
+              color: "rgba(84, 84, 84, 0.6)",
             },
           }))
         }
@@ -57,7 +50,6 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
             range: constrainYRange ? [ 0, highestTopWhisker + 1 ] : undefined,  // FROM STATE
           },
           height: 600,
-          // autosize: true,
           modebar: { orientation: "v" },
         }}
         config={{
@@ -101,8 +93,8 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
             radioOptions={[
               { id: "boxplot-full", label: "All points (full range)" },
               { id: "boxplot-outlier-points", label: "Only outliers (full range)" },
-              { id: "boxplot-scale-down", label: "All points (range scaled)" },
-              { id: "boxplot-scale-down-no-points", label: "Hide points (range scaled)" },
+              { id: "boxplot-scale-down", label: "All points (scaled range)" },
+              { id: "boxplot-scale-down-no-points", label: "Only outliers (scaled range)" },
             ]}
             selected="boxplot-full"
             handleChange={(id) => {
@@ -112,7 +104,7 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
                   setConstrainYRange(false)
                   break
                   case "boxplot-outlier-points":
-                    setBoxpoints("suspectedoutliers")
+                    setBoxpoints("outliers")
                     setConstrainYRange(false)
                     break
                   case "boxplot-scale-down":
