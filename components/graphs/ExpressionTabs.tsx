@@ -21,8 +21,6 @@ const ExpressionBoxplot = dynamic(
 )
 
 interface IProps {
-  taxid: number
-  geneLabel: string
   sampleAnnotations: object
 }
 
@@ -35,7 +33,9 @@ const ExpressionTabs: React.FC<IProps> = ({ sampleAnnotations }) => {
 
   const handleChangeTab = (tabIndex: number) => {
     const plotlyDivs = document.getElementsByClassName("js-plotly-plot")
-    Plotly.Plots.resize(plotlyDivs[tabIndex])
+    if (plotlyDivs.length > 0 && plotlyDivs.length > tabIndex) {
+      Plotly.Plots.resize(plotlyDivs[tabIndex])
+    }
   }
 
   return (
