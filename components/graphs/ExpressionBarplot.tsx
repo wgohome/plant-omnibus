@@ -20,6 +20,7 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
   return (
     <div className="my-4">
       <Plot
+        className="overflow-hidden border border-stone-300 rounded-2xl shadow-lg min-h-[600px]"
         data={[
           {
             type: 'bar',
@@ -73,8 +74,8 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
           modeBarButtonsToRemove: ["select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", "toImage"],
         }}
         style={{
-          position: "relative",
-          width: "100%",
+          // position: "relative",
+          // width: "100%",
         }}
         onInitialized={hideLoader}
         // useResizeHandler={true}
