@@ -7,12 +7,12 @@ interface IProps {
   href?: string
 }
 
-const Header2: React.FC<IProps> = ({ children, className, href }) => {
+const Header3: React.FC<IProps> = ({ children, className, href }) => {
   if (href) {
     return (
       <Link href={href}>
         <a className="hover:underline active:text-plb-red">
-          <h1 className={`text-3xl py-3 ${className}`}>
+          <h1 className={`text-2xl py-3 ${className}`}>
             {children}
           </h1>
         </a>
@@ -20,10 +20,10 @@ const Header2: React.FC<IProps> = ({ children, className, href }) => {
     )
   }
   return (
-    <h1 className={`text-3xl py-3 ${className}`}>
+    <h1 className={`text-2xl py-3 ${className}`}>
       {children}
     </h1>
   )
 }
 
-export default Header2
+export default Header3
