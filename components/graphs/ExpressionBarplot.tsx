@@ -86,18 +86,18 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
         </p>
         <div className="mt-4 mb-8">
           <Radio
-            groupName="barplot-points-option"
+            groupName="barplot-options"
             radioOptions={[
-              { id: "full-range", label: "Full range" },
-              { id: "crop-out-outliers", label: "Scale without outliers" },
+              { id: "barplot-full", label: "Full range" },
+              { id: "barplot-scale-down", label: "Range without outliers" },
             ]}
-            selected="full-range"
+            selected="barplot-full"
             handleChange={(id) => {
               switch (id) {
-                case "full-range":
+                case "barplot-full":
                   setConstrainYRange(false)
                   break
-                case "crop-out-outliers":
+                case "barplot-scale-down":
                   setConstrainYRange(true)
                   break
                 default:

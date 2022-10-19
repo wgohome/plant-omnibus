@@ -97,25 +97,30 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
         </p>
         <div className="mt-4 mb-8">
           <Radio
-            groupName="boxplot-points-option"
+            groupName="boxplot-options"
             radioOptions={[
-              { id: "all-points", label: "All datapoints" },
-              { id: "only-outliers", label: "Only outliers" },
-              { id: "crop-out-outliers", label: "All datapoints (axis scaled)" },
+              { id: "boxplot-full", label: "All points (full range)" },
+              { id: "boxplot-outlier-points", label: "Only outliers (full range)" },
+              { id: "boxplot-scale-down", label: "All points (range scaled)" },
+              { id: "boxplot-scale-down-no-points", label: "Hide points (range scaled)" },
             ]}
-            selected="all-points"
+            selected="boxplot-full"
             handleChange={(id) => {
               switch (id) {
-                case "all-points":
+                case "boxplot-full":
                   setBoxpoints("all")
                   setConstrainYRange(false)
                   break
-                  case "only-outliers":
+                  case "boxplot-outlier-points":
                     setBoxpoints("suspectedoutliers")
                     setConstrainYRange(false)
                     break
-                  case "crop-out-outliers":
+                  case "boxplot-scale-down":
                     setBoxpoints("all")
+                    setConstrainYRange(true)
+                    break
+                  case "boxplot-scale-down-no-points":
+                    setBoxpoints("outliers")
                     setConstrainYRange(true)
                     break
                 default:
