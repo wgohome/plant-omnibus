@@ -35,7 +35,6 @@ const ExpressionTabs: React.FC<IProps> = ({ sampleAnnotations }) => {
 
   const handleChangeTab = (tabIndex: number) => {
     const plotlyDivs = document.getElementsByClassName("js-plotly-plot")
-    console.log("Resizing: ")
     Plotly.Plots.resize(plotlyDivs[tabIndex])
   }
 
