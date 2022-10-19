@@ -12,6 +12,10 @@ interface IProps {
   handleChange: (id: string) => void
 }
 
+/*
+  NOTE:
+  the groupName and the id for radioOptions have to be unique globally on the same page!
+*/
 const Radio: React.FC<IProps> = ({ groupName, radioOptions, selected: initialSelected, handleChange }) => {
   const [ selectedId, setSelectedId ] = React.useState(initialSelected)
 
@@ -19,7 +23,7 @@ const Radio: React.FC<IProps> = ({ groupName, radioOptions, selected: initialSel
     <div
       onChange={e => {
         setSelectedId(e.target.id)
-        handleChange(e.target.id.replace(groupName, ""))
+        handleChange(e.target.id)
       }}
     >
       {radioOptions.map((radioOption) => (
@@ -27,12 +31,12 @@ const Radio: React.FC<IProps> = ({ groupName, radioOptions, selected: initialSel
           <input
             type="radio"
             name={groupName}
-            id={groupName + radioOption.id}
+            id={radioOption.id}
             value={radioOption.id}  // Redundant
-            checked={groupName + radioOption.id === selectedId}
+            checked={radioOption.id === selectedId}
             className="w-4 h-4"
           />
-          <label htmlFor={groupName + radioOption.id} className="ml-2">
+          <label htmlFor={radioOption.id} className="ml-2">
             {radioOption.label}
           </label>
         </div>
