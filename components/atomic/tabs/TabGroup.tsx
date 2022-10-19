@@ -19,7 +19,7 @@ const TabGroup: React.FC<IProps> = ({ children, handleChangeTab, ...otherProps }
   return (
     <TabContext.Provider value={{ openTab, setOpenTab, handleChangeTab }}>
       <div
-        className="my-4"
+        className=""
         role="tablist"
         {...otherProps}
       >
