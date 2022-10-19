@@ -76,10 +76,11 @@ const GenePage: NextPage = ({species, gene, highestSpmSa, mapmanGas, interproGas
 
       <section className="my-4" id="expression-graph">
         <h3 className="text-2xl py-3">Gene expression profile by organs</h3>
-        {!highestSpmSa && (
+        {!highestSpmSa ? (
           <p>No annotated samples yet 😢</p>
+        ) : (
+          <ExpressionTabs sampleAnnotations={sampleAnnotations} />
         )}
-        <ExpressionTabs sampleAnnotations={sampleAnnotations} />
       </section>
 
       <section className="my-4" id="mapman-annotations">
