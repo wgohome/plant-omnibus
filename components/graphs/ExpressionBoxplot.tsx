@@ -48,10 +48,11 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
           xaxis: { automargin: true, tickangle: -90 },
           yaxis: {
             title: "TPM",
-            range: constrainYRange ? [ 0, highestTopWhisker + 1 ] : undefined,  // FROM STATE
+            range: constrainYRange ? [ 0, highestTopWhisker * 1.01] : undefined,  // FROM STATE
           },
           height: 600,
           modebar: { orientation: "v" },
+          dragmode: "pan",
         }}
         config={{
           responsive: true,
@@ -76,6 +77,7 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
             },
           ],
           modeBarButtonsToRemove: ["select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", "toImage"],
+          // scrollZoom: true,
         }}
         style={{
           // position: "relative",
@@ -104,18 +106,18 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
                   setBoxpoints("all")
                   setConstrainYRange(false)
                   break
-                  case "boxplot-outlier-points":
-                    setBoxpoints("outliers")
-                    setConstrainYRange(false)
-                    break
-                  case "boxplot-scale-down":
-                    setBoxpoints("all")
-                    setConstrainYRange(true)
-                    break
-                  case "boxplot-scale-down-no-points":
-                    setBoxpoints("outliers")
-                    setConstrainYRange(true)
-                    break
+                case "boxplot-outlier-points":
+                  setBoxpoints("outliers")
+                  setConstrainYRange(false)
+                  break
+                case "boxplot-scale-down":
+                  setBoxpoints("all")
+                  setConstrainYRange(true)
+                  break
+                case "boxplot-scale-down-no-points":
+                  setBoxpoints("outliers")
+                  setConstrainYRange(true)
+                  break
                 default:
                   break
               }
