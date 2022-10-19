@@ -2,8 +2,6 @@ import dynamic from "next/dynamic"
 import React from "react"
 import Plotly from "plotly.js"
 
-// const Plotly = dynamic(() => import("plotly.js"), {ssr: false})
-
 import {
   TabGroup,
   TabHeaderGroup,
@@ -37,12 +35,14 @@ const ExpressionTabs: React.FC<IProps> = ({ sampleAnnotations }) => {
 
   const handleChangeTab = (tabIndex: number) => {
     const plotlyDivs = document.getElementsByClassName("js-plotly-plot")
+    console.log("Resizing: ")
     Plotly.Plots.resize(plotlyDivs[tabIndex])
   }
-  // handleChangeTab.bind(document)
 
   return (
-    <TabGroup handleChangeTab={handleChangeTab}>
+    <TabGroup
+      handleChangeTab={handleChangeTab}
+    >
       <TabHeaderGroup>
         <TabHeaderItem key="barchart" tabIndex={0}>
           Barchart
@@ -53,17 +53,15 @@ const ExpressionTabs: React.FC<IProps> = ({ sampleAnnotations }) => {
       </TabHeaderGroup>
       <TabBodyGroup>
         <TabBodyItem key="barchart" tabIndex={0}>
-          {
-            /*
-              ExpressionBarplot will only be loaded on client side,
-              so the loading placeholder should be outside of that component
-            */
-            showLoader && (
-              <div id="graph-loading-placeholder">
-                <Loader comment="Drawing the graph" />
-              </div>
-            )
-          }
+          {/*
+            ExpressionBarplot will only be loaded on client side,
+            so the loading placeholder should be outside of that component
+          */}
+          {showLoader && (
+            <div id="graph-loading-placeholder">
+              <Loader comment="Drawing the graph" />
+            </div>
+          )}
           <ExpressionBarplot hideLoader={hideLoader} sampleAnnotations={sampleAnnotations} />
         </TabBodyItem>
         <TabBodyItem key="boxplot" tabIndex={1}>

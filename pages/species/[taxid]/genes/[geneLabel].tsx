@@ -8,7 +8,6 @@ import Layout from "../../../../components/Layout"
 import TextLink from "../../../../components/atomic/TextLink"
 import MapmanTable from "../../../../components/tables/MapmanTable"
 import InterproTable from "../../../../components/tables/InterproTable"
-// import ExpressionTabs from "../../../../components/graphs/ExpressionTabs"
 
 const ExpressionTabs = dynamic(() => import("../../../../components/graphs/ExpressionTabs"), {ssr: false})
 
