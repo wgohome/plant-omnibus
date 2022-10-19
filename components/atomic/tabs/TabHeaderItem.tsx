@@ -7,7 +7,7 @@ interface IProps {
   children: React.ReactNode
 }
 
-const TabHeaderItem: React.FC<IProps> = ({ tabIndex, children }) => {
+const TabHeaderItem: React.FC<IProps> = ({ tabIndex, children, ...otherProps }) => {
   const { openTab, setOpenTab, handleChangeTab } = React.useContext(TabContext)!
 
   const selectedHeaderClass = "font-medium text-plb-green border-b-2 border-plb-green"
@@ -15,6 +15,7 @@ const TabHeaderItem: React.FC<IProps> = ({ tabIndex, children }) => {
   return (
     <li
       className="mr-2"
+      {...otherProps}
     >
       <a
         href="#"
