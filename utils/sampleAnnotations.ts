@@ -1,3 +1,5 @@
+import { median } from "mathjs"
+
 import Species from "../models/species"
 import Gene from "../models/gene"
 import SampleAnnotation from "../models/sampleAnnotation"
@@ -45,6 +47,17 @@ export const getHighestSpmSA = async (
 }
 
 /*
+  Avoid calling the DB a second time
+*/
+interface SortableSA {
+  spm: number
+}
+
+export const findTopSpmSA = (sampleAnnotations: SortableSA[], n: number = 3): SortableSA[] => {
+  return [...sampleAnnotations].sort((sa1, sa2) => sa2.spm - sa1.spm).slice(0, n)
+}
+
+/*
   For getting additional data to be rendered on graphs
 */
 export const getSampleAnnotationsGraphData = async (
@@ -58,6 +71,7 @@ export const getSampleAnnotationsGraphData = async (
     sa.tpms = sa.samples.map((sample: object): number => sample.tpm)
     sa.sd = getStdDev(sa.tpms)
     // sa.se = 0
+    sa.median = Math.round(median(sa.tpms) * 1000) / 1000
     sa.topWhisker = getWhiskers(sa.tpms)[1]
     delete sa.samples
   })
