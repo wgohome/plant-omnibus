@@ -13,7 +13,7 @@ interface TabContextType {
 
 export const TabContext = React.createContext<TabContextType | null>(null)
 
-const TabGroup: React.FC<IProps> = ({ children, handleChangeTab }) => {
+const TabGroup: React.FC<IProps> = ({ children, handleChangeTab, ...otherProps }) => {
   const [ openTab, setOpenTab ] = React.useState(0)
 
   return (
@@ -21,6 +21,7 @@ const TabGroup: React.FC<IProps> = ({ children, handleChangeTab }) => {
       <div
         className="my-4"
         role="tablist"
+        {...otherProps}
       >
         {children}
       </div>

@@ -7,13 +7,13 @@ interface IProps {
   children: React.ReactNode
 }
 
-const TabBodyItem: React.FC<IProps> = ({ tabIndex, children }) => {
+const TabBodyItem: React.FC<IProps & any> = ({ tabIndex, children, ...otherProps }) => {
   const { openTab } = React.useContext(TabContext)!
 
   return (
     <li
       hidden={openTab != tabIndex}
-      className=""
+      {...otherProps}
     >
       {children}
     </li>
