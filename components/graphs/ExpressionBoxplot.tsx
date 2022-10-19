@@ -22,7 +22,7 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
         data={
           sampleAnnotations.map(sa => ({
             type: "box",
-            quartilemethod: "inclusive",
+            quartilemethod: "exclusive",
             y: sa.tpms,
             boxpoints: boxpoints,  // FROM STATE
             jitter: 0.5,
