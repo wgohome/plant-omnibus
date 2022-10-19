@@ -16,8 +16,9 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
   const highestTopWhisker = Math.max(...sampleAnnotations.map(sa => sa.topWhisker))
 
   return (
-    <div className="relative my-4">
+    <div className="my-4">
       <Plot
+        className="overflow-hidden border border-stone-300 rounded-2xl shadow-lg min-h-[600px]"
         data={
           sampleAnnotations.map(sa => ({
             type: "box",
@@ -84,8 +85,8 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
           modeBarButtonsToRemove: ["select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", "toImage"],
         }}
         style={{
-          position: "relative",
-          width: "100%",
+          // position: "relative",
+          // width: "100%",
         }}
         onInitialized={hideLoader}
         // useResizeHandler={true}
