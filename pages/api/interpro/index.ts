@@ -9,14 +9,16 @@ export default async function handler(
   switch (req.method) {
     case "GET":
       try {
-        let { pageIndex: pageIndexIn, pageSize: pageSizeIn, queryFilter } = req.query
+        let { pageIndex: pageIndexIn, pageSize: pageSizeIn, queryFilter, sortByObject: sortByStr } = req.query
         const pageIndex = parseInt(pageIndexIn as string) || 0
         const pageSize = parseInt(pageSizeIn as string) || parseInt(process.env.pageSize!)
+        const sortByObject = sortByStr ? JSON.parse(sortByStr as string) : {}
         const genePage = await getGeneAnnotationsPage({
           type: "INTERPRO",
           pageIndex,
           pageSize,
           queryFilter,
+          sortByObject,
         })
         if (pageIndex < 0 || pageIndex > genePage.pageTotal) {
           res.status(422).json({

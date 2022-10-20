@@ -8,6 +8,7 @@ export interface IPropsFetchData {
   pageSize: number
   pageIndex: number
   queryFilter?: string | null
+  sortByObject?: object
 }
 
 interface IProps {
@@ -15,7 +16,7 @@ interface IProps {
   data: object[]
   pageCount: number
   loading: boolean
-  fetchData: ({ pageIndex, pageSize, queryFilter }: IPropsFetchData) => void
+  fetchData: ({ pageIndex, pageSize, queryFilter, sortBy }: IPropsFetchData) => void
 }
 
 const VirtualPaginatedTable: React.FC<IProps> = ({
@@ -44,7 +45,7 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
     // setHiddenColumns,
     preGlobalFilteredRows,
     setGlobalFilter,
-    state: { pageIndex, pageSize, globalFilter },
+    state: { pageIndex, pageSize, globalFilter, sortBy },
   } = useTable(
     {
       columns,
@@ -53,14 +54,15 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
         pageIndex: 0,
         pageSize: defaultPageSize,
       },
+      // To do GlobalFilter on serverside
+      manualGlobalFilter: true,
+      autoResetGlobalFilter: false,
       manualPagination: true,
       pageCount: controlledPageCount,  // Needed when doing manualPagination
       // Needed when useSortBy + usePagination combo of hooks are used
       // Otherwise, the table just kept resetting to its original state even on page change
       autoResetPage: false,
-      // To do GlobalFilter on serverside
-      manualGlobalFilter: true,
-      autoResetGlobalFilter: false,
+      manualSortBy: true,
     },
     useGlobalFilter,
     useSortBy,
@@ -68,8 +70,15 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
   )
 
   React.useEffect(() => {
-    fetchData({ pageIndex, pageSize, queryFilter: globalFilter })
-  }, [fetchData, pageIndex, pageSize, globalFilter])
+    // Convert sortBy to format accepted by Mongoose
+    let sortByObject = {}
+    if (sortBy) {
+      sortBy.forEach(item => {
+        sortByObject[item.id] = item.desc ? -1 : 1
+      })
+    }
+    fetchData({ pageIndex, pageSize, queryFilter: globalFilter, sortByObject })
+  }, [ fetchData, pageIndex, pageSize, globalFilter, sortBy ])
 
   return (
     <div>
@@ -107,7 +116,7 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
         setGlobalFilter={setGlobalFilter}
         placeholder="Search by your PFAM ID or name ..."
       />
-      <div className="overflow-x-auto border border-stone-300 rounded-3xl shadow-lg my-3 pt-1">
+      <div className="overflow-x-auto border border-stone-300 rounded-3xl shadow-md my-3 pt-1">
         <table className="w-full" {...getTableProps()}>
           <thead className="border-b">
             {headerGroups.map(headerGroup => (

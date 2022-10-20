@@ -6,6 +6,7 @@ interface InputArgs {
   pageIndex: number
   pageSize: number
   queryFilter?: string | null
+  sortByObject?: object
 }
 
 export const getGeneAnnotationsPage = async ({
@@ -13,6 +14,7 @@ export const getGeneAnnotationsPage = async ({
   pageIndex = 0,
   pageSize = parseInt(process.env.pageSize!),
   queryFilter = null,
+  sortByObject,
 }: InputArgs) => {
   connectMongo()
   const queryObject = { type: type }
@@ -23,6 +25,7 @@ export const getGeneAnnotationsPage = async ({
     ]
   }
   const geneAnnotations = await GeneAnnotation.find(queryObject)
+    .sort(sortByObject)
     .skip(pageIndex * pageSize)
     .limit(pageSize)
   const numGeneAnnotations = await GeneAnnotation.countDocuments(queryObject)

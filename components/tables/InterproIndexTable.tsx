@@ -42,17 +42,21 @@ const InterproIndexTable: React.FC<IProps> = ({ initialGeneAnnotations, pageTota
               : goTerms.join(", ")
           }
         </ul>
-      )
+      ),
+      disableSortBy: true,
     },
   ], [])
 
-  const fetchGaPage = React.useCallback(({ pageSize, pageIndex, queryFilter=null }: IPropsFetchData) => {
+  const fetchGaPage = React.useCallback(({ pageSize, pageIndex, queryFilter=null, sortByObject={} }: IPropsFetchData) => {
     const fetchId = ++fetchIdRef.current
     setLoading(true)
     if (fetchId === fetchIdRef.current) {
       let apiUrl = `/api/interpro?pageIndex=${pageIndex}&pageSize=${pageSize}`
       if (queryFilter) {
         apiUrl += `&queryFilter=${queryFilter}`
+      }
+      if (Object.keys(sortByObject).length > 0) {
+        apiUrl += `&sortByObject=${JSON.stringify(sortByObject)}`
       }
       fetch(apiUrl)
       .then(res => res.json())
