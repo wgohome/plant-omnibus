@@ -105,6 +105,7 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
       <GlobalFilterBox
         globalFilter={globalFilter}
         setGlobalFilter={setGlobalFilter}
+        placeholder="Search by your PFAM ID or name ..."
       />
       <div className="overflow-x-auto border border-stone-300 rounded-xl shadow-lg my-3">
         <table className="w-full" {...getTableProps()}>
