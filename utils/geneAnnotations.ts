@@ -17,7 +17,10 @@ export const getGeneAnnotationsPage = async ({
   connectMongo()
   const queryObject = { type: type }
   if (queryFilter) {
-    queryObject.name = { "$regex": new RegExp(queryFilter), "$options": "i" }
+    queryObject["$or"] = [
+      { name: { "$regex": new RegExp(queryFilter), "$options": "i" } },
+      { label: { "$regex": new RegExp(queryFilter), "$options": "i" } },
+    ]
   }
   const geneAnnotations = await GeneAnnotation.find(queryObject)
     .skip(pageIndex * pageSize)
