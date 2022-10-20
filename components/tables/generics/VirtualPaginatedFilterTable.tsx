@@ -67,17 +67,6 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
     usePagination,
   )
 
-  /*
-    Whenever pageIndex changes, the data will be fetched.
-    useEffect to avoid re-rendering
-  */
-  React.useEffect(() => {
-    fetchData({ pageIndex, pageSize })
-  }, [fetchData, pageIndex, pageSize])
-
-  /*
-    Filter state
-  */
   React.useEffect(() => {
     fetchData({ pageIndex, pageSize, queryFilter: globalFilter })
   }, [fetchData, pageIndex, pageSize, globalFilter])
