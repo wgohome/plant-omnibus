@@ -107,7 +107,7 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
         setGlobalFilter={setGlobalFilter}
         placeholder="Search by your PFAM ID or name ..."
       />
-      <div className="overflow-x-auto border border-stone-300 rounded-xl shadow-lg my-3">
+      <div className="overflow-x-auto border border-stone-300 rounded-3xl shadow-lg my-3 pt-1">
         <table className="w-full" {...getTableProps()}>
           <thead className="border-b">
             {headerGroups.map(headerGroup => (
@@ -160,7 +160,7 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
           </tbody>
         </table>
         {/* Optional foorter row */}
-        <div className="px-3">
+        <div className="px-6 py-2">
           {loading ? (
             <span>Loading ...</span>
           ) : (
