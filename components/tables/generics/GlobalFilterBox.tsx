@@ -7,10 +7,15 @@ import { useAsyncDebounce } from "react-table"
 
 interface IProps {
   globalFilter: string
-  setGlobalFilter
+  setGlobalFilter: (filterValue: string | undefined) => void
+  placeholder?: string
 }
 
-const GlobalFilterBox: React.FC<IProps> = ({ globalFilter, setGlobalFilter }) => {
+const GlobalFilterBox: React.FC<IProps> = ({
+  globalFilter,
+  setGlobalFilter,
+  placeholder = "What are you searching for?",
+}) => {
   const [ queryValue, setQueryValue ] = React.useState(globalFilter)
 
   const handleChange = useAsyncDebounce(value => {
@@ -27,7 +32,7 @@ const GlobalFilterBox: React.FC<IProps> = ({ globalFilter, setGlobalFilter }) =>
           setQueryValue(e.target.value)
           handleChange(e.target.value)
         }}
-        placeholder="What are you searching for?"
+        placeholder={placeholder}
       />
     </span>
   )
