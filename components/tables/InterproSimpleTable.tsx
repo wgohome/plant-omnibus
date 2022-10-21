@@ -1,9 +1,9 @@
 import React from "react"
 
-import SortableTable from "./generics/SortableTable"
+import LocalSimpleTable from "./generics/LocalSimpleTable"
 import TextLink from "../atomic/TextLink"
 
-const InterproTable = ({ geneAnnotations }) => {
+const InterproSimpleTable = ({ geneAnnotations }) => {
   const columns = React.useMemo(
     () => [
       {
@@ -34,8 +34,8 @@ const InterproTable = ({ geneAnnotations }) => {
   )
 
   return (
-    <SortableTable columns={columns} data={geneAnnotations} />
+    <LocalSimpleTable columns={columns} data={geneAnnotations} />
   )
 }
 
-export default InterproTable
+export default InterproSimpleTable
