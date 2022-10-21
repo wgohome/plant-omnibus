@@ -3,6 +3,7 @@ import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table
 
 import PaginationBar from "./PaginationBar"
 import GlobalFilterBox from "./GlobalFilterBox"
+import PageStatusFooter from "./PageStatusFooter"
 
 export interface IPropsFetchData {
   pageSize: number
@@ -168,20 +169,11 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
             )}
           </tbody>
         </table>
-        {/* Optional foorter row */}
-        <div className="px-6 py-2">
-          {loading ? (
-            <span>Loading ...</span>
-          ) : (
-            <span>
-              Page{' '}
-              <strong>
-                {pageIndex + 1}
-              </strong>{' '}
-              of {pageOptions.length}
-            </span>
-          )}
-        </div>
+        <PageStatusFooter
+          pageIndex={pageIndex}
+          pageLength={pageOptions.length}
+          loading={loading}
+        />
       </div>
     </div>
   )

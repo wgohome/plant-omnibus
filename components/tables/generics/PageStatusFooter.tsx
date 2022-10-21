@@ -8,7 +8,7 @@ interface IProps {
 
 const PageStatusFooter: React.FC<IProps> = ({ pageIndex, pageLength, loading }) => {
   return (
-    <div className="px-3">
+    <div className="px-6 py-2">
       {loading ? (
         <span>Loading ...</span>
       ) : (
