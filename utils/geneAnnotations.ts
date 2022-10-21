@@ -1,6 +1,9 @@
 import GeneAnnotation from "../models/geneAnnotation";
 import connectMongo from "./connectMongo";
 
+import mapmanLevel1Bins from '/public/data/mapman_level1_bins.json' assert {type: 'json'}
+/* Why arrays are imported differently https://stackoverflow.com/a/62499195/10723457 */
+
 interface InputArgs {
   type: string
   pageIndex: number
@@ -61,4 +64,12 @@ export const getOneGeneAnnotation = async ({ type, label }) => {
     })
     .lean()
   return geneAnnotation
+}
+
+/*
+  More specialised functions for specific gene annotation types
+*/
+
+export const getMapmanLevel1Bins = async () => {
+  return mapmanLevel1Bins
 }
