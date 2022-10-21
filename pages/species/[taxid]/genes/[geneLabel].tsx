@@ -6,8 +6,8 @@ import dynamic from "next/dynamic"
 
 import Layout from "../../../../components/Layout"
 import TextLink from "../../../../components/atomic/TextLink"
-import MapmanTable from "../../../../components/tables/MapmanTable"
-import InterproTable from "../../../../components/tables/InterproTable"
+import MapmanSimpleTable from "../../../../components/tables/MapmanSimpleTable"
+import InterproSimpleTable from "../../../../components/tables/InterproSimpleTable"
 import Header1 from "../../../../components/atomic/texts/Header1"
 import Header2 from "../../../../components/atomic/texts/Header2"
 import Header3 from "../../../../components/atomic/texts/Header3"
@@ -53,7 +53,7 @@ const GenePage: NextPage = ({species, gene, mapmanGas, interproGas, sampleAnnota
   return (
     <Layout>
       <Head>
-        <title>Gene {geneLabel}</title>
+        <title>{`Gene ${geneLabel}`}</title>
       </Head>
 
       <section className="mt-4 mb-4">
@@ -100,12 +100,12 @@ const GenePage: NextPage = ({species, gene, mapmanGas, interproGas, sampleAnnota
 
       <section className="mt-10 mb-4" id="mapman-annotations">
         <Header2>Mapman annotations</Header2>
-        <MapmanTable geneAnnotations={mapmanGas} />
+        <MapmanSimpleTable geneAnnotations={mapmanGas} />
       </section>
 
       <section className="mt-10 mb-4" id="interpro-annotations">
         <Header2>PFAM annotations</Header2>
-        <InterproTable geneAnnotations={interproGas} />
+        <InterproSimpleTable geneAnnotations={interproGas} />
       </section>
 
       <section className="mt-10 mb-4" id="coexpression-table">

@@ -1,9 +1,9 @@
 import React from "react"
 
-import SortableTable from "./generics/SortableTable"
+import LocalSimpleTable from "./generics/LocalSimpleTable"
 import TextLink from "../atomic/TextLink"
 
-const MapmanTable = ({ geneAnnotations }) => {
+const MapmanSimpleTable = ({ geneAnnotations }) => {
   const columns = React.useMemo(
     () => [
       {
@@ -27,8 +27,8 @@ const MapmanTable = ({ geneAnnotations }) => {
   )
 
   return (
-    <SortableTable columns={columns} data={geneAnnotations} />
+    <LocalSimpleTable columns={columns} data={geneAnnotations} />
   )
 }
 
-export default MapmanTable
+export default MapmanSimpleTable
