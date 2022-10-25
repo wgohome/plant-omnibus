@@ -1,8 +1,9 @@
 import React from "react"
-import { useTable, usePagination, useSortBy } from 'react-table'
+import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table'
 
 import PaginationBar from "./PaginationBar"
 import PageStatusFooter from "./PageStatusFooter"
+import GlobalFilterBox from "./GlobalFilterBox"
 
 interface IProps {
   columns: object[]
@@ -32,7 +33,9 @@ const LocalPaginatedTable: React.FC<IProps> = ({
     previousPage,
     setPageSize,
     // setHiddenColumns,
-    state: { pageIndex, pageSize },
+    preGlobalFilteredRows,
+    setGlobalFilter,
+    state: { pageIndex, pageSize, globalFilter },
   } = useTable(
     {
       columns,
@@ -43,6 +46,7 @@ const LocalPaginatedTable: React.FC<IProps> = ({
         hiddenColumns: hiddenColumns,
       },
     },
+    useGlobalFilter,
     useSortBy,
     usePagination,
   )
@@ -77,7 +81,12 @@ const LocalPaginatedTable: React.FC<IProps> = ({
           setPageSize,
         }}
       />
-      <div className="overflow-x-auto border border-stone-300 rounded-xl shadow-lg my-3">
+      <GlobalFilterBox
+        globalFilter={globalFilter}
+        setGlobalFilter={setGlobalFilter}
+        // placeholder="Search for ..."
+      />
+      <div className="overflow-x-auto border border-stone-300 rounded-3xl shadow-md my-3 pt-1">
         <table className="w-full" {...getTableProps()}>
           <thead className="border-b">
             {headerGroups.map(headerGroup => (
@@ -87,8 +96,8 @@ const LocalPaginatedTable: React.FC<IProps> = ({
                   // we can add them into the header props
                   <th
                     className="text-gray-900 font-medium text-left min-w-[120px] px-6 py-4"
+                    key={column.getHeaderProps(column.getSortByToggleProps()).key}
                     {...column.getHeaderProps(column.getSortByToggleProps())}
-                    key={column.getHeaderProps().key}
                   >
                     {column.render('Header')}
                     {/* Add a sort direction indicator */}
