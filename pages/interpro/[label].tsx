@@ -33,10 +33,10 @@ const InterproShowPage: NextPage<IProps> = ({ geneAnnotation }) => {
       </Head>
 
       <Header1>PFAM {label}</Header1>
-      <p>{geneAnnotation.name}</p>
-      <p>
-        <b>GO Terms:</b> {geneAnnotation.details.go_terms.join(", ")}
-      </p>
+      <div className="mb-4">
+        <p>{geneAnnotation.name}</p>
+        <p><b>GO Terms:</b> {geneAnnotation.details.go_terms.join(", ")}</p>
+      </div>
       <InterproShowTable data={geneAnnotation.gene_annotation_buckets} />
     </Layout>
   )

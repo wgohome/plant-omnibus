@@ -50,7 +50,9 @@ const MapmanSubbinIndexPage: NextPage<IProps> = ({ level1BinsNameMap, geneAnnota
         </TextLink>
       </div>
       <Header1>{level1BinsNameMap[level1Bin]}</Header1>
-      <p>Mapman Bin {level1Bin}</p>
+      <div className="mb-4">
+        <p>Mapman Bin {level1Bin}</p>
+      </div>
 
       <MapmanSubbinIndexTable
         level1Bin={level1Bin}
