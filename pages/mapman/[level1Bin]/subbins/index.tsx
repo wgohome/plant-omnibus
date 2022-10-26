@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 
 import Layout from "../../../../components/Layout"
 import Header1 from "../../../../components/atomic/texts/Header1"
-import { getMapmanLevel1Bins } from "../../../../utils/geneAnnotations"
+import { getMapmanLevel1Bins, getMapmanSubbinsPage } from "../../../../utils/geneAnnotations"
 import TextLink from "../../../../components/atomic/TextLink"
 import MapmanSubbinIndexTable from "../../../../components/tables/MapmanSubbinIndexTable"
 
@@ -16,24 +16,27 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
     return collector
   }, {})
 
-  // const geneAnnotation = await getOneGeneAnnotation({ type: "MAPMAN", label: params.label })
+  const level1Bin = parseInt(params.level1Bin as string)
+  const page = await getMapmanSubbinsPage({ level1Bin })
 
   return {
     props: {
       level1BinsNameMap: JSON.parse(JSON.stringify(level1BinsNameMap)),
-      // geneAnnotation: JSON.parse(JSON.stringify(geneAnnotation))
+      geneAnnotations: JSON.parse(JSON.stringify(page.geneAnnotations)),
+      numGeneAnnotations: JSON.parse(JSON.stringify(page.pageTotal)),
     }
   }
 }
 
 interface IProps {
-  geneAnnotation: object
+  level1BinsNameMap: object
+  geneAnnotations: object[]
+  numGeneAnnotations: number
 }
 
-const MapmanSubbinIndexPage: NextPage<IProps> = ({ level1BinsNameMap }) => {
+const MapmanSubbinIndexPage: NextPage<IProps> = ({ level1BinsNameMap, geneAnnotations, numGeneAnnotations }) => {
   const router = useRouter()
-  const level1Bin = router.query.level1Bin
-
+  const level1Bin = parseInt(router.query.level1Bin as string)
 
   return (
     <Layout>
@@ -41,15 +44,19 @@ const MapmanSubbinIndexPage: NextPage<IProps> = ({ level1BinsNameMap }) => {
         <title>{`Mapman Bin ${level1Bin}`}</title>
       </Head>
 
-      <Header1>{level1BinsNameMap[level1Bin]}</Header1>
-      <p>Mapman Bin {level1Bin}</p>
-      <div className="my-2 italic">
+      <div className="italic">
         <TextLink href="/mapman">
           See all level 1 bins
         </TextLink>
       </div>
+      <Header1>{level1BinsNameMap[level1Bin]}</Header1>
+      <p>Mapman Bin {level1Bin}</p>
 
-      <MapmanSubbinIndexTable data={[]} />
+      <MapmanSubbinIndexTable
+        level1Bin={level1Bin}
+        initialGeneAnnotations={geneAnnotations}
+        pageTotal={numGeneAnnotations}
+      />
     </Layout>
   )
 }
