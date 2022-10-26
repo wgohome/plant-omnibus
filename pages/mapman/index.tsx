@@ -9,6 +9,7 @@ import Header1 from '../../components/atomic/texts/Header1'
 import MapmanIndexTable from '../../components/tables/MapmanIndexTable'
 import MapmanLevel1IndexTable from '../../components/tables/MapmanLevel1IndexTable'
 import { TabBodyGroup, TabBodyItem, TabGroup, TabHeaderGroup, TabHeaderItem } from '../../components/atomic/tabs'
+import MapmanLevel1Cards from '../../components/cards/MapmanLevel1Cards'
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   const level1Bins = await getMapmanLevel1Bins()
@@ -53,7 +54,7 @@ const MapmanIndexPage: NextPage<IProps> = ({ level1Bins, geneAnnotations, numGen
         </TabHeaderGroup>
         <TabBodyGroup>
           <TabBodyItem key="cards-level1" tabIndex={0}>
-            Cards index
+            <MapmanLevel1Cards level1Bins={level1Bins} />
           </TabBodyItem>
           <TabBodyItem key="table-level1" tabIndex={1}>
             <MapmanLevel1IndexTable level1Bins={level1Bins} />
