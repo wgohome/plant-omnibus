@@ -13,42 +13,14 @@ import SpeciesIndexTable from '../../components/tables/SpeciesIndexTable'
 export const getServerSideProps: GetServerSideProps = async () => {
   await connectMongo()
   const species = await Species.find({})
-  return { props: { species: JSON.parse(JSON.stringify(species)) } }
+  return {
+    props: {
+      species: JSON.parse(JSON.stringify(species)),
+    }
+  }
 }
 
 const SpeciesIndexPage: NextPage = ({ species }) => {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Tax ID",
-        accessor: "tax",
-        Cell: ({ value }) => {
-          return (
-            <Link href={`/species/${value}`}>
-              <a className="hover:underline text-plb-green active:text-plb-red">{value}</a>
-            </Link>
-          )
-        },
-      },
-      {
-        Header: "Scientific name",
-        accessor: "name",
-      },
-      {
-        Header: "Alias",
-        accessor: "alias",
-      },
-      {
-        Header: "Source",
-        accessor: "cds.source",
-      },
-      {
-        Header: "Source url",
-        accessor: "cds.url",
-      },
-    ], []
-  )
-
   return (
     <Layout>
       <Head>
