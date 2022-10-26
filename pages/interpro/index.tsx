@@ -28,7 +28,7 @@ const PfamIndexPage: NextPage<IProps> = ({ geneAnnotations, numGeneAnnotations }
   return (
     <Layout>
       <Head>
-        <title>PFAM terms</title>
+        <title>PFAM annotations</title>
       </Head>
 
       <Header1>PFAM terms</Header1>

@@ -34,7 +34,7 @@ const MapmanIndexPage: NextPage<IProps> = ({ level1Bins, geneAnnotations, numGen
   return (
     <Layout>
       <Head>
-        <title>PFAM terms</title>
+        <title>Mapman annotations</title>
       </Head>
 
       <Header1>Mapman bins</Header1>
@@ -42,10 +42,10 @@ const MapmanIndexPage: NextPage<IProps> = ({ level1Bins, geneAnnotations, numGen
       <TabGroup>
         <TabHeaderGroup>
           <TabHeaderItem key="cards-level1" tabIndex={0}>
-            Level 1 bins (grid)
+            Level 1 bins (Grid)
           </TabHeaderItem>
           <TabHeaderItem key="table-level1" tabIndex={1}>
-            Level 1 bins (table)
+            Level 1 bins (Table)
           </TabHeaderItem>
           <TabHeaderItem key="table-all" tabIndex={2}>
             All Mapman bins
