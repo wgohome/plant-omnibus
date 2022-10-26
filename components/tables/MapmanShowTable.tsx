@@ -2,13 +2,14 @@ import React from "react"
 
 import LocalPaginatedTable from "./generics/LocalPaginatedTable"
 import TextLink from "../atomic/TextLink"
+import ShowMoreList from "../atomic/texts/ShowMoreList"
 
 const MapmanShowTable = ({ data }) => {
   const columns = React.useMemo(
     () => [
       {
         Header: "Species",
-        accessor: "species.name", // TODO
+        accessor: "species.name",
         Cell: ({ value, row }) => (
           <TextLink href={`/species/${row.values.tax}`}>
             {value}
@@ -23,14 +24,13 @@ const MapmanShowTable = ({ data }) => {
         Header: "Genes",
         accessor: "genes",
         Cell: ({ value, row }) => (
-          value.map((gene, i) => (
-            <span className="" key={i}>
-              <TextLink href={`/species/${row.values.tax}/genes/${gene.label}`}>
+          <ShowMoreList
+            items={value.map((gene, i) => (
+              <TextLink href={`/species/${row.values.tax}/genes/${gene.label}`} key={i}>
                 {gene.label}
               </TextLink>
-              {",  "}
-            </span>
-          ))
+            ))}
+          />
         ),
       },
     ], []

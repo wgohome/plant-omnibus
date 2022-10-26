@@ -3,11 +3,11 @@ import Head from "next/head"
 import { GetServerSideProps, NextPage } from "next"
 import { useRouter } from "next/router"
 
-import Layout from "../../../../components/Layout"
-import Header1 from "../../../../components/atomic/texts/Header1"
-import { getMapmanLevel1Bins, getMapmanSubbinsPage } from "../../../../utils/geneAnnotations"
-import TextLink from "../../../../components/atomic/TextLink"
-import MapmanSubbinIndexTable from "../../../../components/tables/MapmanSubbinIndexTable"
+import Layout from "../../../components/Layout"
+import Header1 from "../../../components/atomic/texts/Header1"
+import { getMapmanLevel1Bins, getMapmanSubbinsPage } from "../../../utils/geneAnnotations"
+import TextLink from "../../../components/atomic/TextLink"
+import MapmanSubbinIndexTable from "../../../components/tables/MapmanSubbinIndexTable"
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   const level1Bins = await getMapmanLevel1Bins()
