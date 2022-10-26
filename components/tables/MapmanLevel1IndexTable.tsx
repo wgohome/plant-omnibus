@@ -18,7 +18,7 @@ const MapmanLevel1IndexTable: React.FC<IProps> = ({ level1Bins }) => {
       Header: "Mapman bin code",
       accessor: "bincode",
       Cell: ({ value }) => (
-        <TextLink href={`/mapman/${value}/subbins`}>
+        <TextLink href={`/mapman/subbins/${value}`}>
           {value}
         </TextLink>
       ),
@@ -27,7 +27,7 @@ const MapmanLevel1IndexTable: React.FC<IProps> = ({ level1Bins }) => {
       Header: "Mapman bin name",
       accessor: "binname",
       Cell: ({ value, row }) => (
-        <TextLink href={`/mapman/${row.values.bincode}/subbins`}>
+        <TextLink href={`/mapman/subbins/${row.values.bincode}`}>
           {value}
         </TextLink>
       ),

@@ -19,7 +19,7 @@ const MapmanLevel1Cards: React.FC<IProps> = ({ level1Bins }) => {
           key={bin.bincode}
         >
           <p className="text-sm text-stone-600">Bin {bin.bincode}</p>
-          <TextLink href={`/mapman/${bin.bincode}/subbins`}>
+          <TextLink href={`/mapman/subbins/${bin.bincode}`}>
             <h4 className="font-medium text-xl my-2">{bin.binname}</h4>
           </TextLink>
         </div>

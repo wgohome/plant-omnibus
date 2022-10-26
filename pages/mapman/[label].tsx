@@ -3,10 +3,11 @@ import Head from "next/head"
 import { NextPage } from "next"
 import { useRouter } from "next/router"
 
+import { getOneGeneAnnotation } from "../../utils/geneAnnotations"
+
 import Layout from "../../components/Layout"
 import Header1 from "../../components/atomic/texts/Header1"
-import InterproShowTable from "../../components/tables/InterproShowTable"
-import { getOneGeneAnnotation } from "../../utils/geneAnnotations"
+import MapmanShowTable from "../../components/tables/MapmanShowTable"
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   const geneAnnotation = await getOneGeneAnnotation({ type: "MAPMAN", label: params.label })
@@ -35,7 +36,7 @@ const MapmanShowPage: NextPage<IProps> = ({ geneAnnotation }) => {
       <Header1>Mapman Bin {label}</Header1>
       <p><b>Bin name:</b> {geneAnnotation.name}</p>
       <p><b>Description:</b> {geneAnnotation.details.desc}</p>
-      <InterproShowTable data={geneAnnotation.gene_annotation_buckets} />
+      <MapmanShowTable data={geneAnnotation.gene_annotation_buckets} />
     </Layout>
   )
 }

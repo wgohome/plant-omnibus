@@ -9,7 +9,7 @@ const InterproShowTable = ({ data }) => {
     () => [
       {
         Header: "Species",
-        accessor: "species.name", // TODO
+        accessor: "species.name",
         Cell: ({ value, row }) => (
           <TextLink href={`/species/${row.values.tax}`}>
             {value}
