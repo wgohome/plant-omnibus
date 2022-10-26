@@ -8,6 +8,7 @@ import connectMongo from '../../utils/connectMongo'
 import Table from '../../components/tables/SpeciesTable'
 import React from 'react'
 import Link from 'next/link'
+import SpeciesIndexTable from '../../components/tables/SpeciesIndexTable'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   await connectMongo()
@@ -56,7 +57,7 @@ const SpeciesIndexPage: NextPage = ({ species }) => {
 
       <section>
         <h1 className="text-4xl font-medium my-3 mb-8">Species</h1>
-        <Table columns={columns} data={species} />
+        <SpeciesIndexTable data={species} />
       </section>
     </Layout>
   )
