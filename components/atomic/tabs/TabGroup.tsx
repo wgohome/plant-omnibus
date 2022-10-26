@@ -8,7 +8,7 @@ interface IProps {
 interface TabContextType {
   openTab: number
   setOpenTab: React.Dispatch<React.SetStateAction<number>>
-  handleChangeTab?: (tabIndex?: number) => {}
+  handleChangeTab?: (tabIndex?: number) => void
 }
 
 export const TabContext = React.createContext<TabContextType | null>(null)
