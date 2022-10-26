@@ -4,11 +4,12 @@ import { GetServerSideProps, NextPage } from 'next'
 
 import Layout from '../../components/Layout'
 import Header1 from '../../components/atomic/texts/Header1'
+import Badge from '../../components/atomic/badges/badge'
 import { getGeneAnnotationsPage } from '../../utils/geneAnnotations'
 import InterproIndexTable from '../../components/tables/InterproIndexTable'
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const page = await getGeneAnnotationsPage("INTERPRO")
+  const page = await getGeneAnnotationsPage({type: "INTERPRO"})
 
   return {
     props: {

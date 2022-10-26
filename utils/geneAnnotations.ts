@@ -73,3 +73,46 @@ export const getOneGeneAnnotation = async ({ type, label }) => {
 export const getMapmanLevel1Bins = async () => {
   return mapmanLevel1Bins
 }
+
+interface InputArgs {
+  level1Bin: number
+  pageIndex: number
+  pageSize: number
+  queryFilter?: string | null
+  sortByObject?: object
+}
+
+export const getMapmanSubbinsPage = async ({
+  level1Bin,
+  pageIndex = 0,
+  pageSize = parseInt(process.env.pageSize!),
+  queryFilter = null,
+  sortByObject,
+}: InputArgs) => {
+  connectMongo()
+  const queryObject = { type: "MAPMAN" }
+  if (queryFilter) {
+    // NOTE: this is $and not $or like in the getGeneAnnotationPage function
+    // This means that user cannot search for Mapman annoation by the full bin label here
+    queryObject["$and"] = [
+      { name: { "$regex": new RegExp(queryFilter), "$options": "i" } },
+      { label: { "$regex": new RegExp(`^${level1Bin}\.`), "$options": "i" } },
+    ]
+  } else {
+    queryObject.label = { "$regex": new RegExp(`^${level1Bin}\.`), "$options": "i" }
+  }
+  const geneAnnotations = await GeneAnnotation.find(queryObject)
+    .sort(sortByObject)
+    .skip(pageIndex * pageSize)
+    .limit(pageSize)
+  const numGeneAnnotations = await GeneAnnotation.countDocuments(queryObject)
+  /*
+    NOTE: pageTotal is the number of pages required for the given pageSize,
+    which is then needed by react-table's useTable() hook
+  */
+  const pageTotal = Math.ceil(numGeneAnnotations / pageSize)
+  return {
+    geneAnnotations: geneAnnotations,
+    pageTotal: pageTotal,
+  }
+}

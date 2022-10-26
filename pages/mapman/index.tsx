@@ -13,14 +13,13 @@ import MapmanLevel1Cards from '../../components/cards/MapmanLevel1Cards'
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   const level1Bins = await getMapmanLevel1Bins()
-  const page = await getGeneAnnotationsPage("MAPMAN")
+  const page = await getGeneAnnotationsPage({ type: "MAPMAN" })
 
   return {
     props: {
       level1Bins: JSON.parse(JSON.stringify(level1Bins)),
-
       geneAnnotations: JSON.parse(JSON.stringify(page.geneAnnotations)),
-      numGeneAnnotations: JSON.parse(JSON.stringify(page.pageTotal))
+      numGeneAnnotations: JSON.parse(JSON.stringify(page.pageTotal)),
     }
   }
 }
