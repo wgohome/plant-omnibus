@@ -27,7 +27,7 @@ export default function Layout({ children }) {
             </Link>
             {[
               ["Species", "/species"],
-              ["Organs", "#"],
+              ["Organs", "/organs"],
               ["PFAM", "/interpro"],
               ["Mapman", "/mapman"],
             ].map(([title, url]) => (
