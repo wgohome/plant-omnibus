@@ -53,7 +53,7 @@ const PaginationBar: React.FC = ({
               setPageSize(Number(e.target.value))
             }}
           >
-            {[10, 15, 20, 25, 30].map(pageSize => (
+            {[10, 20, 30, 40, 50].map(pageSize => (
               <option key={pageSize} value={pageSize}>
                 Show {pageSize}
               </option>
