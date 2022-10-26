@@ -32,6 +32,11 @@ const SpeciesIndexTable = ({ data }) => {
       {
         Header: "Source url",
         accessor: "cds.url",
+        Cell: ({ value }) => (
+          <p className="break-all">
+            {value}
+          </p>
+        ),
       },
     ], []
   )
