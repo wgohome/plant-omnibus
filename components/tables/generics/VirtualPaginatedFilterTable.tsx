@@ -99,6 +99,7 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
           )}
         </code>
       </pre>
+
       <PaginationBar
         {...{
           pageIndex,  // This is a state from useTable hook
@@ -117,6 +118,7 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
         setGlobalFilter={setGlobalFilter}
         placeholder="Search by your PFAM ID or name ..."
       />
+
       <div className="overflow-x-auto border border-stone-300 rounded-3xl shadow-md my-3 pt-1">
         <table className="w-full" {...getTableProps()}>
           <thead className="border-b">

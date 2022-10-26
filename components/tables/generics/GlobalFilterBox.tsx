@@ -23,18 +23,19 @@ const GlobalFilterBox: React.FC<IProps> = ({
   }, 1000)
 
   return (
-    <span>
+    <div className="my-3">
       <input
         type="text"
-        className="outline-none p-3 w-full rounded-full shadow border border-stone-300 focus:ring ring-plb-green ring-offset-1 focus:border-green-plb"
+        className="outline-none p-3 w-full rounded-full drop-shadow border border-stone-300 focus:ring ring-plb-green ring-offset-1 focus:border-green-plb"
         value={queryValue || ""}
         onChange={e =>{
           setQueryValue(e.target.value)
           handleChange(e.target.value)
         }}
         placeholder={placeholder}
+        autoFocus
       />
-    </span>
+    </div>
   )
 }
 

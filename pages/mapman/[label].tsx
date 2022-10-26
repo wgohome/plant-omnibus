@@ -34,8 +34,10 @@ const MapmanShowPage: NextPage<IProps> = ({ geneAnnotation }) => {
       </Head>
 
       <Header1>Mapman Bin {label}</Header1>
-      <p><b>Bin name:</b> {geneAnnotation.name}</p>
-      <p><b>Description:</b> {geneAnnotation.details.desc}</p>
+      <div className="mb-4">
+        <p><b>Bin name:</b> {geneAnnotation.name}</p>
+        <p><b>Description:</b> {geneAnnotation.details.desc}</p>
+      </div>
       <MapmanShowTable data={geneAnnotation.gene_annotation_buckets} />
     </Layout>
   )

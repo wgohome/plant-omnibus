@@ -1,6 +1,6 @@
 import React from "react"
 
-const PaginationBar: ReactFC = ({
+const PaginationBar: React.FC = ({
   pageIndex,  // This is a state from useTable hook
   pageSize,  // This is a state from useTable hook
   pageCount,
@@ -12,24 +12,24 @@ const PaginationBar: ReactFC = ({
   setPageSize,
 }) => {
   return (
-    <nav className="flex justify-center">
-      <div className="inline-flex drop-shadow-md my-4">
+    // <nav className="flex justify-center my-3">
+      <div className="flex text-center drop-shadow">
         <button
-          className="py-2 px-3 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+          className="py-3 px-5 pl-6 text-gray-500 bg-white rounded-l-full border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
           onClick={() => gotoPage(0)}
           disabled={!canPreviousPage}
         >
           First
         </button>
         <button
-          className="py-2 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+          className="py-3 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
         >
           {'<'}
         </button>
         <div
-          className="py-2 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+          className="grow py-3 px-5 text-gray-500 bg-white border border-gray-300"
         >
           Go to{" "}
           <input
@@ -44,7 +44,7 @@ const PaginationBar: ReactFC = ({
           />
         </div>
         <div
-          className="py-2 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+          className="grow py-3 px-5 text-gray-500 bg-white border border-gray-300"
         >
           <select
             className="border border-stone-300"
@@ -61,21 +61,21 @@ const PaginationBar: ReactFC = ({
           </select>
         </div>
         <button
-          className="py-2 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+          className="py-3 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
           onClick={() => nextPage()}
           disabled={!canNextPage}
         >
           {'>'}
         </button>
         <button
-          className="py-2 px-5 text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+          className="py-3 px-5 pr-6 text-gray-500 bg-white rounded-r-full border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
           onClick={() => gotoPage(pageCount - 1)}
           disabled={!canNextPage}
         >
           Last
         </button>
       </div>
-    </nav>
+    // </nav>
   )
 }
 
