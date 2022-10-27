@@ -14,7 +14,10 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   connectMongo()
   const this_species = await Species.findOne({"tax": params.taxid})
   const pageIndex = query.pageIndex ? Math.max(parseInt(query.pageIndex), 0) : 0
-  const genePage = await getGenesPage(params.taxid, pageIndex)
+  const genePage = await getGenesPage({
+    taxid: params.taxid,
+    pageIndex,
+  })
   return {
     props: {
       species: JSON.parse(JSON.stringify(this_species)),
@@ -28,11 +31,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
 interface IProps {
   species: Species
   numGenes: number
+  initialGenes: object[]
+  pageTotal: number
 }
 
 const SpeciesPage: NextPage<IProps> = ({ species, numGenes, initialGenes, pageTotal }) => {
   const router = useRouter()
-  const taxid = parseInt(router.query.taxid!)
+  const taxid = parseInt(router.query.taxid as string)
 
   return (
     <Layout>
@@ -44,9 +49,11 @@ const SpeciesPage: NextPage<IProps> = ({ species, numGenes, initialGenes, pageTo
         <Header1 className="italic">
           {species.name}
         </Header1>
-        <p>Taxanomic ID: {taxid}</p>
-        <p>Alias: {species.alias.length ? species.alias.join(", ") : "-"}</p>
-        <p>Number of genes: {numGenes}</p>
+        <div className="mb-4">
+          <p>Taxanomic ID: {taxid}</p>
+          <p>Alias: {species.alias.length ? species.alias.join(", ") : "-"}</p>
+          <p>Number of genes: {numGenes}</p>
+        </div>
       </section>
 
       <section>

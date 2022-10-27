@@ -9,12 +9,13 @@ export default async function handler(
   switch (req.method) {
     case "GET":
       try {
-        let { taxid, pageIndex, pageSize } = req.query
-        taxid = parseInt(taxid)
-        pageIndex = parseInt(pageIndex) || 0
-        pageSize = parseInt(pageSize) || process.env.pageSize
+        let { taxid: taxidIn, pageIndex: pageIndexIn, pageSize: pageSizeIn, queryFilter, sortByObject: sortByStr } = req.query
+        const taxid = parseInt(taxidIn as string)
+        const pageIndex = parseInt(pageIndexIn as string) || 0
+        const pageSize = parseInt(pageSizeIn as string) || parseInt(process.env.pageSize!)
+        const sortByObject = sortByStr ? JSON.parse(sortByStr as string) : {}
 
-        const genePage = await getGenesPage(taxid, pageIndex, pageSize)
+        const genePage = await getGenesPage({ taxid, pageIndex, pageSize, queryFilter, sortByObject })
         if (pageIndex < 0 || pageIndex > genePage.pageTotal) {
           res.status(422).json({
             error: `${pageIndex} is an invalid pageIndex`
