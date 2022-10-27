@@ -4,31 +4,49 @@ import Species from "../models/species"
 import Gene from "../models/gene"
 import connectMongo from "../utils/connectMongo"
 
+interface GenesPageInputArgs {
+  taxid: number
+  pageIndex: number
+  pageSize: number
+  queryFilter?: string | null
+  sortByObject?: object
+}
+
 /*
   Used for species show page, where the table of all genes for the species is at
  */
-export const getGenesPage = async (
-  taxid: number,
-  pageIndex: number,
-  pageSize: number = parseInt(process.env.pageSize),
-) => {
+export const getGenesPage = async ({
+  taxid,
+  pageIndex = 0,
+  pageSize = parseInt(process.env.pageSize!),
+  queryFilter = null,
+  sortByObject,
+}: GenesPageInputArgs) => {
   connectMongo()
   const species = await Species.findOne({"tax": taxid}, "_id")
   const species_id = species._id
-  const genes = await Gene.find({"spe_id": species_id})
+  const queryObject = {"spe_id": species_id}
+  if (queryFilter) {
+    queryObject["$or"] = [
+      { label: { "$regex": new RegExp(queryFilter), "$options": "i" } },
+      // TODO check through list of alias in db
+      // { alias: { "$regex": new RegExp(queryFilter), "$options": "i" } },
+    ]
+  }
+  const genes = await Gene.find(queryObject)
+    .sort(sortByObject)
     .skip(pageIndex * pageSize)
     .limit(pageSize)
     .populate("gene_annotations")
     .lean()
-
-  const numGenes = await Gene.countDocuments({"spe_id": species_id})
+  const numGenes = await Gene.countDocuments(queryObject)
   /*
     NOTE: pageTotal is the number of pages required for the given pageSize,
     which is then needed by react-table's useTable() hook
   */
   const pageTotal = Math.ceil(numGenes / pageSize)
   return {
-    pageIndex: pageIndex,
+    // pageIndex: pageIndex,
     pageTotal: pageTotal,
     numGenes: numGenes,
     genes: genes,

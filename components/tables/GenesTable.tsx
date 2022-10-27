@@ -1,22 +1,20 @@
 import React from "react"
 
-import VirtualPaginatedTable from "./generics/VirtualPaginatedTable"
 import TextLink from "../atomic/TextLink"
+import VirtualPaginatedFilterTable, { IPropsFetchData } from "./generics/VirtualPaginatedFilterTable"
 
 interface IProps {
   taxid: number
-  initalGenes: object[]
+  initialGenes: object[]
   pageTotal: number
 }
 
 const GenesTable: React.FC<IProps> = ({ taxid, initialGenes, pageTotal }) => {
-  // Pagination state management
   const [ genesPage, setGenesPage ] = React.useState(initialGenes)
   const [ pageCount, setPageCount ] = React.useState(pageTotal)
   const [ loading, setLoading ] = React.useState(false)
   const fetchIdRef = React.useRef(0)
 
-  // Table columns
   const columns = React.useMemo(() => [
     {
       Header: "Gene ID",
@@ -38,7 +36,7 @@ const GenesTable: React.FC<IProps> = ({ taxid, initialGenes, pageTotal }) => {
       Cell: ({ value: geneAnnotations }: { value: object[] }) => (
         <ul className="">
           {
-            /* If not gene annotation in the DB, just rended MAPMAN bin 35.2 */
+            /* If gene annotation not in the DB, just display MAPMAN bin 35.2 */
             (geneAnnotations.filter(ga => ga.type == "MAPMAN").length === 0) ? (
               <li className="mb-2 last:mb-0">
                 not assigned.not annotated
@@ -55,11 +53,18 @@ const GenesTable: React.FC<IProps> = ({ taxid, initialGenes, pageTotal }) => {
     },
   ], [taxid])
 
-  const fetchGenePage = React.useCallback(({ pageSize, pageIndex }: { pageSize: number; pageIndex: number }) => {
+  const fetchGenePage = React.useCallback(({ pageSize, pageIndex, queryFilter=null, sortByObject={} }: IPropsFetchData) => {
     const fetchId = ++fetchIdRef.current
     setLoading(true)
     if (fetchId === fetchIdRef.current) {
-      fetch(`/api/species/${taxid}/genes?pageIndex=${pageIndex}&pageSize=${pageSize}`)
+      let apiUrl = `/api/species/${taxid}/genes?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      if (queryFilter) {
+        apiUrl += `&queryFilter=${queryFilter}`
+      }
+      if (Object.keys(sortByObject).length > 0) {
+        apiUrl += `&sortByObject=${JSON.stringify(sortByObject)}`
+      }
+      fetch(apiUrl)
       .then(res => res.json())
       .then((data) => {
           setGenesPage(data.genes)
@@ -71,7 +76,7 @@ const GenesTable: React.FC<IProps> = ({ taxid, initialGenes, pageTotal }) => {
   }, [taxid])
 
   return (
-    <VirtualPaginatedTable
+    <VirtualPaginatedFilterTable
       columns={columns}
       data={genesPage}
       pageCount={pageCount}
