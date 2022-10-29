@@ -44,7 +44,7 @@ const Home: NextPage = () => {
             The largest annotated gene expression resource for{" "}
             <Link href="/species">
               <a className="hover:underline active:text-plb-green">
-                <span className="font-bold text-xl text-plb-red">97</span> plant species
+                <span className="font-bold text-xl text-plb-red">100</span> plant species
               </a>
             </Link>
           </p>
