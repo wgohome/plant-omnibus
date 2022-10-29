@@ -24,6 +24,7 @@ import { getOneSpecies } from "../../../../utils/species"
 import { getOneGene } from "../../../../utils/genes"
 import { capitalizeFirstLetter } from "../../../../utils/strings"
 import TopSpmOrgansSection from "../../../../components/cards/TopSpmOrgansSection"
+import PccTable from "../../../../components/tables/PccTable"
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   connectMongo()
@@ -110,9 +111,12 @@ const GenePage: NextPage = ({species, gene, mapmanGas, interproGas, sampleAnnota
 
       <section className="mt-10 mb-4" id="coexpression-table">
         <Header2>Top co-expressed genes</Header2>
-        <p>
-          🚧👷🏻 Coming soon ...
-        </p>
+        {(!gene.neighbors || gene.neighbors.length === 0)
+          ?
+          <p>No coexpressed neighbors</p>
+          :
+          <PccTable taxid={species.tax} data={gene.neighbors} />
+        }
       </section>
     </Layout>
   )

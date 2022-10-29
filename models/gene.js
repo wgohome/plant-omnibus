@@ -2,6 +2,11 @@ import { Schema, model, models, ObjectId } from "mongoose";
 
 import GeneAnnotation from "./geneAnnotation";
 
+const NeighborSchema = new Schema({
+  label: String,
+  pcc: Number,
+})
+
 const geneSchema = new Schema({
   label: {
     type: String,
@@ -22,6 +27,9 @@ const geneSchema = new Schema({
     default: [],
     ref: "GeneAnnotation", // run .populate("ga_ids") to get objects
   },
+  neighbors: {
+    type: [NeighborSchema],
+  }
 })
 
 geneSchema.virtual("gene_annotations", {
