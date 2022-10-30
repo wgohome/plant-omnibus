@@ -16,6 +16,15 @@ const PccTable = ({ taxid, data }) => {
         ),
       },
       {
+        Header: "Description",
+        accessor: "names",
+        Cell: ({ value }) => (
+          value.map(n => (
+            <p className="mt-1.5 first:mt-0" key={n}>{n}</p>
+          ))
+        ),
+      },
+      {
         Header: "PCC Value",
         accessor: "pcc",
       },
