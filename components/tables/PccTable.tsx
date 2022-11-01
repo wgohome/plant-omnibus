@@ -8,7 +8,7 @@ const PccTable = ({ taxid, data }) => {
     () => [
       {
         Header: "Gene",
-        accessor: "label",
+        accessor: "gene.label",
         Cell: ({ value }) => (
           <TextLink href={`/species/${taxid}/genes/${value}`}>
             {value}
@@ -17,10 +17,10 @@ const PccTable = ({ taxid, data }) => {
       },
       {
         Header: "Description",
-        accessor: "names",
+        accessor: "gene.gene_annotations",
         Cell: ({ value }) => (
-          value.map(n => (
-            <p className="mt-1.5 first:mt-0" key={n}>{n}</p>
+          value && value.map(ga => (
+            <p className="mt-1.5 first:mt-0" key={ga._id}>{ga.name}</p>
           ))
         ),
       },
