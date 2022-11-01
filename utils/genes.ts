@@ -65,23 +65,10 @@ export const getOneGene = async (
   const gene = await Gene.findOne({"spe_id": species_id, "label": label})
     .populate("gene_annotations")
     .populate({
-      path: "neighborGenes",
-      select: "ga_ids",
-      populate: {
-        path: "gene_annotations",
-      }
-    }).lean()
-  const geneNameMap = gene.neighborGenes.reduce((coll, curr) => {
-    const mapmanNames = curr.gene_annotations
-      .filter(ga => ga.type === "MAPMAN")
-      .map(ga => ga.name)
-      coll[curr.label] = mapmanNames
-      return coll
-  }, {})
-  gene.neighbors.forEach((neighbor, i) => {
-    neighbor.names = geneNameMap[neighbor.label]
-  })
-  delete gene.neighborGenes
+      path: "neighbors.gene",
+      select: "label ga_ids",
+      populate: "gene_annotations",
+    })
   return gene
 }
 

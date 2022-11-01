@@ -3,9 +3,12 @@ import { Schema, model, models, ObjectId } from "mongoose";
 import GeneAnnotation from "./geneAnnotation";
 
 const neighborSchema = new Schema({
-  label: String,
+  gene: {
+    type: ObjectId,
+    ref: "Gene",
+  },
   pcc: Number,
-})
+});
 
 const geneSchema = new Schema({
   label: {
@@ -36,12 +39,6 @@ geneSchema.virtual("gene_annotations", {
   ref: "GeneAnnotation",
   localField: "ga_ids",
   foreignField: "_id",
-})
-
-geneSchema.virtual("neighborGenes", {
-  ref: "Gene",
-  localField: "neighbors.label",
-  foreignField: "label",
 })
 
 /* These are needed for virtual fields to appear */
