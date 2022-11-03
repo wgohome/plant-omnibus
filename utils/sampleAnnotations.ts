@@ -77,3 +77,44 @@ export const getSampleAnnotationsGraphData = async (
   })
   return sampleAnnotations
 }
+
+/*
+  For getting most specific genes for a SA (organ)
+*/
+interface organSpecificGasInputArgs {
+  poLabel: string
+  pageIndex: number
+  pageSize: number
+  queryFilter?: string | null
+  sortByObject?: object
+}
+
+export const getOrganSpecificGas = async ({
+  poLabel,
+  pageIndex = 0,
+  pageSize = parseInt(process.env.pageSize!),
+  queryFilter = null,
+  sortByObject,
+}: organSpecificGasInputArgs) => {
+  connectMongo()
+  const sas = await SampleAnnotation.find({
+    type: "PO",
+    label: poLabel,
+  })
+    .sort({ spm_med: -1 })
+    .skip(pageIndex * pageSize)
+    .limit(pageSize)
+    .populate("species", "name tax")
+    .populate("gene")
+    .lean()
+  const numSas = await SampleAnnotation.countDocuments({
+    type: "PO",
+    label: poLabel,
+  })
+  const pageTotal = Math.ceil(numSas / pageSize)
+  return {
+    pageTotal,
+    numSas,
+    sas,
+  }
+}

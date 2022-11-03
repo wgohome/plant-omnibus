@@ -4,21 +4,27 @@ import React from "react"
 
 import Header1 from "../../components/atomic/texts/Header1"
 import Layout from "../../components/Layout"
+import { getOrganSpecificGas } from "../../utils/sampleAnnotations"
 
 import poNameMap from '/public/data/po_name_map.json' assert {type: 'json'}
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const poTerm = params.poLabel as string
+  const specificGas = await getOrganSpecificGas({
+    poLabel: poTerm,
+  })
 
   return {
     props: {
-      poName: poNameMap[poTerm]
+      poName: poNameMap[poTerm],
+      specificGas: JSON.parse(JSON.stringify(specificGas)),
     },
   }
 }
 
 interface IProps {
   poName: string
+  specificGas: object[]
 }
 
 /*
@@ -26,7 +32,7 @@ interface IProps {
   For each species, which genes have the highest SPM?
 */
 
-const OrganShowPage: NextPage<IProps> = ({ poName }) => {
+const OrganShowPage: NextPage<IProps> = ({ poName, specificGas }) => {
   const router = useRouter()
   const poLabel = router.query.poLabel as string
 
@@ -38,6 +44,8 @@ const OrganShowPage: NextPage<IProps> = ({ poName }) => {
 
       <Header1>{poName}</Header1>
       <p>{poLabel}</p>
+
+      {JSON.stringify(specificGas)}
     </Layout>
   )
 }
