@@ -9,12 +9,14 @@ interface IProps {
   globalFilter: string
   setGlobalFilter: (filterValue: string | undefined) => void
   placeholder?: string
+  autofocus?: boolean
 }
 
 const GlobalFilterBox: React.FC<IProps> = ({
   globalFilter,
   setGlobalFilter,
   placeholder = "What are you searching for?",
+  autofocus = true,
 }) => {
   const [ queryValue, setQueryValue ] = React.useState(globalFilter)
 
@@ -33,7 +35,7 @@ const GlobalFilterBox: React.FC<IProps> = ({
           handleChange(e.target.value)
         }}
         placeholder={placeholder}
-        autoFocus
+        autoFocus={autofocus}
       />
     </div>
   )
