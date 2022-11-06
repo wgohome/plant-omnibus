@@ -17,7 +17,7 @@ const PccTable = ({ taxid, data }) => {
       },
       {
         Header: "Description",
-        accessor: "gene.gene_annotations",
+        accessor: "gene.mapman_annotations",
         Cell: ({ value }) => {
           if (value && value.length > 0) {
             return value.map(ga => (
