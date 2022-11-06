@@ -6,7 +6,7 @@ import TextLink from "./atomic/TextLink";
 
 export default function Layout({ children }) {
   return (
-    <div className="flex flex-col min-h-screen font-ttinterfaces tracking-wide bg-stone-100">
+    <div className="flex flex-col items-stretch min-w-min min-h-screen font-ttinterfaces tracking-wide bg-stone-100">
       <Head>
         <title>Plant Gene Expression Omnibus</title>
         <meta
@@ -17,7 +17,7 @@ export default function Layout({ children }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header>
+      <header className="">
         <nav className="sticky bg-plb-green py-4 pl-4 pr-2 md:px-2">
           <div className="container flex flex-wrap justify-between items-center mx-auto">
             <TextLink href="/" className="self-center whitespace-nowrap text-gray-50 text-xl font-medium">
