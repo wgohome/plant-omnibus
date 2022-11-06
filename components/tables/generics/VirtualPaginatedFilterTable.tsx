@@ -20,7 +20,7 @@ interface IProps {
   fetchData: ({ pageIndex, pageSize, queryFilter, sortBy }: IPropsFetchData) => void
 }
 
-const VirtualPaginatedTable: React.FC<IProps> = ({
+const VirtualPaginatedFilterTable: React.FC<IProps> = ({
   columns,
   data,
   pageCount: controlledPageCount,
@@ -181,4 +181,4 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
   )
 }
 
-export default VirtualPaginatedTable
+export default VirtualPaginatedFilterTable

@@ -1,9 +1,8 @@
 // TODO virtual paginated table, shouldnt be sortable
 import React from "react"
 
-import VirtualPaginatedFilterTable from "./generics/VirtualPaginatedFilterTable"
+import VirtualPaginatedTable from "./generics/VirtualPaginatedTable"
 import TextLink from "../atomic/TextLink"
-import { IPropsFetchData } from "./generics/VirtualPaginatedFilterTable"
 
 interface IProps {
   poLabel: string
@@ -101,7 +100,7 @@ const OrganShowTable: React.FC<IProps> = ({ poLabel, initialSaPage, pageTotal })
   }, [])
 
   return (
-    <VirtualPaginatedFilterTable
+    <VirtualPaginatedTable
       columns={columns}
       data={saPage}
       pageCount={pageCount}

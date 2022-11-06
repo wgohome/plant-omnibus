@@ -145,17 +145,14 @@ export const getOrganSpecificSasByMean = async ({
   sortByObject,
 }: organSpecificSasInputArgs) => {
   connectMongo()
-  // const queryObject = { type: "PO", label: poLabel }
+  const queryObject = { type: "PO", label: poLabel }
   // if (queryFilter) {
   //   queryObject["$or"] = [
   //     { name: { "$regex": new RegExp(queryFilter), "$options": "i" } },
   //     { label: { "$regex": new RegExp(queryFilter), "$options": "i" } },
   //   ]
   // }
-  const sas = await SampleAnnotation.find({
-    type: "PO",
-    label: poLabel,
-  })
+  const sas = await SampleAnnotation.find(queryObject)
     .sort({ spm: -1 })
     .skip(pageIndex * pageSize)
     .limit(pageSize)

@@ -1,14 +1,19 @@
 import React from "react"
 import { useTable, usePagination, useSortBy } from 'react-table'
-
 import PaginationBar from "./PaginationBar"
+import PageStatusFooter from "./PageStatusFooter"
 
+export interface IPropsFetchData {
+  pageSize: number
+  pageIndex: number
+  sortByObject?: object
+}
 interface IProps {
   columns: object[]
   data: object[]
   pageCount: number
   loading: boolean
-  fetchData: ({pageIndex, pageSize}: {pageIndex: number, pageSize: number}) => void
+  fetchData: ({pageIndex, pageSize, sortBy}: IPropsFetchData) => void
 }
 
 const VirtualPaginatedTable: React.FC<IProps> = ({
@@ -35,17 +40,21 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
     previousPage,
     setPageSize,
     // setHiddenColumns,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, sortBy },
   } = useTable(
     {
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize: defaultPageSize },
+      initialState: {
+        pageIndex: 0,
+        pageSize: defaultPageSize,
+      },
       manualPagination: true,
       pageCount: controlledPageCount,  // Needed when doing manualPagination
       // Needed when useSortBy + usePagination combo of hooks are used
       // Otherwise, the table just kept resetting to its original state even on page change
       autoResetPage: false,
+      manualSortBy: true,
     },
     useSortBy,
     usePagination,
@@ -56,8 +65,15 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
     useEffect to avoid re-rendering
   */
   React.useEffect(() => {
-    fetchData({ pageIndex, pageSize })
-  }, [fetchData, pageIndex, pageSize])
+    // Convert sortBy to format accepted by Mongoose
+    let sortByObject = {}
+    if (sortBy) {
+      sortBy.forEach(item => {
+        sortByObject[item.id] = item.desc ? -1 : 1
+      })
+    }
+    fetchData({ pageIndex, pageSize, sortByObject })
+  }, [ fetchData, pageIndex, pageSize, sortBy ])
 
   return (
     <div>
@@ -89,7 +105,7 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
           setPageSize,
         }}
       />
-      <div className="overflow-x-auto border border-stone-300 rounded-xl shadow-lg my-3">
+      <div className="overflow-x-auto border border-stone-300 rounded-3xl shadow-md my-3">
         <table className="w-full" {...getTableProps()}>
           <thead className="border-b">
             {headerGroups.map(headerGroup => (
@@ -141,20 +157,11 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
             )}
           </tbody>
         </table>
-        {/* Optional foorter row */}
-        <div className="px-3">
-          {loading ? (
-            <span>Loading ...</span>
-          ) : (
-            <span>
-              Page{' '}
-              <strong>
-                {pageIndex + 1}
-              </strong>{' '}
-              of {pageOptions.length}
-            </span>
-          )}
-        </div>
+        <PageStatusFooter
+          pageIndex={pageIndex}
+          pageLength={pageOptions.length}
+          loading={loading}
+        />
       </div>
     </div>
   )
