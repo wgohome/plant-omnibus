@@ -53,8 +53,15 @@ interface SortableSA {
   spm: number
 }
 
-export const findTopSpmSA = (sampleAnnotations: SortableSA[], n: number = 3): SortableSA[] => {
-  return [...sampleAnnotations].sort((sa1, sa2) => sa2.spm - sa1.spm).slice(0, n)
+export const findTopSpmSA = (
+  sampleAnnotations: SortableSA[],
+  n: number = 3,
+  by: "mean" | "median" = "mean",
+): SortableSA[] => {
+  if (by === "mean") {
+    return [...sampleAnnotations].sort((sa1, sa2) => sa2.spm - sa1.spm).slice(0, n)
+  }
+  return [...sampleAnnotations].sort((sa1, sa2) => sa2.spm_med - sa1.spm_med).slice(0, n)
 }
 
 /*
