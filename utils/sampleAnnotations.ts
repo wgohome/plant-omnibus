@@ -81,22 +81,29 @@ export const getSampleAnnotationsGraphData = async (
 /*
   For getting most specific genes for a SA (organ)
 */
-interface organSpecificGasInputArgs {
+interface organSpecificSasInputArgs {
   poLabel: string
-  pageIndex: number
-  pageSize: number
+  pageIndex?: number
+  pageSize?: number
   queryFilter?: string | null
   sortByObject?: object
 }
 
-export const getOrganSpecificGas = async ({
+export const getOrganSpecificSasByMedian = async ({
   poLabel,
   pageIndex = 0,
   pageSize = parseInt(process.env.pageSize!),
   queryFilter = null,
   sortByObject,
-}: organSpecificGasInputArgs) => {
+}: organSpecificSasInputArgs) => {
   connectMongo()
+  // const queryObject = { type: "PO", label: poLabel }
+  // if (queryFilter) {
+  //   queryObject["$or"] = [
+  //     { name: { "$regex": new RegExp(queryFilter), "$options": "i" } },
+  //     { label: { "$regex": new RegExp(queryFilter), "$options": "i" } },
+  //   ]
+  // }
   const sas = await SampleAnnotation.find({
     type: "PO",
     label: poLabel,
@@ -104,14 +111,72 @@ export const getOrganSpecificGas = async ({
     .sort({ spm_med: -1 })
     .skip(pageIndex * pageSize)
     .limit(pageSize)
-    .populate("species", "name tax")
-    .populate("gene")
+    .populate({
+      path: "species",
+      select: "name tax",
+    })
+    .populate({
+      path: "gene",
+      model: "Gene",
+      select: "label ga_ids",
+      populate: {
+        path: "mapman_annotations",
+      },
+    })
     .lean()
   const numSas = await SampleAnnotation.countDocuments({
     type: "PO",
     label: poLabel,
   })
-  const pageTotal = Math.ceil(numSas / pageSize)
+  const pageTotal = Math.ceil(0.2 * numSas / pageSize)
+  return {
+    pageTotal,
+    numSas,
+    sas,
+  }
+}
+
+
+export const getOrganSpecificSasByMean = async ({
+  poLabel,
+  pageIndex = 0,
+  pageSize = parseInt(process.env.pageSize!),
+  queryFilter = null,
+  sortByObject,
+}: organSpecificSasInputArgs) => {
+  connectMongo()
+  // const queryObject = { type: "PO", label: poLabel }
+  // if (queryFilter) {
+  //   queryObject["$or"] = [
+  //     { name: { "$regex": new RegExp(queryFilter), "$options": "i" } },
+  //     { label: { "$regex": new RegExp(queryFilter), "$options": "i" } },
+  //   ]
+  // }
+  const sas = await SampleAnnotation.find({
+    type: "PO",
+    label: poLabel,
+  })
+    .sort({ spm: -1 })
+    .skip(pageIndex * pageSize)
+    .limit(pageSize)
+    .populate({
+      path: "species",
+      select: "name tax",
+    })
+    .populate({
+      path: "gene",
+      model: "Gene",
+      select: "label ga_ids",
+      populate: {
+        path: "mapman_annotations",
+      },
+    })
+    .lean()
+  const numSas = await SampleAnnotation.countDocuments({
+    type: "PO",
+    label: poLabel,
+  })
+  const pageTotal = Math.ceil(0.2 * numSas / pageSize)
   return {
     pageTotal,
     numSas,

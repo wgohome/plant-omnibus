@@ -41,6 +41,13 @@ geneSchema.virtual("gene_annotations", {
   foreignField: "_id",
 })
 
+geneSchema.virtual("mapman_annotations", {
+  ref: "GeneAnnotation",
+  localField: "ga_ids",
+  foreignField: "_id",
+  match: { type: "MAPMAN" },
+})
+
 /* These are needed for virtual fields to appear */
 geneSchema.set("toObject", { virtuals: true })
 geneSchema.set("toJSON", { virtuals: true })
