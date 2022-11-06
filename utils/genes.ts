@@ -67,7 +67,7 @@ export const getOneGene = async (
     .populate({
       path: "neighbors.gene",
       select: "label ga_ids",
-      populate: "gene_annotations",
+      populate: "mapman_annotations",
     })
   return gene
 }
