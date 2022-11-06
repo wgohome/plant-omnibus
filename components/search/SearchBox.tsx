@@ -116,7 +116,7 @@ const SearchBox = ({
             type="search"
             ref={autoFocusRef}
             placeholder={placeholder}
-            className="outline-none p-3 w-full rounded-full shadow border border-stone-300 focus:ring ring-plb-green ring-offset-1 focus:border-green-plb"
+            className="outline-none p-3 w-full rounded-full shadow border border-stone-300 focus:ring focus:ring-1 focus:ring-plb-green focus:border-plb-green"
             value={userInput}
             onChange={(e) => {
               /*
