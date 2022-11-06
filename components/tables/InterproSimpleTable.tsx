@@ -22,13 +22,7 @@ const InterproSimpleTable = ({ geneAnnotations }) => {
       {
         Header: "GO Terms",
         accessor: "details.go_terms",
-        Cell: ({value: goTerms}) => {
-          return goTerms.map((goTerm, i) => (
-            <TextLink href="#" key={i}>
-              {goTerm}{"  "}
-            </TextLink>
-          ))
-        },
+        Cell: ({value: goTerms}) => goTerms.join(", "),
       },
     ], []
   )
