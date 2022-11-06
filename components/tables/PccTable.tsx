@@ -18,11 +18,14 @@ const PccTable = ({ taxid, data }) => {
       {
         Header: "Description",
         accessor: "gene.gene_annotations",
-        Cell: ({ value }) => (
-          value && value.map(ga => (
-            <p className="mt-1.5 first:mt-0" key={ga._id}>{ga.name}</p>
-          ))
-        ),
+        Cell: ({ value }) => {
+          if (value && value.length > 0) {
+            return value.map(ga => (
+              <p className="mt-1.5 first:mt-0" key={ga._id}>{ga.name}</p>
+            ))
+          }
+          return (<p>not assigned.not annotated</p>)
+        }
       },
       {
         Header: "PCC Value",
