@@ -16,7 +16,6 @@ const ExpressionTabs = dynamic(() => import("../../../../components/graphs/Expre
 
 import connectMongo from "../../../../utils/connectMongo"
 import {
-  getHighestSpmSA,
   findTopSpmSA,
   getSampleAnnotationsGraphData,
 } from "../../../../utils/sampleAnnotations"
@@ -25,6 +24,7 @@ import { getOneGene } from "../../../../utils/genes"
 import { capitalizeFirstLetter } from "../../../../utils/strings"
 import TopSpmOrgansSection from "../../../../components/cards/TopSpmOrgansSection"
 import PccTable from "../../../../components/tables/PccTable"
+import { TabBodyGroup, TabBodyItem, TabGroup, TabHeaderGroup, TabHeaderItem } from "../../../../components/atomic/tabs"
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   connectMongo()
@@ -33,7 +33,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   const mapmanGas = gene.gene_annotations.filter(ga => ga.type === "MAPMAN")
   const interproGas = gene.gene_annotations.filter(ga => ga.type === "INTERPRO")
   const sampleAnnotations = await getSampleAnnotationsGraphData(params.taxid, params.geneLabel, "PO")
-  const topSpmSas = findTopSpmSA(sampleAnnotations)
+  const topSpmSasMean = findTopSpmSA(sampleAnnotations, 3, "mean")
+  const topSpmSasMedian = findTopSpmSA(sampleAnnotations, 3, "median")
+
 
   return {
     props: {
@@ -42,12 +44,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
       mapmanGas: JSON.parse(JSON.stringify(mapmanGas)),
       interproGas: JSON.parse(JSON.stringify(interproGas)),
       sampleAnnotations: JSON.parse(JSON.stringify(sampleAnnotations)),
-      topSpmSas: JSON.parse(JSON.stringify(topSpmSas)),
+      topSpmSasMean: JSON.parse(JSON.stringify(topSpmSasMean)),
+      topSpmSasMedian: JSON.parse(JSON.stringify(topSpmSasMedian)),
     }
   }
 }
 
-const GenePage: NextPage = ({species, gene, mapmanGas, interproGas, sampleAnnotations, topSpmSas }) => {
+const GenePage: NextPage = ({species, gene, mapmanGas, interproGas, sampleAnnotations, topSpmSasMean, topSpmSasMedian }) => {
   const router = useRouter()
   const { taxid, geneLabel } = router.query
 
@@ -82,12 +85,34 @@ const GenePage: NextPage = ({species, gene, mapmanGas, interproGas, sampleAnnota
 
       <section className="mt-10 mb-4" id="top-spm">
         <Header2>Organ specificity</Header2>
-        {!sampleAnnotations.length ? (
-          <p>No annotated samples yet 😢</p>
-        ) : (
-          <p>For gene {geneLabel}, we found these organs to have the highest SPM values. Do explore and inspect the data distribution plot to make your inference.</p>
-        )}
-        <TopSpmOrgansSection topSpmSas={topSpmSas} />
+        <div className="my-2">
+          {!sampleAnnotations.length ? (
+            <p>No annotated samples yet 😢</p>
+          ) : (
+            <p>For gene {geneLabel}, we found these organs to have the highest SPM values. Do explore and inspect the data distribution plot to make your inference.</p>
+          )}
+        </div>
+
+        <TabGroup>
+          <TabHeaderGroup>
+            <TabHeaderItem key="spm-mean" tabIndex={0}>
+              SPM by mean TPM
+            </TabHeaderItem>
+            <TabHeaderItem key="spm-median" tabIndex={1}>
+              SPM by median TPM
+            </TabHeaderItem>
+          </TabHeaderGroup>
+          <TabBodyGroup>
+            <TabBodyItem key="spm-mean" tabIndex={0}>
+              <TopSpmOrgansSection topSpmSas={topSpmSasMean} by="mean" />
+            </TabBodyItem>
+            <TabBodyItem key="spm-median" tabIndex={1}>
+              <TopSpmOrgansSection topSpmSas={topSpmSasMedian} by="median" />
+            </TabBodyItem>
+          </TabBodyGroup>
+        </TabGroup>
+
+
       </section>
 
       <section className="mt-10 mb-4" id="expression-graph">
