@@ -128,7 +128,7 @@ export const getOrganSpecificSasByMedian = async ({
     type: "PO",
     label: poLabel,
   })
-  const pageTotal = Math.ceil(0.2 * numSas / pageSize)
+  const pageTotal = Math.ceil(0.05 * numSas / pageSize)
   return {
     pageTotal,
     numSas,
@@ -176,7 +176,7 @@ export const getOrganSpecificSasByMean = async ({
     type: "PO",
     label: poLabel,
   })
-  const pageTotal = Math.ceil(0.2 * numSas / pageSize)
+  const pageTotal = Math.ceil(0.05 * numSas / pageSize)
   return {
     pageTotal,
     numSas,
