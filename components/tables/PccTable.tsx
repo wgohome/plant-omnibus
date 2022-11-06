@@ -39,6 +39,7 @@ const PccTable = ({ taxid, data }) => {
       columns={columns}
       data={data}
       hiddenColumns={["tax"]}
+      autofocus={false}
     />
   )
 }

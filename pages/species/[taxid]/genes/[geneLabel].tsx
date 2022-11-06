@@ -83,7 +83,7 @@ const GenePage: NextPage = ({species, gene, mapmanGas, interproGas, sampleAnnota
         </div>
       </section>
 
-      <section className="mt-10 mb-4" id="top-spm">
+      <section className="mt-8 mb-4" id="top-spm">
         <Header2>Organ specificity</Header2>
         <div className="my-2">
           {!sampleAnnotations.length ? (
@@ -92,7 +92,6 @@ const GenePage: NextPage = ({species, gene, mapmanGas, interproGas, sampleAnnota
             <p>For gene {geneLabel}, we found these organs to have the highest SPM values. Do explore and inspect the data distribution plot to make your inference.</p>
           )}
         </div>
-
         <TabGroup>
           <TabHeaderGroup>
             <TabHeaderItem key="spm-mean" tabIndex={0}>
@@ -111,8 +110,6 @@ const GenePage: NextPage = ({species, gene, mapmanGas, interproGas, sampleAnnota
             </TabBodyItem>
           </TabBodyGroup>
         </TabGroup>
-
-
       </section>
 
       <section className="mt-10 mb-4" id="expression-graph">

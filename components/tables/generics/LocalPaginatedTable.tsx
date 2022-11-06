@@ -9,12 +9,16 @@ interface IProps {
   columns: object[]
   data: object[]
   hiddenColumns?: string[]
+  searchPlaceholder?: string
+  autofocus?: boolean
 }
 
 const LocalPaginatedTable: React.FC<IProps> = ({
   columns,
   data,
   hiddenColumns = [],
+  searchPlaceholder,
+  autofocus,
 }) => {
   const defaultPageSize: number = process.env.pageSize ? parseInt(process.env.pageSize) : 10
 
@@ -84,7 +88,8 @@ const LocalPaginatedTable: React.FC<IProps> = ({
       <GlobalFilterBox
         globalFilter={globalFilter}
         setGlobalFilter={setGlobalFilter}
-        // placeholder="Search for ..."
+        placeholder={searchPlaceholder}
+        autofocus={autofocus}
       />
       <div className="overflow-x-auto border border-stone-300 rounded-3xl shadow-md my-3 pt-1">
         <table className="w-full" {...getTableProps()}>
