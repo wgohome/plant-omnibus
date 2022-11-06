@@ -60,28 +60,29 @@ const GenePage: NextPage = ({species, gene, mapmanGas, interproGas, sampleAnnota
         <title>{`Gene ${geneLabel}`}</title>
       </Head>
 
-      <section className="mt-4 mb-4">
+      <section className="mb-4">
         <Header1>Gene {geneLabel}</Header1>
         <p>Species name: <span className="italic">{species.name}</span></p>
         <p>Taxanomic ID: {taxid}</p>
-        <div className="flex italic text-sm gap-2 my-3">
-          <TextLink href="#top-spm">
-            Organ specificity
-          </TextLink>|
-          <TextLink href="#expression-graph">
-            Expression graph
-          </TextLink>|
-          <TextLink href="#mapman-annotations">
-            Mapman annotations
-          </TextLink>|
-          <TextLink href="#interpro-annotations">
-            PFAM annotations
-          </TextLink>|
-          <TextLink href="#coexpression-table">
-            Co-expressed genes
-          </TextLink>
-        </div>
       </section>
+
+      <div className="flex italic text-sm gap-2 my-3">
+        <TextLink href="#top-spm">
+          Organ specificity
+        </TextLink>|
+        <TextLink href="#expression-graph">
+          Expression graph
+        </TextLink>|
+        <TextLink href="#mapman-annotations">
+          Mapman annotations
+        </TextLink>|
+        <TextLink href="#interpro-annotations">
+          PFAM annotations
+        </TextLink>|
+        <TextLink href="#coexpression-table">
+          Co-expressed genes
+        </TextLink>
+      </div>
 
       <section className="mt-8 mb-4" id="top-spm">
         <Header2>Organ specificity</Header2>
