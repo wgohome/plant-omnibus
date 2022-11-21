@@ -18,6 +18,11 @@ export default function Layout({ children }) {
       </Head>
 
       <header className="sticky top-0 z-20">
+        {/*
+          TOFIX:
+          mobile hamburger doesnt work on routing to other pages
+          flowbite issue with chrome browsers, not urgent for now, to be fixed next time
+        */}
         <nav className="bg-plb-green py-4 pl-4 pr-2 md:px-6">
           <div className="container flex flex-wrap justify-between items-center mx-auto">
             <TextLink href="/" className="self-center whitespace-nowrap text-gray-50 text-xl font-medium">
