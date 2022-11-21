@@ -24,32 +24,35 @@ const GenesTable: React.FC<IProps> = ({ taxid, initialGenes, pageTotal }) => {
           {value}
         </TextLink>
       ),
+      disableSortBy: true,
     },
     /* No Alias stored in DB yet for now, so leaving it out first */
     // {
     //   Header: "Alias",
     //   accessor: "alias",
+    //   disableSortBy: true,
     // },
     {
       Header: "Mapman annotations",
-      accessor: "gene_annotations",
+      accessor: "geneAnnotations",
       Cell: ({ value: geneAnnotations }: { value: object[] }) => (
         <ul className="">
           {
             /* If gene annotation not in the DB, just display MAPMAN bin 35.2 */
-            (geneAnnotations.filter(ga => ga.type == "MAPMAN").length === 0) ? (
+            (geneAnnotations.length === 0) ? (
               <li className="mb-2 last:mb-0">
                 not assigned.not annotated
               </li>
             ) :
-            geneAnnotations.filter(ga => ga.type == "MAPMAN").map(ga => (
+            geneAnnotations.map(ga => (
               <li className="mb-2 last:mb-0" key={ga.label}>
                 {ga.name}
               </li>
             ))
           }
         </ul>
-      )
+      ),
+      disableSortBy: true,
     },
   ], [taxid])
 

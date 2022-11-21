@@ -3,6 +3,7 @@ import { ObjectId } from "mongoose"
 import Species from "../models/species"
 import Gene from "../models/gene"
 import connectMongo from "../utils/connectMongo"
+import GeneAnnotation from "../models/geneAnnotation"
 
 interface GenesPageInputArgs {
   taxid: number
@@ -19,27 +20,87 @@ export const getGenesPage = async ({
   taxid,
   pageIndex = 0,
   pageSize = parseInt(process.env.pageSize!),
-  queryFilter = null,
+  queryFilter = "",
   sortByObject,
 }: GenesPageInputArgs) => {
   connectMongo()
   const species = await Species.findOne({"tax": taxid}, "_id")
   const species_id = species._id
-  const queryObject = {"spe_id": species_id}
-  if (queryFilter) {
-    queryObject["$or"] = [
-      { label: { "$regex": new RegExp(queryFilter), "$options": "i" } },
-      // TODO check through list of alias in db
-      // { alias: { "$regex": new RegExp(queryFilter), "$options": "i" } },
-    ]
-  }
-  const genes = await Gene.find(queryObject)
-    .sort(sortByObject)
-    .skip(pageIndex * pageSize)
-    .limit(pageSize)
-    .populate("gene_annotations")
-    .lean()
-  const numGenes = await Gene.countDocuments(queryObject)
+  /*
+    We want to search for genes where queryFilter matches:
+    - gene label
+    - or the Mapman term name
+
+    We also no longer care about sorting (for efficiency)
+  */
+
+  const geneAggregationResult = await Gene.aggregate([
+    {
+      "$match": { spe_id: species_id }
+    },
+    {
+      "$lookup": {
+        from: "gene_annotations",
+        localField: "ga_ids",
+        foreignField: "_id",
+        as: "geneAnnotations",
+      },
+    },
+    {
+      "$set": {
+        geneAnnotations: {
+          "$filter": {
+            input: "$geneAnnotations",
+            as: "geneAnnotation",
+            cond: {
+              "$eq": ["$$geneAnnotation.type", "MAPMAN"]
+            },
+          }
+        }
+      }
+    },
+    {
+      "$set": {
+        mapmanNames: {
+          "$map": {
+            input: "$geneAnnotations",
+            in: "$$this.name",
+          }
+        }
+      }
+    },
+    {
+      "$match": {
+        "$or": [
+          { label: { "$regex": new RegExp(queryFilter), "$options": "i" } },
+          { mapmanNames: { "$regex": new RegExp(queryFilter), "$options": "i" } },
+          // TODO: also match alias if we have alias in future
+        ]
+      }
+    },
+    {
+      "$facet": {
+        "metadata": [
+          { "$count": "total" },
+        ],
+        "data": [
+          { "$skip": pageIndex * pageSize },
+          { "$limit": pageSize },
+        ]
+      }
+    },
+    {
+      "$project": {
+        metadata: {
+          "$arrayElemAt": [ "$metadata", 0 ]
+        },
+        data: "$data"
+      }
+    },
+  ])
+
+  const numGenes = geneAggregationResult[0].metadata ? geneAggregationResult[0].metadata.total : 0
+  const genes = geneAggregationResult[0].data
   /*
     NOTE: pageTotal is the number of pages required for the given pageSize,
     which is then needed by react-table's useTable() hook
