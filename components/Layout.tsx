@@ -17,8 +17,8 @@ export default function Layout({ children }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header className="">
-        <nav className="sticky bg-plb-green py-4 pl-4 pr-2 md:px-2">
+      <header className="sticky top-0 z-20">
+        <nav className="bg-plb-green py-4 pl-4 pr-2 md:px-6">
           <div className="container flex flex-wrap justify-between items-center mx-auto">
             <TextLink href="/" className="self-center whitespace-nowrap text-gray-50 text-xl font-medium">
               Omnibus
