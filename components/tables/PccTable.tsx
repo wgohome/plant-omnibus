@@ -14,18 +14,21 @@ const PccTable = ({ taxid, data }) => {
             {value}
           </TextLink>
         ),
+        disableSortBy: true,
       },
       {
         Header: "Description",
-        accessor: "gene.mapman_annotations",
-        Cell: ({ value }) => {
-          if (value && value.length > 0) {
-            return value.map(ga => (
+        accessor: row => row.gene.mapman_annotations.map(anot => anot.name),
+        Cell: ({ row }) => {
+          const anots = row.original.gene.mapman_annotations
+          if (anots && anots.length > 0) {
+            return anots.map(ga => (
               <p className="mt-1.5 first:mt-0" key={ga._id}>{ga.name}</p>
             ))
           }
           return (<p>not assigned.not annotated</p>)
-        }
+        },
+        disableSortBy: true,
       },
       {
         Header: "PCC Value",
