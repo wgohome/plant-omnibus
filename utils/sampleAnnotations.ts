@@ -51,6 +51,7 @@ export const getHighestSpmSA = async (
 */
 interface SortableSA {
   spm: number
+  spm_med: number
 }
 
 export const findTopSpmSA = (
