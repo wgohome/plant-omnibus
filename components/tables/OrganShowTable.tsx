@@ -21,9 +21,9 @@ const OrganShowTable: React.FC<IProps> = ({ poLabel, initialSaPage, pageTotal })
   const columns = React.useMemo(() => [
     {
       Header: "Species",
-      accessor: "species.tax",
-      Cell: ({ value }: { value: number }) => (
-        <TextLink href={`/species/${value}`}>
+      accessor: "species.name",
+      Cell: ({ value, row }) => (
+        <TextLink href={`/species/${row.original.species.tax}`}>
           {value}
         </TextLink>
       ),
