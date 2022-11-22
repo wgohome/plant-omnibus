@@ -1,13 +1,13 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
 import React from "react"
-import { TabGroup, TabHeaderGroup, TabHeaderItem, TabBodyGroup, TabBodyItem } from "../../components/atomic/tabs"
 
 import Header1 from "../../components/atomic/texts/Header1"
 import Layout from "../../components/Layout"
 import OrganShowTable from "../../components/tables/OrganShowTable"
 import OrganShowTableMean from "../../components/tables/OrganShowTableMean"
 import { getOrganSpecificSasByMedian, getOrganSpecificSasByMean } from "../../utils/sampleAnnotations"
+import { TabGroup, TabHeaderGroup, TabHeaderItem, TabBodyGroup, TabBodyItem } from "../../components/atomic/tabs"
 
 import poNameMap from '/public/data/po_name_map.json' assert {type: 'json'}
 
