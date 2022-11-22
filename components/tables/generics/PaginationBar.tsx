@@ -14,14 +14,14 @@ const PaginationBar: React.FC = ({
   return (
     <div className="flex text-center drop-shadow">
       <button
-        className="py-3 px-5 pl-6 text-gray-500 bg-white rounded-l-full border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+        className="py-3 px-5 pl-6 text-gray-500 disabled:text-gray-300 bg-white rounded-l-full border border-gray-300 enabled:hover:bg-gray-100 enabled:hover:text-gray-700"
         onClick={() => gotoPage(0)}
         disabled={!canPreviousPage}
       >
         First
       </button>
       <button
-        className="py-3 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+        className="py-3 px-5 text-gray-500 disabled:text-gray-300 bg-white border border-gray-300 enabled:hover:bg-gray-100 enabled:hover:text-gray-700"
         onClick={() => previousPage()}
         disabled={!canPreviousPage}
       >
@@ -60,14 +60,14 @@ const PaginationBar: React.FC = ({
         </select>
       </div>
       <button
-        className="py-3 px-5 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+        className="py-3 px-5 text-gray-500 disabled:text-gray-300 bg-white border border-gray-300 enabled:hover:bg-gray-100 enabled:hover:text-gray-700"
         onClick={() => nextPage()}
         disabled={!canNextPage}
       >
         {'>'}
       </button>
       <button
-        className="py-3 px-5 pr-6 text-gray-500 bg-white rounded-r-full border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+        className="py-3 px-5 pr-6 text-gray-500 disabled:text-gray-300 bg-white rounded-r-full border border-gray-300 enabled:hover:bg-gray-100 enabled:hover:text-gray-700"
         onClick={() => gotoPage(pageCount - 1)}
         disabled={!canNextPage}
       >
