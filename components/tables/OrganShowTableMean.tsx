@@ -53,10 +53,7 @@ const OrganShowTableMean: React.FC<IProps> = ({ poLabel, initialSaPage, pageTota
     },
     {
       Header: "Num of samples",
-      accessor: "samples",
-      Cell: ({ value }: {value: object[]}) => {
-        return value.length
-      },
+      accessor: row => row.samples.length,
     },
     {
       Header: "Mapman Terms",
