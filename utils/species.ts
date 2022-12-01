@@ -23,3 +23,9 @@ export const getManySpecies = async (
   )
   return results
 }
+
+export const getAllSpecies = async () => {
+  connectMongo()
+  const species = Species.find()
+  return species
+}
