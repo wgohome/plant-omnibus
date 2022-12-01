@@ -7,6 +7,7 @@ import connectMongo from "../utils/connectMongo"
 import { getStdDev, getWhiskers } from "./stats"
 
 import * as poNameMap from '/public/data/po_name_map.json' assert {type: 'json'}
+import { ObjectId } from "mongoose"
 
 export const getSampleAnnotations = async (
   taxid: number,
@@ -91,6 +92,7 @@ export const getSampleAnnotationsGraphData = async (
 */
 interface organSpecificSasInputArgs {
   poLabel: string
+  speciesId?: ObjectId // if omitted, search across all species
   pageIndex?: number
   pageSize?: number
   queryFilter?: string | null
@@ -99,12 +101,31 @@ interface organSpecificSasInputArgs {
 
 export const getOrganSpecificSasByMedian = async ({
   poLabel,
+  species_id = null,
   pageIndex = 0,
   pageSize = parseInt(process.env.pageSize!),
   queryFilter = null,
   sortByObject,
 }: organSpecificSasInputArgs) => {
   connectMongo()
+
+  // const pipeline = [
+  //   {
+
+  //   },
+  // ]
+  // if (species_id) {
+  //   pipeline.unshift({
+  //     "$match": {
+  //       spe_id: species_id
+  //     }
+  //   })
+  // }
+
+  // const sas1 = await SampleAnnotation.aggregate(pipeline)
+  // debugger
+
+
   // const queryObject = { type: "PO", label: poLabel }
   // if (queryFilter) {
   //   queryObject["$or"] = [
@@ -116,6 +137,8 @@ export const getOrganSpecificSasByMedian = async ({
     type: "PO",
     label: poLabel,
   })
+    .where("spe_id").eq("62ecb148f15bf24fb8dacb23")
+    .where("med_tpm").gt(10)
     .sort({ spm_med: -1 })
     .skip(pageIndex * pageSize)
     .limit(pageSize)
@@ -161,6 +184,7 @@ export const getOrganSpecificSasByMean = async ({
   //   ]
   // }
   const sas = await SampleAnnotation.find(queryObject)
+    .where("avg_tpm").gt(10)
     .sort({ spm: -1 })
     .skip(pageIndex * pageSize)
     .limit(pageSize)
