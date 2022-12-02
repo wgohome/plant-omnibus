@@ -1,4 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { Types } from "mongoose"
+const ObjectId = Types.ObjectId
 
 import { getOrganSpecificSasByMean, getOrganSpecificSasByMedian } from '../../../../utils/sampleAnnotations'
 
@@ -9,13 +11,16 @@ export default async function handler(
   switch (req.method) {
     case "GET":
       try {
-        let { poLabel, pageIndex: pageIndexIn, pageSize: pageSizeIn, queryFilter, sortByObject: sortByStr, variant } = req.query
+        let { poLabel, speciesId: speciesIdIn, pageIndex: pageIndexIn, pageSize: pageSizeIn, queryFilter, sortByObject: sortByStr, variant } = req.query
+        const speciesId = new ObjectId(speciesIdIn as string)
         const pageIndex = parseInt(pageIndexIn as string) || 0
         const pageSize = parseInt(pageSizeIn as string) || parseInt(process.env.pageSize!)
         const sortByObject = sortByStr ? JSON.parse(sortByStr as string) : {}
+
         const genePage = variant === "median" ?
           await getOrganSpecificSasByMedian({
             poLabel: poLabel as string,
+            speciesId,
             pageIndex,
             pageSize,
             queryFilter,
@@ -24,11 +29,13 @@ export default async function handler(
         :
           await getOrganSpecificSasByMean({
             poLabel: poLabel as string,
+            speciesId,
             pageIndex,
             pageSize,
             queryFilter,
             sortByObject,
           })
+
         if (pageIndex < 0 || pageIndex > genePage.pageTotal) {
           res.status(422).json({
             error: `${pageIndex} is an invalid pageIndex`

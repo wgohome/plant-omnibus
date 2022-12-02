@@ -1,4 +1,7 @@
 import { median } from "mathjs"
+import { ObjectId } from "mongoose"
+// import { Types } from "mongoose"
+// const ObjectId = Types.ObjectId
 
 import Species from "../models/species"
 import Gene from "../models/gene"
@@ -7,7 +10,6 @@ import connectMongo from "../utils/connectMongo"
 import { getStdDev, getWhiskers } from "./stats"
 
 import * as poNameMap from '/public/data/po_name_map.json' assert {type: 'json'}
-import { ObjectId } from "mongoose"
 
 export const getSampleAnnotations = async (
   taxid: number,
@@ -92,7 +94,7 @@ export const getSampleAnnotationsGraphData = async (
 */
 interface organSpecificSasInputArgs {
   poLabel: string
-  speciesId?: ObjectId // if omitted, search across all species
+  speciesId?: ObjectId | null
   pageIndex?: number
   pageSize?: number
   queryFilter?: string | null
@@ -101,7 +103,7 @@ interface organSpecificSasInputArgs {
 
 export const getOrganSpecificSasByMedian = async ({
   poLabel,
-  species_id = null,
+  speciesId = null,
   pageIndex = 0,
   pageSize = parseInt(process.env.pageSize!),
   queryFilter = null,
@@ -109,106 +111,252 @@ export const getOrganSpecificSasByMedian = async ({
 }: organSpecificSasInputArgs) => {
   connectMongo()
 
-  // const pipeline = [
-  //   {
-
-  //   },
-  // ]
-  // if (species_id) {
-  //   pipeline.unshift({
-  //     "$match": {
-  //       spe_id: species_id
-  //     }
-  //   })
-  // }
-
-  // const sas1 = await SampleAnnotation.aggregate(pipeline)
-  // debugger
-
-
-  // const queryObject = { type: "PO", label: poLabel }
-  // if (queryFilter) {
-  //   queryObject["$or"] = [
-  //     { name: { "$regex": new RegExp(queryFilter), "$options": "i" } },
-  //     { label: { "$regex": new RegExp(queryFilter), "$options": "i" } },
-  //   ]
-  // }
-  const sas = await SampleAnnotation.find({
-    type: "PO",
-    label: poLabel,
-  })
-    .where("spe_id").eq("62ecb148f15bf24fb8dacb23")
-    .where("med_tpm").gt(10)
-    .sort({ spm_med: -1 })
-    .skip(pageIndex * pageSize)
-    .limit(pageSize)
-    .populate({
-      path: "species",
-      select: "name tax",
-    })
-    .populate({
-      path: "gene",
-      model: "Gene",
-      select: "label ga_ids",
-      populate: {
-        path: "mapman_annotations",
+  const pipeline = [
+    {
+      // Index created by these two fields, in this order
+      "$match": {
+        type: "PO",
+        label: poLabel,
+      }
+    },
+    {
+      // Then use another index to query down a particular species
+      "$match": {
+        spe_id: speciesId,
+      }
+    },
+    {
+      "$sort": { spm_med: -1 }
+    },
+    {
+      // Then use another index to filter by spm
+      "$match": {
+        med_tpm: { "$gt": 1 },
+      }
+    },
+    {
+      "$facet": {
+        "metadata": [
+          { "$count": "total" }
+        ],
+        "data": [
+          {
+            "$skip": pageIndex * pageSize,
+          },
+          {
+            "$limit": pageSize,
+          },
+          {
+            "$lookup": {
+              from: "species",
+              localField: "spe_id",
+              foreignField: "_id",
+              as: "species",
+            }
+          },
+          {
+            "$set": {
+              species: {
+                "$arrayElemAt": ["$species", 0]
+              }
+            }
+          },
+          {
+            "$lookup": {
+              from: "genes",
+              localField: "g_id",
+              foreignField: "_id",
+              as: "gene",
+            }
+          },
+          {
+            "$set": {
+              gene: {
+                "$arrayElemAt": ["$gene", 0]
+              }
+            }
+          },
+          {
+            "$unset": "gene.neighbors"
+          },
+          {
+            "$lookup": {
+              from: "gene_annotations",
+              localField: "gene.ga_ids",
+              foreignField: "_id",
+              as: "geneAnnotations",
+            }
+          },
+          {
+            "$set": {
+              mapman_annotations: {
+                "$filter": {
+                  input: "$geneAnnotations",
+                  as: "geneAnnotation",
+                  cond: {
+                    "$eq": ["$$geneAnnotation.type", "MAPMAN"]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "$unset": "geneAnnotations"
+          },
+        ]
       },
-    })
-    .lean()
-  const numSas = await SampleAnnotation.countDocuments({
-    type: "PO",
-    label: poLabel,
-  })
-  const pageTotal = Math.ceil(0.05 * numSas / pageSize)
+    },
+    {
+      "$project": {
+        metadata: {
+          "$arrayElemAt": [ "$metadata", 0 ]
+        },
+        data: "$data"
+      }
+    },
+  ]
+
+  const aggregationResult = await SampleAnnotation.aggregate(pipeline)
+
+  const sas = aggregationResult[0].data
+  const numSasTotal = aggregationResult[0].metadata.total
+  const numSasPassed = Math.ceil(numSasTotal * 0.05)
+  const pageTotal = Math.ceil(0.05 * numSasTotal / pageSize)
+
   return {
+    numSasTotal,
     pageTotal,
-    numSas,
-    sas,
+    pageIndex,
+    sas: (pageIndex < pageTotal) ? sas : [],
   }
 }
 
 
 export const getOrganSpecificSasByMean = async ({
   poLabel,
+  speciesId = null,
   pageIndex = 0,
   pageSize = parseInt(process.env.pageSize!),
   queryFilter = null,
   sortByObject,
 }: organSpecificSasInputArgs) => {
   connectMongo()
-  const queryObject = { type: "PO", label: poLabel }
-  // if (queryFilter) {
-  //   queryObject["$or"] = [
-  //     { name: { "$regex": new RegExp(queryFilter), "$options": "i" } },
-  //     { label: { "$regex": new RegExp(queryFilter), "$options": "i" } },
-  //   ]
-  // }
-  const sas = await SampleAnnotation.find(queryObject)
-    .where("avg_tpm").gt(10)
-    .sort({ spm: -1 })
-    .skip(pageIndex * pageSize)
-    .limit(pageSize)
-    .populate({
-      path: "species",
-      select: "name tax",
-    })
-    .populate({
-      path: "gene",
-      model: "Gene",
-      select: "label ga_ids",
-      populate: {
-        path: "mapman_annotations",
+
+  const pipeline = [
+    {
+      // Index created by these two fields, in this order
+      "$match": {
+        type: "PO",
+        label: poLabel,
+      }
+    },
+    {
+      // Then use another index to query down a particular species
+      "$match": {
+        spe_id: speciesId,
+      }
+    },
+    {
+      "$sort": { spm: -1 }
+    },
+    {
+      // Then use another index to filter by spm
+      "$match": {
+        avg_tpm: { "$gt": 1 },
+      }
+    },
+    {
+      "$facet": {
+        "metadata": [
+          { "$count": "total" }
+        ],
+        "data": [
+          {
+            "$skip": pageIndex * pageSize,
+          },
+          {
+            "$limit": pageSize,
+          },
+          {
+            "$lookup": {
+              from: "species",
+              localField: "spe_id",
+              foreignField: "_id",
+              as: "species",
+            }
+          },
+          {
+            "$set": {
+              species: {
+                "$arrayElemAt": ["$species", 0]
+              }
+            }
+          },
+          {
+            "$lookup": {
+              from: "genes",
+              localField: "g_id",
+              foreignField: "_id",
+              as: "gene",
+            }
+          },
+          {
+            "$set": {
+              gene: {
+                "$arrayElemAt": ["$gene", 0]
+              }
+            }
+          },
+          {
+            "$unset": "gene.neighbors"
+          },
+          {
+            "$lookup": {
+              from: "gene_annotations",
+              localField: "gene.ga_ids",
+              foreignField: "_id",
+              as: "geneAnnotations",
+            }
+          },
+          {
+            "$set": {
+              mapman_annotations: {
+                "$filter": {
+                  input: "$geneAnnotations",
+                  as: "geneAnnotation",
+                  cond: {
+                    "$eq": ["$$geneAnnotation.type", "MAPMAN"]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "$unset": "geneAnnotations"
+          },
+        ]
       },
-    })
-    .lean()
-  const numSas = await SampleAnnotation.countDocuments({
-    type: "PO",
-    label: poLabel,
-  })
-  const pageTotal = Math.ceil(0.05 * numSas / pageSize)
+    },
+    {
+      "$project": {
+        metadata: {
+          "$arrayElemAt": [ "$metadata", 0 ]
+        },
+        data: "$data"
+      }
+    },
+  ]
+
+  const aggregationResult = await SampleAnnotation.aggregate(pipeline)
+  const sas = aggregationResult[0].data
+  const numSasTotal = aggregationResult[0].metadata.total
+  const numSasPassed = Math.ceil(numSasTotal * 0.05)
+  const pageTotal = Math.ceil(0.05 * numSasTotal / pageSize)
+
   return {
+    numSasTotal,
     pageTotal,
-    numSas,
-    sas,
+    pageIndex,
+    sas: (pageIndex < pageTotal) ? sas : [],
   }
 }

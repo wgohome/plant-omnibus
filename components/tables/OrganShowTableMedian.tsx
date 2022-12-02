@@ -1,16 +1,17 @@
-// TODO virtual paginated table, shouldnt be sortable
 import React from "react"
+import { ObjectId } from "mongoose"
 
 import VirtualPaginatedTable from "./generics/VirtualPaginatedTable"
 import TextLink from "../atomic/TextLink"
 
 interface IProps {
   poLabel: string
+  speciesId: ObjectId
   initialSaPage: object[]
   pageTotal: number
 }
 
-const OrganShowTable: React.FC<IProps> = ({ poLabel, initialSaPage, pageTotal }) => {
+const OrganShowTableMedian: React.FC<IProps> = ({ poLabel, speciesId, initialSaPage, pageTotal }) => {
   // Pagination state management
   const [ saPage, setSaPage ] = React.useState(initialSaPage)
   const [ pageCount, setPageCount ] = React.useState(pageTotal)
@@ -33,7 +34,7 @@ const OrganShowTable: React.FC<IProps> = ({ poLabel, initialSaPage, pageTotal })
       Header: "Gene",
       accessor: "gene.label",
       Cell: ({ value, row }: { value: string, row: object }) => (
-        <TextLink href={`/species/${row.values["species.tax"]}/genes/${value}`}>
+        <TextLink href={`/species/${row.original.species.tax}/genes/${value}`}>
           {value}
         </TextLink>
       ),
@@ -57,7 +58,7 @@ const OrganShowTable: React.FC<IProps> = ({ poLabel, initialSaPage, pageTotal })
     },
     {
       Header: "Mapman Terms",
-      accessor: "gene.mapman_annotations",
+      accessor: "mapman_annotations",
       Cell: ({ value: gaTerms }: { value: object[] | "-" }) =>
       (
         <ul className="min-w-[400px]">
@@ -78,7 +79,8 @@ const OrganShowTable: React.FC<IProps> = ({ poLabel, initialSaPage, pageTotal })
     const fetchId = ++fetchIdRef.current
     setLoading(true)
     if (fetchId === fetchIdRef.current) {
-      let apiUrl = `/api/sampleAnnotations/PO/${poLabel}?pageIndex=${pageIndex}&pageSize=${pageSize}&variant=median`
+      let apiUrl = `/api/sampleAnnotations/PO/${poLabel}?speciesId=${speciesId}&pageIndex=${pageIndex}&pageSize=${pageSize}&variant=median`
+
       if (queryFilter) {
         apiUrl += `&queryFilter=${queryFilter}`
       }
@@ -107,4 +109,4 @@ const OrganShowTable: React.FC<IProps> = ({ poLabel, initialSaPage, pageTotal })
   )
 }
 
-export default OrganShowTable
+export default OrganShowTableMedian

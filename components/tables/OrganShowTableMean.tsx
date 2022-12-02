@@ -6,11 +6,12 @@ import TextLink from "../atomic/TextLink"
 
 interface IProps {
   poLabel: string
+  speciesId: ObjectId
   initialSaPage: object[]
   pageTotal: number
 }
 
-const OrganShowTableMean: React.FC<IProps> = ({ poLabel, initialSaPage, pageTotal }) => {
+const OrganShowTableMean: React.FC<IProps> = ({ poLabel, speciesId, initialSaPage, pageTotal }) => {
   // Pagination state management
   const [ saPage, setSaPage ] = React.useState(initialSaPage)
   const [ pageCount, setPageCount ] = React.useState(pageTotal)
@@ -33,7 +34,7 @@ const OrganShowTableMean: React.FC<IProps> = ({ poLabel, initialSaPage, pageTota
       Header: "Gene",
       accessor: "gene.label",
       Cell: ({ value, row }: { value: string, row: object }) => (
-        <TextLink href={`/species/${row.values["species.tax"]}/genes/${value}`}>
+        <TextLink href={`/species/${row.original.species.tax}/genes/${value}`}>
           {value}
         </TextLink>
       ),
@@ -57,7 +58,7 @@ const OrganShowTableMean: React.FC<IProps> = ({ poLabel, initialSaPage, pageTota
     },
     {
       Header: "Mapman Terms",
-      accessor: "gene.mapman_annotations",
+      accessor: "mapman_annotations",
       Cell: ({ value: gaTerms }: { value: object[] | "-" }) =>
       (
         <ul className="min-w-[400px]">
@@ -78,7 +79,7 @@ const OrganShowTableMean: React.FC<IProps> = ({ poLabel, initialSaPage, pageTota
     const fetchId = ++fetchIdRef.current
     setLoading(true)
     if (fetchId === fetchIdRef.current) {
-      let apiUrl = `/api/sampleAnnotations/PO/${poLabel}?pageIndex=${pageIndex}&pageSize=${pageSize}&variant=mean`
+      let apiUrl = `/api/sampleAnnotations/PO/${poLabel}?speciesId=${speciesId}&pageIndex=${pageIndex}&pageSize=${pageSize}&variant=mean`
       if (queryFilter) {
         apiUrl += `&queryFilter=${queryFilter}`
       }
