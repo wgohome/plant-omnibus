@@ -15,6 +15,7 @@ interface IProps {
   pageCount: number
   loading: boolean
   fetchData: ({pageIndex, pageSize, sortBy}: IPropsFetchData) => void
+  noItemWarning?: string
 }
 
 const VirtualPaginatedTable: React.FC<IProps> = ({
@@ -23,6 +24,7 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
   pageCount: controlledPageCount,
   loading,
   fetchData,
+  noItemWarning = "No items found",
 }) => {
   const defaultPageSize: number = process.env.pageSize ? parseInt(process.env.pageSize) : 10
 
@@ -158,6 +160,11 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
             )}
           </tbody>
         </table>
+        {(page.length === 0) && (
+          <div className="p-3 text-stone-500 text-center">
+            {noItemWarning}
+          </div>
+        )}
         <PageStatusFooter
           pageIndex={pageIndex}
           pageLength={pageOptions.length}
