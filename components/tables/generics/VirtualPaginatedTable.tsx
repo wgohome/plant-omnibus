@@ -70,7 +70,6 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
     let sortByObject = {}
     if (sortBy) {
       sortBy.forEach(item => {
-        debugger
         sortByObject[item.id] = item.desc ? -1 : 1
       })
     }

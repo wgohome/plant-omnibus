@@ -52,9 +52,10 @@ const OrganShowPage: NextPage<IProps> = ({ poName, species, topSpmByMedianResult
   const capsPoName = poName.charAt(0).toUpperCase() + poName.slice(1).toLowerCase()
 
   const speciesOptions = species.map(sp => ({
-    value: sp.tax,
+    value: sp._id,
     label: sp.name,
   }))
+
   const [ selectedSpecies, setSelectedSpecies ] = React.useState(speciesOptions[0])
 
   return (
@@ -70,12 +71,14 @@ const OrganShowPage: NextPage<IProps> = ({ poName, species, topSpmByMedianResult
         <p className="text-stone-500 text-sm italic">Context-specific expression is quantified with the SPM measure. The SPM is conventionally calculated by considering the mean TPM of each organ. However, this is prone to distortion due to extreme outliers. We provide the results from SPM using both mean and median here.</p>
       </section>
 
+      {/* TODO: Abstract the select box into a component */}
       <div className="my-3">
         <div className="flex items-center mb-2">
           <FontAwesomeIcon icon={faMagnifyingGlass} />
           <label htmlFor="speciesSelect" className="block ml-1.5 text-sm font-medium text-gray-900">Select a species</label>
         </div>
-        {/* <p>Selected species taxid: {JSON.stringify(selectedSpecies)}</p> */}
+        {/* <p>Selected species taxid: {JSON.stringify(selectedSpecies)}</p>
+        <p>Selected species taxid: {JSON.stringify(selectedSpeciesId)}</p> */}
         <Select
           defaultValue={speciesOptions[0]}
           options={speciesOptions}
@@ -117,7 +120,7 @@ const OrganShowPage: NextPage<IProps> = ({ poName, species, topSpmByMedianResult
           <TabBodyItem key="spm-mean" tabIndex={0}>
             <OrganShowTableMean
               poLabel={poLabel}
-              speciesId={species[0]._id}
+              speciesId={selectedSpecies.value}
               initialSaPage={topSpmByMeanResult.sas}
               pageTotal={topSpmByMeanResult.pageTotal}
             />
@@ -125,15 +128,13 @@ const OrganShowPage: NextPage<IProps> = ({ poName, species, topSpmByMedianResult
           <TabBodyItem key="spm-median" tabIndex={1}>
             <OrganShowTableMedian
               poLabel={poLabel}
-              speciesId={species[0]._id}
+              speciesId={selectedSpecies.value}
               initialSaPage={topSpmByMedianResult.sas}
               pageTotal={topSpmByMedianResult.pageTotal}
             />
           </TabBodyItem>
         </TabBodyGroup>
       </TabGroup>
-
-      {/* {JSON.stringify(topSpmByMedianResult)} */}
     </Layout>
   )
 }
