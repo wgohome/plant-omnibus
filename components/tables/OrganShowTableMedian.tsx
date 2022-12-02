@@ -105,6 +105,7 @@ const OrganShowTableMedian: React.FC<IProps> = ({ poLabel, speciesId, initialSaP
       pageCount={pageCount}
       loading={loading}
       fetchData={fetchSaPage}
+      noItemWarning={`This species is not annotated with the organ`}
     />
   )
 }

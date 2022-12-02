@@ -15,7 +15,7 @@ const PageStatusFooter: React.FC<IProps> = ({ pageIndex, pageLength, loading }) 
         <span>
           Page{' '}
           <strong>
-            {pageIndex + 1}
+            {(pageLength === 0) ? 0 : pageIndex + 1}
           </strong>{' '}
           of {pageLength}
         </span>

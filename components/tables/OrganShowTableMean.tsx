@@ -104,6 +104,7 @@ const OrganShowTableMean: React.FC<IProps> = ({ poLabel, speciesId, initialSaPag
       pageCount={pageCount}
       loading={loading}
       fetchData={fetchSaPage}
+      noItemWarning={`This species is not annotated with the organ`}
     />
   )
 }
