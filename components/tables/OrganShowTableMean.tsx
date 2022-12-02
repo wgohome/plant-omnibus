@@ -87,15 +87,15 @@ const OrganShowTableMean: React.FC<IProps> = ({ poLabel, speciesId, initialSaPag
         apiUrl += `&sortByObject=${JSON.stringify(sortByObject)}`
       }
       fetch(apiUrl)
-      .then(res => res.json())
-      .then((data) => {
+        .then(res => res.json())
+        .then((data) => {
           setSaPage(data.sas)
           setPageCount(data.pageTotal)
           setLoading(false)
         })
         .catch(err => console.log(err))
     }
-  }, [])
+  }, [ speciesId ])
 
   return (
     <VirtualPaginatedTable

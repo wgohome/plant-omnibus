@@ -217,9 +217,8 @@ export const getOrganSpecificSasByMedian = async ({
   ]
 
   const aggregationResult = await SampleAnnotation.aggregate(pipeline)
-
   const sas = aggregationResult[0].data
-  const numSasTotal = aggregationResult[0].metadata.total
+  const numSasTotal = aggregationResult[0].metadata ? aggregationResult[0].metadata.total : 0
   const numSasPassed = Math.ceil(numSasTotal * 0.05)
   const pageTotal = Math.ceil(0.05 * numSasTotal / pageSize)
 
@@ -349,7 +348,7 @@ export const getOrganSpecificSasByMean = async ({
 
   const aggregationResult = await SampleAnnotation.aggregate(pipeline)
   const sas = aggregationResult[0].data
-  const numSasTotal = aggregationResult[0].metadata.total
+  const numSasTotal = aggregationResult[0].metadata ? aggregationResult[0].metadata.total : 0
   const numSasPassed = Math.ceil(numSasTotal * 0.05)
   const pageTotal = Math.ceil(0.05 * numSasTotal / pageSize)
 

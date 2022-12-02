@@ -96,7 +96,7 @@ const OrganShowTableMedian: React.FC<IProps> = ({ poLabel, speciesId, initialSaP
         })
         .catch(err => console.log(err))
     }
-  }, [])
+  }, [ speciesId ])
 
   return (
     <VirtualPaginatedTable
