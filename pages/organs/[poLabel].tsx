@@ -1,14 +1,13 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
 import React from "react"
-import Turnstone from "turnstone"
 import Select from 'react-select'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 import Header1 from "../../components/atomic/texts/Header1"
 import Layout from "../../components/Layout"
-import OrganShowTable from "../../components/tables/OrganShowTable"
+import OrganShowTableMedian from "../../components/tables/OrganShowTableMedian"
 import OrganShowTableMean from "../../components/tables/OrganShowTableMean"
 import { getOrganSpecificSasByMedian, getOrganSpecificSasByMean } from "../../utils/sampleAnnotations"
 import { getAllSpecies } from "../../utils/species"
@@ -21,15 +20,21 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const poTerm = params.poLabel as string
   const species = await getAllSpecies()
 
-  const specificSas = await getOrganSpecificSasByMedian({
+  const topSpmByMedianResult = await getOrganSpecificSasByMedian({
     poLabel: poTerm,
+    speciesId: species[0]._id,
+  })
+  const topSpmByMeanResult = await getOrganSpecificSasByMean({
+    poLabel: poTerm,
+    speciesId: species[0]._id,
   })
 
   return {
     props: {
       poName: poNameMap[poTerm],
       species: JSON.parse(JSON.stringify(species)),
-      specificSas: JSON.parse(JSON.stringify(specificSas)),
+      topSpmByMedianResult: JSON.parse(JSON.stringify(topSpmByMedianResult)),
+      topSpmByMeanResult: JSON.parse(JSON.stringify(topSpmByMeanResult)),
     },
   }
 }
@@ -37,15 +42,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 interface IProps {
   species: (typeof Species)[]
   poName: string
-  specificSas: object[]
+  topSpmByMedianResult: object[]
+  topSpmByMeanResult: object[]
 }
 
-/*
-  How many species is this organ represented in?
-  For each species, which genes have the highest SPM?
-*/
-
-const OrganShowPage: NextPage<IProps> = ({ poName, species, specificSas }) => {
+const OrganShowPage: NextPage<IProps> = ({ poName, species, topSpmByMedianResult, topSpmByMeanResult }) => {
   const router = useRouter()
   const poLabel = router.query.poLabel as string
   const capsPoName = poName.charAt(0).toUpperCase() + poName.slice(1).toLowerCase()
@@ -116,21 +117,23 @@ const OrganShowPage: NextPage<IProps> = ({ poName, species, specificSas }) => {
           <TabBodyItem key="spm-mean" tabIndex={0}>
             <OrganShowTableMean
               poLabel={poLabel}
-              initialSaPage={specificSas.sas}
-              pageTotal={specificSas.pageTotal}
+              speciesId={species[0]._id}
+              initialSaPage={topSpmByMeanResult.sas}
+              pageTotal={topSpmByMeanResult.pageTotal}
             />
           </TabBodyItem>
           <TabBodyItem key="spm-median" tabIndex={1}>
-            <OrganShowTable
+            <OrganShowTableMedian
               poLabel={poLabel}
-              initialSaPage={specificSas.sas}
-              pageTotal={specificSas.pageTotal}
+              speciesId={species[0]._id}
+              initialSaPage={topSpmByMedianResult.sas}
+              pageTotal={topSpmByMedianResult.pageTotal}
             />
           </TabBodyItem>
         </TabBodyGroup>
       </TabGroup>
 
-      {/* {JSON.stringify(specificSas)} */}
+      {/* {JSON.stringify(topSpmByMedianResult)} */}
     </Layout>
   )
 }

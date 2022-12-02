@@ -8,6 +8,7 @@ export interface IPropsFetchData {
   pageIndex: number
   sortByObject?: object
 }
+
 interface IProps {
   columns: object[]
   data: object[]
@@ -65,10 +66,11 @@ const VirtualPaginatedTable: React.FC<IProps> = ({
     useEffect to avoid re-rendering
   */
   React.useEffect(() => {
-    // Convert sortBy to format accepted by Mongoose
+    // // Convert sortBy to format accepted by Mongoose
     let sortByObject = {}
     if (sortBy) {
       sortBy.forEach(item => {
+        debugger
         sortByObject[item.id] = item.desc ? -1 : 1
       })
     }
