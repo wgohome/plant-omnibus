@@ -48,12 +48,12 @@ export const getOneGeneAnnotation = async ({ type, label }) => {
   const geneAnnotation = await GeneAnnotation.findOne({ type: type, label: label})
     .populate({
       path: "gene_annotation_buckets",
-      select: "ga_id tax gene_ids",
+      select: "ga_id spe_id gene_ids",
       populate: [
         {
           path: "species",
           model: "Species",
-          select: "name taxid"
+          select: "name tax"
         },
         {
           path: "genes",

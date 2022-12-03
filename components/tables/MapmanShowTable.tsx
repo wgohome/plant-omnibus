@@ -11,22 +11,18 @@ const MapmanShowTable = ({ data }) => {
         Header: "Species",
         accessor: "species.name",
         Cell: ({ value, row }) => (
-          <TextLink href={`/species/${row.values.tax}`}>
+          <TextLink href={`/species/${row.original.species.tax}`}>
             {value}
           </TextLink>
         ),
       },
-      {
-        Header: "Tax ID",
-        accessor: "tax",
-      }, // To hide, but needed to access the value for species url
       {
         Header: "Genes",
         accessor: "genes",
         Cell: ({ value, row }) => (
           <ShowMoreList
             items={value.map((gene, i) => (
-              <TextLink href={`/species/${row.values.tax}/genes/${gene.label}`} key={i}>
+              <TextLink href={`/species/${row.original.species.tax}/genes/${gene.label}`} key={i}>
                 {gene.label}
               </TextLink>
             ))}
@@ -40,7 +36,7 @@ const MapmanShowTable = ({ data }) => {
     <LocalPaginatedTable
       columns={columns}
       data={data}
-      hiddenColumns={["tax"]}
+      hiddenColumns={[]}
     />
   )
 }

@@ -9,9 +9,10 @@ const geneAnnotationBucketSchema = new Schema(
       $type: ObjectId,
       required: true,
     },
-    tax: {
-      $type: Number,
+    spe_id: {
+      $type: ObjectId,
       required: true,
+      ref: "Species",
     },
     gene_ids: {
       $type: [ObjectId],
@@ -29,8 +30,8 @@ const geneAnnotationBucketSchema = new Schema(
 
 geneAnnotationBucketSchema.virtual("species", {
   ref: "Species",
-  localField: "tax",
-  foreignField: "tax",
+  localField: "spe_id",
+  foreignField: "_id",
   justOne: true,
 })
 geneAnnotationBucketSchema.virtual("genes", {
