@@ -3,6 +3,7 @@ import Plotly from "plotly.js"
 import Plot from "react-plotly.js"
 
 import Radio from "../atomic/inputs/Radio"
+import Toggle from "../atomic/inputs/Toggle"
 import { GeneShowContext } from "../../pages/species/[taxid]/genes/[geneLabel]"
 
 const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
@@ -19,7 +20,17 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
   }
 
   const [ constrainYRange, setConstrainYRange ] = React.useState(false)
+  const [ scrollZoomable, setScrollZoomable ] = React.useState(false)
+
   const highestAvgTpm = Math.max(...sampleAnnotations.map(sa => sa.avg_tpm))
+
+  const handleScrollZoomableToggle = () => {
+    setScrollZoomable(!scrollZoomable)
+  }
+
+  const handleYRangeConstrain = () => {
+    setConstrainYRange(!constrainYRange)
+  }
 
   return (
     <div className="my-4">
@@ -77,6 +88,7 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
             },
           ],
           modeBarButtonsToRemove: ["select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", "toImage"],
+          scrollZoom: scrollZoomable,
         }}
         style={{
           // position: "relative",
@@ -89,7 +101,7 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
         <p className="italic text-stone-500 text-sm">
           Bar chart reflects mean TPM of each organ with error bars reflecting standard deviation.
         </p>
-        <div className="mt-4 mb-8">
+        {/* <div className="mt-4 mb-8">
           <Radio
             groupName="barplot-options"
             radioOptions={[
@@ -110,7 +122,9 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
               }
             }}
           />
-        </div>
+        </div> */}
+        <Toggle currState={constrainYRange} handleChange={handleYRangeConstrain} prompt="Zoom Y-axis to exclude outliers" />
+        <Toggle currState={scrollZoomable} handleChange={handleScrollZoomableToggle} prompt="Allow zoom on scroll" />
       </div>
     </div>
   )
