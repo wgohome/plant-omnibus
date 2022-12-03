@@ -1,4 +1,5 @@
 import SampleAnnotation from "../models/sampleAnnotation"
+import SampleAnnotationEntity from "../models/sampleAnnotationEntity"
 import Species from "../models/species"
 import connectMongo from "../utils/connectMongo"
 
@@ -33,42 +34,47 @@ export const getAllSpecies = async () => {
 
 export const getSpeciesHavingOrgan = async (poTerm: string) => {
   connectMongo()
-  const species = await SampleAnnotation.aggregate([
-    {
-      "$match": {
-        type: "PO",
-        label: poTerm,
-      }
-    },
-    {
-      "$group": {
-        "_id": "$spe_id",
-      }
-    },
-    {
-      "$lookup": {
-        from: "species",
-        localField: "_id",
-        foreignField: "_id",
-        as: "annotatedSpecies",
-      }
-    },
-    // {
-    //   "$set": {
-    //     annotatedSpecies: { "$arrayElemAt": [ "$annotatedSpecies", 0 ] },
-    //   }
-    // },
-    {
-      "$unwind": {
-        path: "$annotatedSpecies"
-      }
-    },
-    {
-      "$project": {
-        tax: "$annotatedSpecies.tax",
-        name: "$annotatedSpecies.name",
-      }
-    },
-  ])
-  return species
+  // TOO SLOW
+  // const species = await SampleAnnotation.aggregate([
+  //   {
+  //     "$match": {
+  //       type: "PO",
+  //       label: poTerm,
+  //     }
+  //   },
+  //   {
+  //     "$group": {
+  //       "_id": "$spe_id",
+  //     }
+  //   },
+  //   {
+  //     "$lookup": {
+  //       from: "species",
+  //       localField: "_id",
+  //       foreignField: "_id",
+  //       as: "annotatedSpecies",
+  //     }
+  //   },
+  //   {
+  //     "$unwind": {
+  //       path: "$annotatedSpecies"
+  //     }
+  //   },
+  //   {
+  //     "$project": {
+  //       tax: "$annotatedSpecies.tax",
+  //       name: "$annotatedSpecies.name",
+  //     }
+  //   },
+  // ])
+  const saEntity = await SampleAnnotationEntity.findOne(
+    { type: "PO", label: poTerm }
+  )
+    .populate("spe_ids")
+    .lean()
+  return saEntity.spe_ids.map(entity => ({
+    _id: entity._id,
+    tax: entity.tax,
+    name: entity.name,
+  }))
 }
