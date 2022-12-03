@@ -52,6 +52,7 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
           },
           height: 600,
           modebar: { orientation: "v" },
+          dragmode: "pan",
         }}
         config={{
           responsive: true,
