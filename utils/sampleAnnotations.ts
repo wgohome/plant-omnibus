@@ -80,6 +80,7 @@ export const getSampleAnnotationsGraphData = async (
   sampleAnnotations.forEach(sa => {
     sa.name = poNameMap[sa.label]
     sa.tpms = sa.samples.map((sample: object): number => sample.tpm)
+    sa.sampleLabels = sa.samples.map((sample: object): string => sample.label)
     sa.sd = getStdDev(sa.tpms)
     // sa.se = 0
     sa.median = Math.round(median(sa.tpms) * 1000) / 1000
