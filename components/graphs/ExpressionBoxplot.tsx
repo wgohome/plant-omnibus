@@ -3,8 +3,11 @@ import React from "react"
 import Plot from "react-plotly.js"
 
 import Radio from "../atomic/inputs/Radio"
+import { GeneShowContext } from "../../pages/species/[taxid]/genes/[geneLabel]"
 
 const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
+  const { geneLabel } = React.useContext(GeneShowContext)
+
   const downloadIcon = {
     width: 500,
     height: 600,
@@ -64,7 +67,7 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
               name: "Download as svg",
               icon: downloadIcon,
               click: (gd) => {
-                Plotly.downloadImage(gd, {format: 'svg', width: 800, height: 600, filename: 'barchart'})
+                Plotly.downloadImage(gd, {format: 'svg', width: 800, height: 600, scale: 4, filename: `boxplot_${geneLabel}`})
               },
             },
             {
@@ -72,7 +75,7 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
               name: "Download as png",
               icon: downloadIcon,
               click: (gd) => {
-                Plotly.downloadImage(gd, {format: 'png', width: 800, height: 600, filename: 'barchart'})
+                Plotly.downloadImage(gd, {format: 'png', width: 800, height: 600, scale: 4, filename: `boxplot_${geneLabel}`})
               },
             },
           ],
