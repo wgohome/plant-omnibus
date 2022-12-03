@@ -17,6 +17,8 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
   const [ boxpoints, setBoxpoints ] = React.useState("all")  // "all" or "suspectedoutliers"
   const [ constrainYRange, setConstrainYRange ] = React.useState(false)
   const highestTopWhisker = Math.max(...sampleAnnotations.map(sa => sa.topWhisker))
+  // debugger
+
 
   return (
     <div className="my-4">
@@ -32,8 +34,9 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
             name: sa.name,
             ids: sa.name,  // string[] for constancy of data points during animation
             showlegend: false,
-            hoverinfo: "y",  // default: "all", but we hide the name here, bcos too repetitive
-            // hovertemplate: "",  // Refer to D3 formatting syntax if we need this in future
+            // hoverinfo: "y",  // default: "all", but we hide the name here, bcos too repetitive
+            text: sa.sampleLabels,
+            hovertemplate: "<b>%{text}</b>: %{y}<extra></extra>",
             // yhoverformat: "",
             fillcolor: "rgb(170, 227, 159)",
             marker: {
