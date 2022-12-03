@@ -1,5 +1,6 @@
 import React from "react"
 
+import TextLink from "../atomic/TextLink"
 import { capitalizeFirstLetter } from "../../utils/strings"
 
 interface IProps {
@@ -16,7 +17,11 @@ const TopSpmOrgansSection: React.FC<IProps> = ({ topSpmSas, by }) => {
           key={sa}
         >
           <p className="text-sm text-stone-400">{sa.label}</p>
-          <h4 className="font-medium text-xl my-2">{capitalizeFirstLetter(sa.name)}</h4>
+          <div className="my-3">
+            <TextLink href={`/organs/${sa.label}`} className="font-medium text-xl text-slate-900">
+              {capitalizeFirstLetter(sa.name)}
+            </TextLink>
+          </div>
           <div className="my-2">
             {by == "mean" ? (
               <p className="text-sm text-stone-600">SPM (mean): {sa.spm}</p>
