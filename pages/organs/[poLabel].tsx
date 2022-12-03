@@ -36,17 +36,22 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       species: JSON.parse(JSON.stringify(species)),
       topSpmByMedianResult: JSON.parse(JSON.stringify(topSpmByMedianResult)),
       topSpmByMeanResult: JSON.parse(JSON.stringify(topSpmByMeanResult)),
-      // topSpmByMedianResult: [],
-      // topSpmByMeanResult: [],
     },
   }
+}
+
+interface ITopSpmResult {
+  numSasTotal: number
+  pageTotal: number
+  pageIndex: number
+  sas: object[]
 }
 
 interface IProps {
   species: (typeof Species)[]
   poName: string
-  topSpmByMedianResult: object
-  topSpmByMeanResult: object
+  topSpmByMedianResult: ITopSpmResult
+  topSpmByMeanResult: ITopSpmResult
 }
 
 const OrganShowPage: NextPage<IProps> = ({ poName, species, topSpmByMedianResult, topSpmByMeanResult }) => {
