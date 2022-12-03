@@ -1,3 +1,4 @@
+import SampleAnnotation from "../models/sampleAnnotation"
 import Species from "../models/species"
 import connectMongo from "../utils/connectMongo"
 
@@ -27,5 +28,47 @@ export const getManySpecies = async (
 export const getAllSpecies = async () => {
   connectMongo()
   const species = Species.find().lean()
+  return species
+}
+
+export const getSpeciesHavingOrgan = async (poTerm: string) => {
+  connectMongo()
+  const species = await SampleAnnotation.aggregate([
+    {
+      "$match": {
+        type: "PO",
+        label: poTerm,
+      }
+    },
+    {
+      "$group": {
+        "_id": "$spe_id",
+      }
+    },
+    {
+      "$lookup": {
+        from: "species",
+        localField: "_id",
+        foreignField: "_id",
+        as: "annotatedSpecies",
+      }
+    },
+    // {
+    //   "$set": {
+    //     annotatedSpecies: { "$arrayElemAt": [ "$annotatedSpecies", 0 ] },
+    //   }
+    // },
+    {
+      "$unwind": {
+        path: "$annotatedSpecies"
+      }
+    },
+    {
+      "$project": {
+        tax: "$annotatedSpecies.tax",
+        name: "$annotatedSpecies.name",
+      }
+    },
+  ])
   return species
 }

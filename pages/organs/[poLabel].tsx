@@ -10,7 +10,7 @@ import Layout from "../../components/Layout"
 import OrganShowTableMedian from "../../components/tables/OrganShowTableMedian"
 import OrganShowTableMean from "../../components/tables/OrganShowTableMean"
 import { getOrganSpecificSasByMedian, getOrganSpecificSasByMean } from "../../utils/sampleAnnotations"
-import { getAllSpecies } from "../../utils/species"
+import { getAllSpecies, getSpeciesHavingOrgan } from "../../utils/species"
 import { TabGroup, TabHeaderGroup, TabHeaderItem, TabBodyGroup, TabBodyItem } from "../../components/atomic/tabs"
 import Species from "../../models/species"
 
@@ -18,7 +18,8 @@ import poNameMap from '/public/data/po_name_map.json' assert {type: 'json'}
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const poTerm = params.poLabel as string
-  const species = await getAllSpecies()
+  // const species = await getAllSpecies()
+  const species = await getSpeciesHavingOrgan(poTerm)
 
   const topSpmByMedianResult = await getOrganSpecificSasByMedian({
     poLabel: poTerm,
@@ -35,6 +36,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       species: JSON.parse(JSON.stringify(species)),
       topSpmByMedianResult: JSON.parse(JSON.stringify(topSpmByMedianResult)),
       topSpmByMeanResult: JSON.parse(JSON.stringify(topSpmByMeanResult)),
+      // topSpmByMedianResult: [],
+      // topSpmByMeanResult: [],
     },
   }
 }
@@ -42,8 +45,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 interface IProps {
   species: (typeof Species)[]
   poName: string
-  topSpmByMedianResult: object[]
-  topSpmByMeanResult: object[]
+  topSpmByMedianResult: object
+  topSpmByMeanResult: object
 }
 
 const OrganShowPage: NextPage<IProps> = ({ poName, species, topSpmByMedianResult, topSpmByMeanResult }) => {
