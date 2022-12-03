@@ -10,7 +10,10 @@ import MapmanSimpleTable from "../../../../components/tables/MapmanSimpleTable"
 import InterproSimpleTable from "../../../../components/tables/InterproSimpleTable"
 import Header1 from "../../../../components/atomic/texts/Header1"
 import Header2 from "../../../../components/atomic/texts/Header2"
-import Header3 from "../../../../components/atomic/texts/Header3"
+import ExpressionDownloadLink from "../../../../components/graphs/ExpressionDownloadLink"
+import { TabBodyGroup, TabBodyItem, TabGroup, TabHeaderGroup, TabHeaderItem } from "../../../../components/atomic/tabs"
+import TopSpmOrgansSection from "../../../../components/cards/TopSpmOrgansSection"
+import PccTable from "../../../../components/tables/PccTable"
 
 const ExpressionTabs = dynamic(() => import("../../../../components/graphs/ExpressionTabs"), {ssr: false})
 
@@ -22,9 +25,6 @@ import {
 import { getOneSpecies } from "../../../../utils/species"
 import { getOneGene } from "../../../../utils/genes"
 import { capitalizeFirstLetter } from "../../../../utils/strings"
-import TopSpmOrgansSection from "../../../../components/cards/TopSpmOrgansSection"
-import PccTable from "../../../../components/tables/PccTable"
-import { TabBodyGroup, TabBodyItem, TabGroup, TabHeaderGroup, TabHeaderItem } from "../../../../components/atomic/tabs"
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   connectMongo()
@@ -125,7 +125,14 @@ const GenePage: NextPage = ({species, gene, mapmanGas, interproGas, sampleAnnota
           {!sampleAnnotations.length ? (
             <p>No annotated samples yet 😢</p>
           ) : (
-            <ExpressionTabs sampleAnnotations={sampleAnnotations} />
+            <>
+              <ExpressionTabs sampleAnnotations={sampleAnnotations} />
+              <ExpressionDownloadLink
+                taxid={taxid}
+                geneLabel={geneLabel}
+                sampleAnnotations={sampleAnnotations}
+              />
+            </>
           )}
         </section>
 
