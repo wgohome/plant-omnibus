@@ -1,9 +1,13 @@
 import React from "react"
 import Plotly from "plotly.js"
 import Plot from "react-plotly.js"
+
 import Radio from "../atomic/inputs/Radio"
+import { GeneShowContext } from "../../pages/species/[taxid]/genes/[geneLabel]"
 
 const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
+  const { geneLabel } = React.useContext(GeneShowContext)
+
   const organNames = sampleAnnotations.map(sa => sa.name)
   const avgTpms = sampleAnnotations.map(sa => sa.avg_tpm)
   const stdDevs = sampleAnnotations.map(sa => sa.sd)
@@ -59,7 +63,7 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
               name: "Download as svg",
               icon: downloadIcon,
               click: (gd) => {
-                Plotly.downloadImage(gd, {format: 'svg', width: 800, height: 600, filename: 'barchart'})
+                Plotly.downloadImage(gd, {format: 'svg', width: 800, height: 600, scale: 4, filename: `barchart_${geneLabel}`})
               },
             },
             {
@@ -67,7 +71,7 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
               name: "Download as png",
               icon: downloadIcon,
               click: (gd) => {
-                Plotly.downloadImage(gd, {format: 'png', width: 800, height: 600, filename: 'barchart'})
+                Plotly.downloadImage(gd, {format: 'png', width: 800, height: 600, scale: 4, filename: `barchart_${geneLabel}`})
               },
             },
           ],

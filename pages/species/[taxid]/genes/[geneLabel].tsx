@@ -50,6 +50,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
 }
 
+interface GeneShowContextType {
+  geneLabel: string
+}
+
+export const GeneShowContext = React.createContext<GeneShowContextType | null>(null)
+
 const GenePage: NextPage = ({species, gene, mapmanGas, interproGas, sampleAnnotations, topSpmSasMean, topSpmSasMedian }) => {
   const router = useRouter()
   const { taxid, geneLabel } = router.query
@@ -60,87 +66,89 @@ const GenePage: NextPage = ({species, gene, mapmanGas, interproGas, sampleAnnota
         <title>{`Gene ${geneLabel}`}</title>
       </Head>
 
-      <section className="mb-4">
-        <Header1>Gene {geneLabel}</Header1>
-        <p>Species name: <span className="italic">{species.name}</span></p>
-        <p>Taxanomic ID: {taxid}</p>
-      </section>
+      <GeneShowContext.Provider value={{ geneLabel: gene.label }}>
+        <section className="mb-4">
+          <Header1>Gene {geneLabel}</Header1>
+          <p>Species name: <span className="italic">{species.name}</span></p>
+          <p>Taxanomic ID: {taxid}</p>
+        </section>
 
-      <div className="flex italic text-sm gap-2 my-3">
-        <TextLink href="#top-spm">
-          Organ specificity
-        </TextLink>|
-        <TextLink href="#expression-graph">
-          Expression graph
-        </TextLink>|
-        <TextLink href="#mapman-annotations">
-          Mapman annotations
-        </TextLink>|
-        <TextLink href="#interpro-annotations">
-          PFAM annotations
-        </TextLink>|
-        <TextLink href="#coexpression-table">
-          Co-expressed genes
-        </TextLink>
-      </div>
+        <div className="flex italic text-sm gap-2 my-3">
+          <TextLink href="#top-spm">
+            Organ specificity
+          </TextLink>|
+          <TextLink href="#expression-graph">
+            Expression graph
+          </TextLink>|
+          <TextLink href="#mapman-annotations">
+            Mapman annotations
+          </TextLink>|
+          <TextLink href="#interpro-annotations">
+            PFAM annotations
+          </TextLink>|
+          <TextLink href="#coexpression-table">
+            Co-expressed genes
+          </TextLink>
+        </div>
 
-      <section className="mt-8 mb-4" id="top-spm">
-        <Header2>Organ specificity</Header2>
-        <div className="my-2">
+        <section className="mt-8 mb-4" id="top-spm">
+          <Header2>Organ specificity</Header2>
+          <div className="my-2">
+            {!sampleAnnotations.length ? (
+              <p>No annotated samples yet 😢</p>
+            ) : (
+              <p>For gene {geneLabel}, we found these organs to have the highest SPM values. Do explore and inspect the data distribution plot to make your inference.</p>
+            )}
+          </div>
+          <TabGroup>
+            <TabHeaderGroup>
+              <TabHeaderItem key="spm-mean" tabIndex={0}>
+                SPM by mean TPM
+              </TabHeaderItem>
+              <TabHeaderItem key="spm-median" tabIndex={1}>
+                SPM by median TPM
+              </TabHeaderItem>
+            </TabHeaderGroup>
+            <TabBodyGroup>
+              <TabBodyItem key="spm-mean" tabIndex={0}>
+                <TopSpmOrgansSection topSpmSas={topSpmSasMean} by="mean" />
+              </TabBodyItem>
+              <TabBodyItem key="spm-median" tabIndex={1}>
+                <TopSpmOrgansSection topSpmSas={topSpmSasMedian} by="median" />
+              </TabBodyItem>
+            </TabBodyGroup>
+          </TabGroup>
+        </section>
+
+        <section className="mt-10 mb-4" id="expression-graph">
+          <Header2>Gene expression profile by organs</Header2>
           {!sampleAnnotations.length ? (
             <p>No annotated samples yet 😢</p>
           ) : (
-            <p>For gene {geneLabel}, we found these organs to have the highest SPM values. Do explore and inspect the data distribution plot to make your inference.</p>
+            <ExpressionTabs sampleAnnotations={sampleAnnotations} />
           )}
-        </div>
-        <TabGroup>
-          <TabHeaderGroup>
-            <TabHeaderItem key="spm-mean" tabIndex={0}>
-              SPM by mean TPM
-            </TabHeaderItem>
-            <TabHeaderItem key="spm-median" tabIndex={1}>
-              SPM by median TPM
-            </TabHeaderItem>
-          </TabHeaderGroup>
-          <TabBodyGroup>
-            <TabBodyItem key="spm-mean" tabIndex={0}>
-              <TopSpmOrgansSection topSpmSas={topSpmSasMean} by="mean" />
-            </TabBodyItem>
-            <TabBodyItem key="spm-median" tabIndex={1}>
-              <TopSpmOrgansSection topSpmSas={topSpmSasMedian} by="median" />
-            </TabBodyItem>
-          </TabBodyGroup>
-        </TabGroup>
-      </section>
+        </section>
 
-      <section className="mt-10 mb-4" id="expression-graph">
-        <Header2>Gene expression profile by organs</Header2>
-        {!sampleAnnotations.length ? (
-          <p>No annotated samples yet 😢</p>
-        ) : (
-          <ExpressionTabs sampleAnnotations={sampleAnnotations} />
-        )}
-      </section>
+        <section className="mt-10 mb-4" id="mapman-annotations">
+          <Header2>Mapman annotations</Header2>
+          <MapmanSimpleTable geneAnnotations={mapmanGas} />
+        </section>
 
-      <section className="mt-10 mb-4" id="mapman-annotations">
-        <Header2>Mapman annotations</Header2>
-        <MapmanSimpleTable geneAnnotations={mapmanGas} />
-      </section>
+        <section className="mt-10 mb-4" id="interpro-annotations">
+          <Header2>PFAM annotations</Header2>
+          <InterproSimpleTable geneAnnotations={interproGas} />
+        </section>
 
-      <section className="mt-10 mb-4" id="interpro-annotations">
-        <Header2>PFAM annotations</Header2>
-        <InterproSimpleTable geneAnnotations={interproGas} />
-      </section>
-
-      <section className="mt-10 mb-4" id="coexpression-table">
-        <Header2>Top co-expressed genes</Header2>
-        {(!gene.neighbors || gene.neighbors.length === 0)
-          ?
-          <p>No coexpressed neighbors</p>
-          :
-          <PccTable taxid={species.tax} data={gene.neighbors} />
-        }
-      </section>
+        <section className="mt-10 mb-4" id="coexpression-table">
+          <Header2>Top co-expressed genes</Header2>
+          {(!gene.neighbors || gene.neighbors.length === 0)
+            ?
+            <p>No coexpressed neighbors</p>
+            :
+            <PccTable taxid={species.tax} data={gene.neighbors} />
+          }
+        </section>
+      </GeneShowContext.Provider>
     </Layout>
   )
 }
