@@ -1,6 +1,7 @@
-import { Schema, model, models, ObjectId } from "mongoose";
+import { Schema, model, models, ObjectId } from "mongoose"
 
-import GeneAnnotation from "./geneAnnotation";
+import GeneAnnotation from "./geneAnnotation"
+import Species from "./species"
 
 const neighborSchema = new Schema({
   gene: {
@@ -33,6 +34,13 @@ const geneSchema = new Schema({
   neighbors: {
     type: [neighborSchema],
   }
+})
+
+geneSchema.virtual("species", {
+  ref: "Species",
+  localField: "spe_id",
+  foreignField: "_id",
+  justOne: true,
 })
 
 geneSchema.virtual("gene_annotations", {

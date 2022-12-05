@@ -134,6 +134,20 @@ export const getOneGene = async (
 }
 
 /*
+  To return a single gene doc with its associated species
+  For gene redirect by gene id
+ */
+export const getOneGeneById = async (
+  id: ObjectId
+) => {
+  connectMongo()
+  const gene = await Gene.findOne({ "_id": id })
+    .populate("species")
+    .lean()
+  return gene
+}
+
+/*
   Returns a page of full gene docs
   Used for search results
  */
