@@ -67,72 +67,32 @@ const Home: NextPage = () => {
                 query: {...router.query, searchTerm: query, loadResults: true}
               },)
             }}
+            handleSelectRedirect={(geneId: string) => {
+              fetch(`/api/search/geneParams/${geneId}`)
+                .then(res => res.json())
+                .then(gene => {
+                  const taxid = gene.species.tax
+                  const geneLabel = gene.label
+                  router.push({
+                    pathname: `/species/${taxid}/genes/${geneLabel}`
+                  })
+                })
+            }}
           />
         </div>
       </section>
 
       <section id="home-other-actions">
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-1.5">
           <TextLink href="/search/proteins">
             Search by protein sequence instead
           </TextLink>
         </div>
-
-        {/* <div className="flex justify-center my-4">
-          <Link href="/species">
-            <a type="button" className="text-xl text-stone-500 outline outline-plb-green hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full px-6 py-3 text-center">
-              Browse species
-            </a>
-          </Link>
-          <Link href="#">
-            <a type="button" className="text-xl text-stone-500 outline outline-plb-green hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full px-6 py-3 text-center">
-              Search genes
-            </a>
-          </Link>
-
-        </div> */}
-      </section>
-
-      <section id="home-draft">
-        {/* <div className="h-40"></div>
-
-        <h2>1. Select your species</h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 place-items-center gap-4 my-3 py-3">
-
-          <div className="p-6 bg-white rounded-lg shadow-md">
-            <h3 className="text-bold text-2xl my-3">Genes</h3>
-            <p className="my-3">See how your gene of interest is expressed across organs. To search for your gene, select your species from our record of 100 plant species.</p>
-          </div>
-
+        <div className="flex justify-center my-1.5">
+          <TextLink href="/species">
+            Search by particular species
+          </TextLink>
         </div>
-
-        <h2>2. You can search for</h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-4 my-3 py-3">
-
-          <div className="p-6 bg-white rounded-lg shadow-md">
-            <h3 className="text-bold text-2xl my-3">Genes</h3>
-            <p className="my-3">See how your gene of interest is expressed across organs. To search for your gene, select your species from our record of 100 plant species.</p>
-          </div>
-          <div className="p-6 bg-white rounded-lg shadow-md">
-            <h3 className="text-bold text-2xl my-3">Organs</h3>
-            <p className="my-3">Find out which genes are specifically expressed</p>
-          </div>
-
-        </div>
-
-
-        <div className="py-12"></div>
-
-        <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
-          <div className="shrink-0">
-          </div>
-          <div>
-            <div className="text-xl font-medium text-black">ChitChat</div>
-            <p className="text-slate-500">You have a new message!</p>
-          </div>
-        </div> */}
       </section>
     </Layout>
   )

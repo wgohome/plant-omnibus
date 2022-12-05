@@ -15,6 +15,7 @@ const SearchBox = ({
    */
   getSuggestions,
   submitSearchQuery, // callback from parent to get and render results
+  handleSelectRedirect,
 }) => {
   /* Controlled input element */
   const [ userInput, setUserInput ] = React.useState(initialValue)
@@ -90,10 +91,16 @@ const SearchBox = ({
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     /* User pressed the enter key */
     if (event.key === "Enter") {
+      event.preventDefault()
+      if (selectedIndex == -1) {
+        handleSubmit(event)
+      }
       // If no suggestion selected, no need to update userInput
       // if no suggestion to select from, also no need to update userInput
       if (selectedIndex < 0 || suggestions.length < 0) return
       setUserInput(suggestions[selectedIndex].label)
+      // Redirect to gene show page straight away not to the result page
+      handleSelectRedirect(suggestions[selectedIndex]._id)
     }
     /* User pressed the up arrow */
     else if (event.key === "ArrowUp") {
@@ -150,9 +157,14 @@ const SearchBox = ({
                   ${index === selectedIndex && "bg-plb-green/25"}`
                 }
                 key={item.label}
+                data-gene-id={item._id}
+                data-gene-label={item.label}
                 onClick={(event) => {
+                  event.preventDefault()
                   setUserInput(event.target.innerText)
                   setSuggestActive(false)
+                  // Redirect to gene show page straight away not to the result page
+                  handleSelectRedirect(event.target.dataset.geneId)
                 }}
               >
                 {item.label}
