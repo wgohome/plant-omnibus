@@ -114,15 +114,10 @@ export const getOrganSpecificSasByMedian = async ({
 
   const pipeline = [
     {
-      // Index created by these two fields, in this order
+      // Index created by these fields, in this order
       "$match": {
         type: "PO",
         label: poLabel,
-      }
-    },
-    {
-      // Then use another index to query down a particular species
-      "$match": {
         spe_id: speciesId,
       }
     },
@@ -244,15 +239,10 @@ export const getOrganSpecificSasByMean = async ({
 
   const pipeline = [
     {
-      // Index created by these two fields, in this order
+      // Index created by these fields, in this order
       "$match": {
         type: "PO",
         label: poLabel,
-      }
-    },
-    {
-      // Then use another index to query down a particular species
-      "$match": {
         spe_id: speciesId,
       }
     },
