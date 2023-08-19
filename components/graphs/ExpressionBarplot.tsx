@@ -2,7 +2,6 @@ import React from "react"
 import Plotly from "plotly.js"
 import Plot from "react-plotly.js"
 
-import Radio from "../atomic/inputs/Radio"
 import Toggle from "../atomic/inputs/Toggle"
 import { GeneShowContext } from "../../pages/species/[taxid]/genes/[geneLabel]"
 
@@ -101,28 +100,6 @@ const ExpressionBarplot = ({ sampleAnnotations, hideLoader }) => {
         <p className="italic text-stone-500 text-sm">
           Bar chart reflects mean TPM of each organ with error bars reflecting standard deviation.
         </p>
-        {/* <div className="mt-4 mb-8">
-          <Radio
-            groupName="barplot-options"
-            radioOptions={[
-              { id: "barplot-full", label: "Full TPM-range" },
-              { id: "barplot-scale-down", label: "Scaled TPM-range" },
-            ]}
-            selected="barplot-full"
-            handleChange={(id) => {
-              switch (id) {
-                case "barplot-full":
-                  setConstrainYRange(false)
-                  break
-                case "barplot-scale-down":
-                  setConstrainYRange(true)
-                  break
-                default:
-                  break
-              }
-            }}
-          />
-        </div> */}
         <Toggle currState={constrainYRange} handleChange={handleYRangeConstrain} prompt="Zoom Y-axis to exclude outliers" />
         <Toggle currState={scrollZoomable} handleChange={handleScrollZoomableToggle} prompt="Allow zoom on scroll" />
       </div>

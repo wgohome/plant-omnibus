@@ -2,7 +2,6 @@ import Plotly from "plotly.js"
 import React from "react"
 import Plot from "react-plotly.js"
 
-import Radio from "../atomic/inputs/Radio"
 import Toggle from "../atomic/inputs/Toggle"
 import { GeneShowContext } from "../../pages/species/[taxid]/genes/[geneLabel]"
 
@@ -110,40 +109,6 @@ const ExpressionBoxplot = ({ hideLoader, sampleAnnotations }) => {
         <p className="italic text-stone-500 text-sm">
           Boxplot reflects median TPM of each organ with raw data points as points to the left of each bar.
         </p>
-        {/* <div className="mt-4 mb-8">
-          <Radio
-            groupName="boxplot-options"
-            radioOptions={[
-              { id: "boxplot-full", label: "All points (full range)" },
-              { id: "boxplot-outlier-points", label: "Only outliers (full range)" },
-              { id: "boxplot-scale-down", label: "All points (scaled range)" },
-              { id: "boxplot-scale-down-no-points", label: "Only outliers (scaled range)" },
-            ]}
-            selected="boxplot-full"
-            handleChange={(id) => {
-              switch (id) {
-                case "boxplot-full":
-                  setBoxpoints("all")
-                  setConstrainYRange(false)
-                  break
-                case "boxplot-outlier-points":
-                  setBoxpoints("outliers")
-                  setConstrainYRange(false)
-                  break
-                case "boxplot-scale-down":
-                  setBoxpoints("all")
-                  setConstrainYRange(true)
-                  break
-                case "boxplot-scale-down-no-points":
-                  setBoxpoints("outliers")
-                  setConstrainYRange(true)
-                  break
-                default:
-                  break
-              }
-            }}
-          />
-        </div> */}
         <Toggle currState={boxpoints} handleChange={handleBoxpointsChange} prompt="Show raw data points" />
         <Toggle currState={constrainYRange} handleChange={handleYRangeConstrain} prompt="Zoom Y-axis to exclude outliers" />
         <Toggle currState={scrollZoomable} handleChange={handleScrollZoomableToggle} prompt="Allow zoom on scroll" />
